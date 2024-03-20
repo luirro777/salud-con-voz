@@ -280,3 +280,5 @@ circles.csv
 *.pub
 .idea/
 tmp/
+
+*.sqlite3

@@ -1,0 +1,1 @@
+codigo: username+ultimas3delDNI+nombreOIniciales

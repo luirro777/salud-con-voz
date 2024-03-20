@@ -30,23 +30,19 @@
             <table class="table table-striped mt-5">
                 <thead>
                     <tr>
-                        <th>Nombre</th>
-                        <th>Apellido</th>
-                        <th>DNI</th>
-                        <th>Edad</th>
-                        <th>Resultado</th>
+                        <th>Código</th>
+                        <th>Fecha</th>
+                        <th>Responde</th>
                         <th></th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for cuestionario in cuestionarios %}
                         <tr>
-                            <td>{{cuestionario.nombre}}</td>
-                            <td>{{cuestionario.apellido}}</td>
-                            <td>{{cuestionario.dni}}</td>
-                            <td>{{cuestionario.edad}}</td>
-                            <td>{{cuestionario.resultado}}</td>
-                            <td><a href="/editar"><i class="bi-pencil"></i></a></td>
+                            <td>{{cuestionario.codigo}}</td>
+                            <td>{{cuestionario.fecha}}</td>
+                            <td>{{cuestionario.tipo}}</td>
+                            <td>{% if cuestionario.confirmado == "SI" %}CONFIRMADO{% else %}<a href="/editar"><i class="bi-pencil"></i></a>{% endif %}</td>
                         </tr>
                     {% endfor %}
                 </tbody>

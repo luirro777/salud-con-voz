@@ -5,15 +5,14 @@ from django.contrib.auth.decorators import login_required
 @login_required
 def home(request):
 
-
     cuestionarios = [
-        {'id': 1, 'nombre': 'Javier', 'apellido': 'Martinez', 'dni': '22', 'edad': 31, 'resultado': 80},
-        {'id': 2, 'nombre': 'Pedro', 'apellido': 'Gomez', 'dni': '23', 'edad': 31, 'resultado': 80},
-        {'id': 3, 'nombre': 'Carolina', 'apellido': 'Carolinez', 'dni': '22', 'edad': 31, 'resultado': 80},
-        {'id': 4, 'nombre': 'Pedro', 'apellido': 'Montagna', 'dni': '22', 'edad': 31, 'resultado': 80},
-        {'id': 5, 'nombre': 'Martina', 'apellido': 'Aguilar', 'dni': '22', 'edad': 31, 'resultado': 80},
-        {'id': 6, 'nombre': 'Josefa', 'apellido': 'Mirabella', 'dni': '22', 'edad': 31, 'resultado': 80},
-        {'id': 7, 'nombre': 'Miguel', 'apellido': 'Torrez', 'dni': '22', 'edad': 31, 'resultado': 80},
+        {'id': 1, 'codigo': 'akosdjasd-1516', 'fecha': "15/03/2024", 'tipo': "familiar", 'confirmado': "SI"},
+        {'id': 2, 'codigo': 'akosdjasd-1517', 'fecha': "15/03/2024", 'tipo': "familiar", 'confirmado': "SI"},
+        {'id': 3, 'codigo': 'akosdjasd-1518', 'fecha': "15/03/2024", 'tipo': "familiar", 'confirmado': "NO"},
+        {'id': 4, 'codigo': 'akosdjasd-1519', 'fecha': "15/03/2024", 'tipo': "chico/a", 'confirmado': "SI"},
+        {'id': 5, 'codigo': 'akosdjasd-1520', 'fecha': "15/03/2024", 'tipo': "familiar", 'confirmado': "SI"},
+        {'id': 6, 'codigo': 'akosdjasd-1521', 'fecha': "15/03/2024", 'tipo': "chico/a", 'confirmado': "SI"},
+        {'id': 7, 'codigo': 'akosdjasd-1522', 'fecha': "15/03/2024", 'tipo': "familiar", 'confirmado': "SI"},
     ]
 
     contexto = {
