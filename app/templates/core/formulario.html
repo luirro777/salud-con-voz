@@ -1,0 +1,23 @@
+{% extends '_base.html' %}
+
+{% block contenido %}
+<div class="container">
+    <h1 class="mt-5">CP-QOL</h1>
+
+    <h4 class="text-end"> Paso: {{seccion.numero}} / 10</h4>
+    <h5 class="mb-5"> {{seccion.nombre}}</h5>
+
+    <form method="post" >{% csrf_token %}
+        
+        {{ form.as_p }}
+
+        <div class="d-flex justify-content-between my-5">
+            
+            <a href="{% url 'cpqol' %}?seccion={{seccion.anterior}}" class="btn btn-secondary">Anterior</a>
+            <button type="submit" class="btn btn-primary">{% if seccion.numero == 11 %}Enviar{% else %}Siguiente{% endif %}</button>
+        </div>
+    </form>
+
+
+</div>
+{% endblock %}

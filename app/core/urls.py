@@ -18,5 +18,5 @@ from django.urls import path
 from .views import *
 
 urlpatterns = [
-    path("", formulario),
+    path("", formulario, name='cpqol'),
 ]

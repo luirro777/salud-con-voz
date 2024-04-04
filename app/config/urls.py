@@ -23,5 +23,5 @@ urlpatterns = [
     path("auth/", include("django.contrib.auth.urls")),
     #####################################################
     path("cpqol/", include("core.urls")),
-    path("", home),
+    path("", home, name="home"),
 ]
