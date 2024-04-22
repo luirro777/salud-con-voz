@@ -3,27 +3,34 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 
-
 from .forms import *
 
 # Create your views here.
 @login_required
-def formulario(request):
+def vista_formulario(request):
 
+    # Obtenemos numero de seccion
     numero_seccion = int(request.GET['seccion'])
+    # Obtenemos cpqol si existe
+    try:
+        cpqol = Cpqol.objects.get(user=request.user, codigo=request.GET['codigo'])
+    except:
+        cpqol = None
 
-    seccion = {
-        1 : {'form': TutorForm, 'nombre': "Tutor"},
-        2 : {'form': PacienteForm, 'nombre': "Paciente"},
-        3 : {'form': SentimientosForm, 'nombre': "Sentimientos"},
-        4 : {'form': RelacionesForm, 'nombre': "Relaciones"},
-        5 : {'form': FamiliaForm, 'nombre': "Familia"},
-        6 : {'form': ParticipacionForm, 'nombre': "Participacion"},
-        7 : {'form': EscuelaForm, 'nombre': "Escuela"},
-        8 : {'form': SaludForm, 'nombre': "Salud"},
-        9 : {'form': DolorForm, 'nombre': "Dolor"},
-        10 : {'form': ServiciosForm, 'nombre': "Servicios"},
-    }[numero_seccion]
+    # Formularios
+    seccion = [
+        {'form': CodigoForm, 'nombre': "Codigo"},
+        {'form': TutorForm, 'nombre': "Tutor"},
+        {'form': PacienteForm, 'nombre': "Paciente"},
+        {'form': SentimientosForm, 'nombre': "Sentimientos"},
+        {'form': RelacionesForm, 'nombre': "Relaciones"},
+        {'form': FamiliaForm, 'nombre': "Familia"},
+        {'form': ParticipacionForm, 'nombre': "Participacion"},
+        {'form': EscuelaForm, 'nombre': "Escuela"},
+        {'form': SaludForm, 'nombre': "Salud"},
+        {'form': DolorForm, 'nombre': "Dolor"},
+        {'form': ServiciosForm, 'nombre': "Servicios"},
+    ][numero_seccion]
 
     seccion['numero'] = numero_seccion
     if numero_seccion > 1:
@@ -34,19 +41,22 @@ def formulario(request):
 
     if request.method == 'POST':
         form = current_form(request.POST)
+        if form.is_valid():
+            if numero_seccion == 0:
+                cpqol = form.save(request.user)
+            else:
+                instance = form.save(cpqol, seccion['nombre'].lower())
         if numero_seccion <= 11:
-            return HttpResponseRedirect(reverse('cpqol') + f'?seccion={numero_seccion+1}')
+            return HttpResponseRedirect(reverse('cpqol') + f'?seccion={numero_seccion+1}&codigo={cpqol.codigo}')
         else:
             return HttpResponseRedirect("home")
-        # if form.is_valid():
-        #     form.save()
-            # hacer algo con el formulario válido
     else:
-        form = current_form()
+        instance = getattr(cpqol, seccion['nombre'].lower(), None)
+        form = current_form(instance=instance)
 
-    contexto = {
-        'form': form,
-        'seccion': seccion
-    }
+    # contexto = {
+    #     'form': form,
+    #     'seccion': seccion
+    # }
 
-    return render(request, "core/formulario.html", contexto)
+    return render(request, "core/formulario.html", locals())

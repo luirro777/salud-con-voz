@@ -15,7 +15,7 @@
                 <a class="navbar-brand " href="{% url 'home' %}">Salud con Voz</a>
                     <div class="dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            {{user.first_name}}
+                            {% if user.first_name %}{{user.first_name}}{% else %}{{user.username}}{% endif %}
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <!-- <li><a class="dropdown-item" href="#">Bases de datos</a></li> -->
