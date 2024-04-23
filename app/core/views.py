@@ -19,17 +19,17 @@ def vista_formulario(request):
 
     # Formularios
     seccion = [
-        {'form': CodigoForm, 'nombre': "Codigo"},
-        {'form': TutorForm, 'nombre': "Tutor"},
-        {'form': PacienteForm, 'nombre': "Paciente"},
-        {'form': SentimientosForm, 'nombre': "Sentimientos"},
-        {'form': RelacionesForm, 'nombre': "Relaciones"},
-        {'form': FamiliaForm, 'nombre': "Familia"},
-        {'form': ParticipacionForm, 'nombre': "Participacion"},
-        {'form': EscuelaForm, 'nombre': "Escuela"},
-        {'form': SaludForm, 'nombre': "Salud"},
-        {'form': DolorForm, 'nombre': "Dolor"},
-        {'form': ServiciosForm, 'nombre': "Servicios"},
+        {'form': CodigoForm, 'nombre': "Código"},
+        {'form': TutorForm, 'nombre': "Tutor", 'subtitulo': 'Información general sobre la persona que responde'},
+        {'form': PacienteForm, 'nombre': "Paciente", 'subtitulo': 'Datos generales de niño/a o adolescente'},
+        {'form': SentimientosForm, 'nombre': "Sentimientos",  'subtitulo': "¿Cómo piensa que su hijo/a se siente con respecto a..."},
+        {'form': RelacionesForm, 'nombre': "Relaciones", 'subtitulo': '¿Cómo piensa que su hijo/a se siente con respecto a...'},
+        {'form': FamiliaForm, 'nombre': "Familia", 'subtitulo': '¿Cómo piensa que su hijo/a se siente con respecto a...'},
+        {'form': ParticipacionForm, 'nombre': "Participacion", 'subtitulo': '¿Cómo piensa que su hijo/a se siente con respecto a...'},
+        {'form': EscuelaForm, 'nombre': "Escuela", 'subtitulo': '¿Cómo piensa que su hijo/a se siente con respecto a...'},
+        {'form': SaludForm, 'nombre': "Salud", 'subtitulo': '¿Cómo piensa que su hijo/a se siente con respecto a...'},
+        {'form': DolorForm, 'nombre': "Dolor", 'subtitulo': '¿Cómo piensa que su hijo/a se siente con respecto a...'},
+        {'form': ServiciosForm, 'nombre': "Servicios", 'subtitulo': '¿Cómo se siente USTED con respecto a...'},
     ][numero_seccion]
 
     seccion['numero'] = numero_seccion
@@ -51,8 +51,11 @@ def vista_formulario(request):
         else:
             return HttpResponseRedirect("home")
     else:
-        instance = getattr(cpqol, seccion['nombre'].lower(), None)
-        form = current_form(instance=instance)
+        if numero_seccion >= 1:
+            instance = getattr(cpqol, seccion['nombre'].lower(), None)
+            form = current_form(instance=instance)
+        else:
+            form = current_form()
 
     # contexto = {
     #     'form': form,

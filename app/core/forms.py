@@ -4,7 +4,7 @@ from .models import *
 
 
 class CodigoForm(forms.Form):
-    dni = forms.CharField(label="Ingrese las 3 últimos numeros del dni del paciente", max_length=3, widget=forms.TextInput(attrs={'class': 'form-control'}))
+    dni = forms.CharField(label="Ingrese los últimos 3 números del DNI del paciente", max_length=3, widget=forms.TextInput(attrs={'class': 'form-control'}))
     nombre = forms.CharField(label="Ingrese el primer nombre del paciente", max_length=100, widget=forms.TextInput(attrs={'class': 'form-control'}))
 
     def save(self, user):
