@@ -16,20 +16,22 @@ def vista_formulario(request):
         cpqol = Cpqol.objects.get(user=request.user, codigo=request.GET['codigo'])
     except:
         cpqol = None
-
+    if cpqol:
+        if cpqol.confirmado: return HttpResponseRedirect(reverse('home'))
     # Formularios
     seccion = [
-        {'form': CodigoForm, 'nombre': "Código"},
+        {'form': CodigoForm, 'nombre': "Código", 'subtitulo': "Generación de código de identificación"},
         {'form': TutorForm, 'nombre': "Tutor", 'subtitulo': 'Información general sobre la persona que responde'},
         {'form': PacienteForm, 'nombre': "Paciente", 'subtitulo': 'Datos generales de niño/a o adolescente'},
-        {'form': SentimientosForm, 'nombre': "Sentimientos",  'subtitulo': "¿Cómo piensa que su hijo/a se siente con respecto a..."},
-        {'form': RelacionesForm, 'nombre': "Relaciones", 'subtitulo': '¿Cómo piensa que su hijo/a se siente con respecto a...'},
-        {'form': FamiliaForm, 'nombre': "Familia", 'subtitulo': '¿Cómo piensa que su hijo/a se siente con respecto a...'},
-        {'form': ParticipacionForm, 'nombre': "Participacion", 'subtitulo': '¿Cómo piensa que su hijo/a se siente con respecto a...'},
-        {'form': EscuelaForm, 'nombre': "Escuela", 'subtitulo': '¿Cómo piensa que su hijo/a se siente con respecto a...'},
-        {'form': SaludForm, 'nombre': "Salud", 'subtitulo': '¿Cómo piensa que su hijo/a se siente con respecto a...'},
-        {'form': DolorForm, 'nombre': "Dolor", 'subtitulo': '¿Cómo piensa que su hijo/a se siente con respecto a...'},
-        {'form': ServiciosForm, 'nombre': "Servicios", 'subtitulo': '¿Cómo se siente USTED con respecto a...'},
+        {'form': SentimientosForm, 'nombre': "Sentimientos",  'subtitulo': "Datos sobre sus sentimientos"},
+        {'form': RelacionesForm, 'nombre': "Relaciones", 'subtitulo': 'Datos sobre sus relaciones con los demás'},
+        {'form': FamiliaForm, 'nombre': "Familia", 'subtitulo': 'Datos sobre su familia'},
+        {'form': ParticipacionForm, 'nombre': "Participacion", 'subtitulo': 'Datos sobre su participación'},
+        {'form': EscuelaForm, 'nombre': "Escuela", 'subtitulo': 'Datos sobre su escuela o colegio'},
+        {'form': SaludForm, 'nombre': "Salud", 'subtitulo': 'Datos sobre su salud'},
+        {'form': DolorForm, 'nombre': "Dolor", 'subtitulo': 'Datos sobre sus dolores y/o molestias'},
+        {'form': ServiciosForm, 'nombre': "Servicios", 'subtitulo': 'Datos sobre accesos a servicios'},
+        {'form': None, 'nombre': "Completado", 'subtitulo': ''},
     ][numero_seccion]
 
     seccion['numero'] = numero_seccion
@@ -46,20 +48,13 @@ def vista_formulario(request):
                 cpqol = form.save(request.user)
             else:
                 instance = form.save(cpqol, seccion['nombre'].lower())
-        if numero_seccion <= 11:
-            return HttpResponseRedirect(reverse('cpqol') + f'?seccion={numero_seccion+1}&codigo={cpqol.codigo}')
-        else:
-            return HttpResponseRedirect("home")
+        return HttpResponseRedirect(reverse('cpqol') + f'?seccion={numero_seccion+1}&codigo={cpqol.codigo}')
     else:
-        if numero_seccion >= 1:
-            instance = getattr(cpqol, seccion['nombre'].lower(), None)
-            form = current_form(instance=instance)
-        else:
-            form = current_form()
-
-    # contexto = {
-    #     'form': form,
-    #     'seccion': seccion
-    # }
+        if not numero_seccion == 11:
+            if numero_seccion >= 1:
+                instance = getattr(cpqol, seccion['nombre'].lower(), None)
+                form = current_form(instance=instance)
+            else:
+                form = current_form()
 
     return render(request, "core/formulario.html", locals())

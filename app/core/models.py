@@ -19,7 +19,7 @@ class Tutor(models.Model):
 	estado_salud = models.CharField(max_length=20, choices=CHOICES_SALUD, verbose_name="Usted diría que SU SALUD es: [De la persona que responde]")
 
 class Paciente(models.Model):
-	edad = models.IntegerField(blank=True, null=True, verbose_name="Edad: [De la persona que responde]")
+	edad = models.IntegerField(blank=True, null=True, verbose_name="Edad: [Del niño/a o adolescente]")
 	CHOICES_GENERO = {
 		'mujer': 'Mujer',
 		'varon': 'Varón',
@@ -28,7 +28,7 @@ class Paciente(models.Model):
 	}
 	genero = models.CharField(max_length=20, choices=CHOICES_GENERO, verbose_name="Género")
 	provincia = models.CharField(max_length=30, verbose_name="Lugar de residencia: [Provincia]")
-	ciudad = models.CharField(max_length=30, verbose_name="Lugar de residencia: [Provincia]")
+	ciudad = models.CharField(max_length=30, verbose_name="Lugar de residencia: [Ciudad]")
 	obra_social = models.CharField(max_length=30, blank=True, null=True, verbose_name="¿Cuenta con obra social (por ejemplo: APROSS, OSECAC, UOM, OSPACA, OSPECOM, UOCRA, UPCN, etc.)? ¿Cuál?")
 	prepaga = models.CharField(max_length=30, blank=True, null=True, verbose_name="¿Cuenta con medicina prepaga o plan privado de salud (por ejemplo: GEA, MEDIFE, SIPSSA, OMINT, SWISS MEDICAL, etc.)? ¿Cuál?")
 	servicio_publico = models.CharField(max_length=30, blank=True, null=True, verbose_name="¿Hace uso del sistema de servicios o programas públicos de salud (por ejemplo: Hospitales públicos, Dispensarios, Incluir Salud, etc.)? ¿Cuál?")
@@ -178,3 +178,7 @@ class Cpqol(models.Model):
 		if not self.dolor: return 9 
 		if not self.servicios: return 10
 		return 0
+	
+	@property
+	def confirmado(self):
+		return self.servicios != None
