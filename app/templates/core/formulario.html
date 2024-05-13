@@ -13,8 +13,7 @@
         {{ form.as_p }}
 
         <div class="d-flex justify-content-between my-5">
-            
-            <a href="{% url 'cpqol' %}?seccion={{seccion.anterior}}&codigo={{cpqol.codigo}}" class="btn btn-secondary">Anterior</a>
+            {% if seccion.anterior %}<a href="{% url 'cpqol' %}?seccion={{seccion.anterior}}&codigo={{cpqol.codigo}}" class="btn btn-secondary">Anterior</a>{% else %}<div></div>{% endif %}
             <button type="submit" class="btn btn-primary">{% if seccion.numero == 11 %}Enviar{% else %}Siguiente{% endif %}</button>
         </div>
     </form>
