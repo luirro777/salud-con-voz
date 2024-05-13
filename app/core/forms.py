@@ -1,3 +1,4 @@
+from typing import Any
 from django import forms
 
 from .models import *
@@ -7,12 +8,34 @@ class CodigoForm(forms.Form):
     dni = forms.CharField(label="Ingrese los últimos 3 números del DNI del paciente", max_length=3, widget=forms.TextInput(attrs={'class': 'form-control'}))
     nombre = forms.CharField(label="Ingrese el primer nombre del paciente", max_length=100, widget=forms.TextInput(attrs={'class': 'form-control'}))
 
-    def save(self, user):
+    def __init__(self, user=None, *args, **kwargs):
+        self.user = user
+        super().__init__(*args, **kwargs)
+
+    def clean(self):
+        cleaned_data = super().clean()
+        dni = cleaned_data.get('dni')
+        nombre = cleaned_data.get('nombre')
+        codigo = f'{self.user.username}-{dni}-{nombre}'
+        try:
+            _ = Cpqol.objects.get(
+                user=self.user,
+                codigo=codigo
+            )
+            self.add_error('dni', "Ya posee un CPQOL con esta combinación de DNI y NOMBRE")
+        except:
+            pass
+            
+        return cleaned_data
+    
+
+
+    def save(self):
         dni = self.cleaned_data.get('dni')
         nombre = self.cleaned_data.get('nombre')
-        codigo = f'{user.username}-{dni}-{nombre}'
+        codigo = f'{self.user.username}-{dni}-{nombre}'
         cpqol_instance = Cpqol.objects.create(
-            user=user,
+            user=self.user,
             codigo=codigo
         )
         return cpqol_instance
@@ -21,7 +44,8 @@ class CodigoForm(forms.Form):
 
 class BaseForm(forms.ModelForm):
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, user=None, *args, **kwargs):
+        self.user = user        
         super().__init__(*args, **kwargs)
         for field_name, field in self.fields.items():
             field.widget.attrs.update({'class': 'form-control'})

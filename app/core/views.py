@@ -42,19 +42,19 @@ def vista_formulario(request):
 
 
     if request.method == 'POST':
-        form = current_form(request.POST)
+        form = current_form(request.user, request.POST)
         if form.is_valid():
             if numero_seccion == 0:
-                cpqol = form.save(request.user)
+                cpqol = form.save()
             else:
                 instance = form.save(cpqol, seccion['nombre'].lower())
-        return HttpResponseRedirect(reverse('cpqol') + f'?seccion={numero_seccion+1}&codigo={cpqol.codigo}')
+            return HttpResponseRedirect(reverse('cpqol') + f'?seccion={numero_seccion+1}&codigo={cpqol.codigo}')   
     else:
         if not numero_seccion == 11:
             if numero_seccion >= 1:
                 instance = getattr(cpqol, seccion['nombre'].lower(), None)
                 form = current_form(instance=instance)
             else:
-                form = current_form()
+                form = current_form(request.user)
 
     return render(request, "core/formulario.html", locals())
