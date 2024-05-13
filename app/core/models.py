@@ -5,7 +5,7 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 
 class Tutor(models.Model):
 	
-	edad = models.IntegerField(verbose_name="Edad (de la persona que responde)")
+	edad = models.IntegerField(verbose_name="Edad: [De la persona que responde]")
 	relacion = models.CharField(max_length=50, verbose_name="¿Cuál es su relación con el niño/a o adolescente?")
 	quien_cuida = models.CharField(max_length=100, verbose_name="¿Usted es la persona que se ocupa principalmente del cuidado?")
 	estudios_alcanzados = models.CharField(max_length=100, verbose_name="¿Cuál es el nivel máximo de estudios finalizado por la madre del niño/a o adolescente?")
@@ -16,10 +16,10 @@ class Tutor(models.Model):
 		'regular': 'Regular',
 		'mala': 'Mala',
 	}
-	estado_salud = models.CharField(max_length=20, choices=CHOICES_SALUD, verbose_name=" Usted diría que SU SALUD (de la persona que responde) es")
+	estado_salud = models.CharField(max_length=20, choices=CHOICES_SALUD, verbose_name="Usted diría que SU SALUD es: [De la persona que responde]")
 
 class Paciente(models.Model):
-	edad = models.IntegerField(blank=True, null=True, verbose_name="Edad (del niño/a o adolescente):")
+	edad = models.IntegerField(blank=True, null=True, verbose_name="Edad: [De la persona que responde]")
 	CHOICES_GENERO = {
 		'mujer': 'Mujer',
 		'varon': 'Varón',
@@ -27,8 +27,8 @@ class Paciente(models.Model):
 
 	}
 	genero = models.CharField(max_length=20, choices=CHOICES_GENERO, verbose_name="Género")
-	provincia = models.CharField(max_length=30)
-	ciudad = models.CharField(max_length=30)
+	provincia = models.CharField(max_length=30, verbose_name="Lugar de residencia: [Provincia]")
+	ciudad = models.CharField(max_length=30, verbose_name="Lugar de residencia: [Provincia]")
 	obra_social = models.CharField(max_length=30, blank=True, null=True, verbose_name="¿Cuenta con obra social (por ejemplo: APROSS, OSECAC, UOM, OSPACA, OSPECOM, UOCRA, UPCN, etc.)? ¿Cuál?")
 	prepaga = models.CharField(max_length=30, blank=True, null=True, verbose_name="¿Cuenta con medicina prepaga o plan privado de salud (por ejemplo: GEA, MEDIFE, SIPSSA, OMINT, SWISS MEDICAL, etc.)? ¿Cuál?")
 	servicio_publico = models.CharField(max_length=30, blank=True, null=True, verbose_name="¿Hace uso del sistema de servicios o programas públicos de salud (por ejemplo: Hospitales públicos, Dispensarios, Incluir Salud, etc.)? ¿Cuál?")
@@ -80,74 +80,75 @@ CHOICES_MOLESTIA = {
 	}
 
 class Sentimientos(models.Model):
-	hacer_cosas = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS, verbose_name="...su capacidad para hacer las cosas que quiere hacer?") 
-	uno_mismo = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS, verbose_name="...él/ella mismo/a?")
-	motivacion = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS, verbose_name="...su motivación?")
-	oportunidades = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS, verbose_name="...sus oportunidades en la vida?")
-	aspecto_fisico = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS, verbose_name="...su aspecto físico?")
+	hacer_cosas = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS, verbose_name="¿Cómo piensa que su hijo/a se siente con respecto a su capacidad para hacer las cosas que quiere hacer?") 
+	uno_mismo = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS, verbose_name="¿Cómo piensa que su hijo/a se siente con respecto a él/ella mismo/a?")
+	motivacion = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS, verbose_name="¿Cómo piensa que su hijo/a se siente con respecto a su motivación?")
+	oportunidades = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS, verbose_name="¿Cómo piensa que su hijo/a se siente con respecto a sus oportunidades en la vida?")
+	aspecto_fisico = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS, verbose_name="¿Cómo piensa que su hijo/a se siente con respecto a su aspecto físico?")
+	
 
 class Relaciones(models.Model):
-	con_gente = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS,verbose_name="...cómo se lleva con la gente en general?") 
-	otros_chichos = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS,verbose_name="...cómo se lleva con otros chicos fuera de la escuela o el colegio (que no son sus amigos de la escuela/colegio)?")
-	con_adultos = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS,verbose_name="...cómo se lleva con los adultos?")
-	con_amigos = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS,verbose_name="...juntarse con amigos/as?")
-	aceptacion_otros_chicos = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS,verbose_name="...cómo es aceptado/a por otros chicos fuera de la escuela o el colegio (que no son sus amigos de la escuela/colegio)?")
-	aceptacion_adultos = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS,verbose_name="...cómo es aceptado/a por los adultos?")
-	aceptacion_gente = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS,verbose_name="...cómo es aceptado por la gente en general?")
-	cosas_nuevas = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS,verbose_name="...la forma en que intenta probar cosas nuevas?")
-	comunicacion_conocidos = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS,verbose_name="...la forma en que se comunica con la gente que conoce bien?")
-	comunicacion_extranios = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS,verbose_name="...la forma en que se comunica con la gente que NO conoce bien?")
-	comunicacion_otros_con_el = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS,verbose_name="...la forma en que otra gente se comunica con su hijo/a?")
-	comunicacion_tecnologia = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS,verbose_name="...la forma en que se comunica con la gente utilizando tecnología? (por ejemplo, mensajes de texto, internet)?")
+	con_gente = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS, verbose_name="¿Cómo piensa que su hijo/a se siente con respecto a cómo se lleva con la gente en general?") 
+	otros_chichos = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS, verbose_name="¿Cómo piensa que su hijo/a se siente con respecto a cómo se lleva con otros chicos fuera de la escuela o el colegio (que no son sus amigos de la escuela/colegio)?")
+	con_adultos = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS, verbose_name="¿Cómo piensa que su hijo/a se siente con respecto a cómo se lleva con los adultos?")
+	con_amigos = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS, verbose_name="¿Cómo piensa que su hijo/a se siente con respecto a juntarse con amigos/as?")
+	aceptacion_otros_chicos = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS, verbose_name="¿Cómo piensa que su hijo/a se siente con respecto a cómo es aceptado/a por otros chicos fuera de la escuela o el colegio (que no son sus amigos de la escuela/colegio)?")
+	aceptacion_adultos = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS, verbose_name="¿Cómo piensa que su hijo/a se siente con respecto a cómo es aceptado/a por los adultos?")
+	aceptacion_gente = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS, verbose_name="¿Cómo piensa que su hijo/a se siente con respecto a cómo es aceptado por la gente en general?")
+	cosas_nuevas = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS, verbose_name="¿Cómo piensa que su hijo/a se siente con respecto a la forma en que intenta probar cosas nuevas?")
+	comunicacion_conocidos = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS, verbose_name="¿Cómo piensa que su hijo/a se siente con respecto a la forma en que se comunica con la gente que conoce bien?")
+	comunicacion_extranios = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS, verbose_name="¿Cómo piensa que su hijo/a se siente con respecto a la forma en que se comunica con la gente que NO conoce bien?")
+	comunicacion_otros_con_el = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS, verbose_name="¿Cómo piensa que su hijo/a se siente con respecto a la forma en que otra gente se comunica con su hijo/a?")
+	comunicacion_tecnologia = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS, verbose_name="¿Cómo piensa que su hijo/a se siente con respecto a la forma en que se comunica con la gente utilizando tecnología? (por ejemplo, mensajes de texto, internet)?")
 
 class Familia(models.Model):
-	apoyo_flia = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS,verbose_name="...el apoyo que tiene de su familia?")
-	viaje_flia = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS,verbose_name="...salir de viaje con la familia?") 
-	aceptacion_flia = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS,verbose_name="...cómo es aceptado/a por su familia?")
+	apoyo_flia = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS, verbose_name="¿Cómo piensa que su hijo/a se siente con respecto a el apoyo que tiene de su familia?")
+	viaje_flia = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS, verbose_name="¿Cómo piensa que su hijo/a se siente con respecto a salir de viaje con la familia?") 
+	aceptacion_flia = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS, verbose_name="¿Cómo piensa que su hijo/a se siente con respecto a cómo es aceptado/a por su familia?")
 
 class Participacion(models.Model):
-	recreativas = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS,verbose_name="...su capacidad para participar en actividades recreativas y de tiempo libre?")
-	deportivas = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS,verbose_name="...su habilidad para participar en actividades deportivas? (Esta pregunta refiere a cómo se siente su hijo/a acerca de su habilidad para hacer deporte, no si puede hacerlo o no)") 
-	eventos_sociales = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS,verbose_name="...su capacidad para participar en eventos sociales fuera de la escuela o colegio?")  
-	en_su_comunidad = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS,verbose_name="...su capacidad para participar en su comunidad?")
+	recreativas = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS, verbose_name="¿Cómo piensa que su hijo/a se siente con respecto a su capacidad para participar en actividades recreativas y de tiempo libre?")
+	deportivas = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS, verbose_name="¿Cómo piensa que su hijo/a se siente con respecto a su habilidad para participar en actividades deportivas? (Esta pregunta refiere a cómo se siente su hijo/a acerca de su habilidad para hacer deporte, no si puede hacerlo o no)") 
+	eventos_sociales = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS, verbose_name="¿Cómo piensa que su hijo/a se siente con respecto a su capacidad para participar en eventos sociales fuera de la escuela o colegio?")  
+	en_su_comunidad = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS, verbose_name="¿Cómo piensa que su hijo/a se siente con respecto a su capacidad para participar en su comunidad?")
 
 class Escuela(models.Model):
-	otros_chicos_escuela = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS,verbose_name="...cómo se lleva con otros chicos en la escuela o colegio?")
-	como_lo_integran= models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS,verbose_name="...cómo otros alumnos lo/la integran en la escuela o colegio?") 
-	profesores = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS,verbose_name="...cómo se lleva con sus maestros, profesores y/o asistentes?")  
-	otros_alumnos = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS,verbose_name="...cómo es aceptado/a por otros alumnos en la escuela o colegio?")
-	otros_docentes = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS,verbose_name="...cómo es aceptado/a por el personal y los docentes de su escuela o colegio?")
-	mismo_trato = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS,verbose_name="...ser tratado/a de la misma manera que los demás en la escuela o colegio?")
-	participacion_colegio = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS,verbose_name="...su capacidad para participar en la escuela o colegio?")
+	otros_chicos_escuela = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS, verbose_name="¿Cómo piensa que su hijo/a se siente con respecto a cómo se lleva con otros chicos en la escuela o colegio?")
+	como_lo_integran= models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS, verbose_name="¿Cómo piensa que su hijo/a se siente con respecto a cómo otros alumnos lo/la integran en la escuela o colegio?") 
+	profesores = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS, verbose_name="¿Cómo piensa que su hijo/a se siente con respecto a cómo se lleva con sus maestros, profesores y/o asistentes?")  
+	otros_alumnos = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS, verbose_name="¿Cómo piensa que su hijo/a se siente con respecto a cómo es aceptado/a por otros alumnos en la escuela o colegio?")
+	otros_docentes = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS, verbose_name="¿Cómo piensa que su hijo/a se siente con respecto a cómo es aceptado/a por el personal y los docentes de su escuela o colegio?")
+	mismo_trato = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS, verbose_name="¿Cómo piensa que su hijo/a se siente con respecto a ser tratado/a de la misma manera que los demás en la escuela o colegio?")
+	participacion_colegio = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS, verbose_name="¿Cómo piensa que su hijo/a se siente con respecto a su capacidad para participar en la escuela o colegio?")
 
 class Salud(models.Model):
-	hacer_cosas_solo = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS,verbose_name="...hacer cosas solo/a, sin compañía?")
-	movilidad= models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS,verbose_name="...su forma de trasladarse de un lado a otro? (es decir, su movilidad)") 
-	independencia = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS,verbose_name="...poder hacer cosas solo/a sin depender de otros?")  
-	moverse_dentro_barrio = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS,verbose_name="...su capacidad para moverse dentro de su barrio?")
-	transporte = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS,verbose_name="...su capacidad para ir de un lugar a otro (ej. transporte)?")
-	brazos_y_manos = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS,verbose_name="...su forma de usar sus brazos y sus manos? (responda en base a cómo cree que se siente y no si puede o no usar brazos y manos)")
-	piernas = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS,verbose_name="...su forma de usar sus piernas? (responda en base a cómo cree que se siente y no si puede o no usar sus piernas)")
-	vestirse = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS,verbose_name="...su capacidad para vestirse sólo/a? (responda en base a cómo cree que se siente y no si puede o no realizar la actividad)")
-	beber = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS,verbose_name="...su capacidad para beber sin ayuda? (responda en base a cómo cree que se siente y no si puede o no realizar la actividad)")
-	ir_al_banio = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS,verbose_name="...su capacidad para ir al baño sin ayuda? (responda en base a cómo cree que se siente y no si puede o no realizar la actividad)")
+	hacer_cosas_solo = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS, verbose_name="¿Cómo piensa que su hijo/a se siente con respecto a hacer cosas solo/a, sin compañía?")
+	movilidad= models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS, verbose_name="¿Cómo piensa que su hijo/a se siente con respecto a su forma de trasladarse de un lado a otro? (es decir, su movilidad)?") 
+	independencia = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS, verbose_name="¿Cómo piensa que su hijo/a se siente con respecto a poder hacer cosas solo/a sin depender de otros?")  
+	moverse_dentro_barrio = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS, verbose_name="¿Cómo piensa que su hijo/a se siente con respecto a su capacidad para moverse dentro de su barrio?")
+	transporte = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS, verbose_name="¿Cómo piensa que su hijo/a se siente con respecto a su capacidad para ir de un lugar a otro (ej. transporte)?")
+	brazos_y_manos = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS, verbose_name="¿Cómo piensa que su hijo/a se siente con respecto a su forma de usar sus brazos y sus manos?")
+	piernas = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS, verbose_name="¿Cómo piensa que su hijo/a se siente con respecto a su forma de usar sus piernas?")
+	vestirse = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS, verbose_name="¿Cómo piensa que su hijo/a se siente con respecto a su capacidad para vestirse sólo/a?")
+	beber = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS, verbose_name="¿Cómo piensa que su hijo/a se siente con respecto a su capacidad para beber sin ayuda?")
+	ir_al_banio = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS, verbose_name="¿Cómo piensa que su hijo/a se siente con respecto a su capacidad para ir al baño sin ayuda?")
 
 class Dolor(models.Model):
-	salud_gral = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS,verbose_name="...su salud en general?")
-	suenio= models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS,verbose_name="...cómo duerme?") 
-	cuanto_dolor = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_DOLOR ,verbose_name="¿Cuánto dolor siente su hijo/a?" )  
-	nivel_dolor = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_MOLESTIA ,verbose_name="...el nivel de dolor que siente?" )
-	nivel_incomodidad = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_MOLESTIA ,verbose_name="...el nivel de incomodidad que siente?" )
-	como_afecta = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_MOLESTIA ,verbose_name="...la forma en que los dolores le afectan en su vida?" )
-	impedimentos = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_MOLESTIA ,verbose_name="...la forma en que el dolor le impide ser él/ella mismo/a?" )
-	no_disfrutar_dia = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_MOLESTIA ,verbose_name="...como el dolor no le permite pasarlo bien todos los días?" )
+	salud_gral = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS, verbose_name="¿Cómo piensa que su hijo/a se siente con respecto a su salud en general?")
+	suenio= models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS, verbose_name="¿Cómo piensa que su hijo/a se siente con respecto a cómo duerme?") 
+	cuanto_dolor = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_DOLOR, verbose_name="¿Cuánto dolor siente su hijo/a?")  
+	nivel_dolor = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_MOLESTIA, verbose_name="¿Cómo se siente su hijo/a con respecto a el nivel de dolor que siente?")
+	nivel_incomodidad = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_MOLESTIA, verbose_name="¿Cómo se siente su hijo/a con respecto a el nivel de incomodidad que siente?")
+	como_afecta = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_MOLESTIA, verbose_name="¿Cómo se siente su hijo/a con respecto a la forma en que los dolores le afectan en su vida?")
+	impedimentos = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_MOLESTIA, verbose_name="¿Cómo se siente su hijo/a con respecto a la forma en que el dolor le impide ser él/ella mismo/a?")
+	no_disfrutar_dia = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_MOLESTIA, verbose_name="¿Cómo se siente su hijo/a con respecto a como el dolor no le permite pasarlo bien todos los días?")
 
 class Servicios(models.Model):
-	acceso_tratamiento = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS,verbose_name="...el acceso de su hijo/a al tratamiento?")
-	acceso_terapia= models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS,verbose_name="...el acceso de su hijo/a a terapia (por ejemplo: fisioterapia, fonoaudiología, terapia ocupacional)?") 
-	acceso_atencion_medica= models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS,verbose_name="...el acceso a atención médica o quirúrgica especializada?") 
-	acceso_pediatria= models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS,verbose_name="...el acceso a atención de pediatría o medicina general?") 
-	acceso_ayuda_aprendizaje= models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS,verbose_name="...el acceso a ayuda adicional de aprendizaje dentro de la escuela o colegio?") 
+	acceso_tratamiento = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS, verbose_name="¿Cómo se siente USTED con respecto a el acceso de su hijo/a al tratamiento?")
+	acceso_terapia= models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS, verbose_name="¿Cómo se siente USTED con respecto a el acceso de su hijo/a a terapia (por ejemplo: fisioterapia, fonoaudiología, terapia ocupacional)?") 
+	acceso_atencion_medica= models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS, verbose_name="¿Cómo se siente USTED con respecto a el acceso a atención médica o quirúrgica especializada?") 
+	acceso_pediatria= models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS, verbose_name="¿Cómo se siente USTED con respecto a el acceso a atención de pediatría o medicina general?") 
+	acceso_ayuda_aprendizaje= models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS, verbose_name="¿Cómo se siente USTED con respecto a el acceso a ayuda adicional de aprendizaje dentro de la escuela o colegio?") 
 
 class Cpqol(models.Model):
 	creacion = models.DateTimeField('creacion',auto_now_add=True)    
