@@ -24,13 +24,4 @@ services:
       - ddbb      
     links:
       - ddbb:mysql
-    command: >
-      bash -c '
-        while ! nc -z ddbb 3306 ; do
-            echo "Waiting for the MySQL Server"
-            sleep 3
-        done
-
-        python manage.py runserver 0.0.0.0:8000
-      '
-
+    # command: /bin/bash -c "/wait-for-mysql.sh && python manage.py runserver 0.0.0.0:8000"
