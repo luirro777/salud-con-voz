@@ -282,3 +282,4 @@ circles.csv
 tmp/
 
 *.sqlite3
+db/

@@ -4,25 +4,33 @@ services:
   ddbb:
     image: mysql:8
     volumes:
-      - ./tmp/data:/var/lib/mysql
-    command: ["mysqld", "--innodb_force_recovery=0", "--innodb_fast_shutdown=1"]       
+      - ./db:/var/lib/mysql
     ports:
       - 3306:3306
     environment:
-      - MYSQL_ALLOW_EMPTY_PASSWORD=1
+      - MYSQL_ALLOW_EMPTY_PASSWORD=1    
       
   app:
     build:
       context: .
     image: ghcr.io/reflejar/salud-con-voz:latest
-    depends_on:
-      - ddbb
     volumes:
       - ./app:/app
     env_file:
       - .env
     ports:
       - 8000:8000
+    depends_on:
+      - ddbb      
     links:
       - ddbb:mysql
-    command: python manage.py runserver 0.0.0.0:8000
+    command: >
+      bash -c '
+        while ! nc -z ddbb 3306 ; do
+            echo "Waiting for the MySQL Server"
+            sleep 3
+        done
+
+        python manage.py runserver 0.0.0.0:8000
+      '
+
