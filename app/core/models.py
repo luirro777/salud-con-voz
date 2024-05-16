@@ -165,6 +165,9 @@ class Cpqol(models.Model):
 	dolor=models.ForeignKey(Dolor, blank=True, null=True, on_delete=models.PROTECT)
 	servicios=models.ForeignKey(Servicios, blank=True, null=True, on_delete=models.PROTECT)
 
+	class Meta:
+		verbose_name_plural = "Lista De Formularios"
+
 	@property
 	def current_seccion(self):
 		if not self.tutor: return 1 

@@ -23,4 +23,5 @@ WORKDIR /app
 EXPOSE 8000
 
 # Ejecutar el script de espera de MySQL antes de iniciar el servidor
-CMD /wait-for-mysql.sh && gunicorn config.wsgi --bind 0.0.0.0:8000 --chdir=/app --timeout 1800
+ENTRYPOINT ["/wait-for-mysql.sh"]
+CMD ["gunicorn", "config.wsgi", "--bind", "0.0.0.0:8000", "--chdir=/app", "--timeout", "1800"]

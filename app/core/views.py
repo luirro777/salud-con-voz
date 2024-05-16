@@ -16,8 +16,7 @@ def vista_formulario(request):
         cpqol = Cpqol.objects.get(user=request.user, codigo=request.GET['codigo'])
     except:
         cpqol = None
-    if cpqol:
-        if cpqol.confirmado: return HttpResponseRedirect(reverse('home'))
+
     # Formularios
     seccion = [
         {'form': CodigoForm, 'nombre': "Código", 'subtitulo': "Generación de código de identificación"},
@@ -35,6 +34,7 @@ def vista_formulario(request):
     ][numero_seccion]
 
     seccion['numero'] = numero_seccion
+    seccion['siguiente'] = numero_seccion +1
     if numero_seccion > 1:
         seccion['anterior'] = numero_seccion -1
 

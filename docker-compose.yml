@@ -24,4 +24,4 @@ services:
       - ddbb      
     links:
       - ddbb:mysql
-    # command: /bin/bash -c "/wait-for-mysql.sh && python manage.py runserver 0.0.0.0:8000"
+    command: python manage.py runserver 0.0.0.0:8000

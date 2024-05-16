@@ -2,25 +2,45 @@
 
 {% block contenido %}
 <div class="container">
-    <h1 class="mt-5 mb-3">CP-QOL {% if form %} - <span class="badge bg-success">Paso: {{seccion.numero}} / 10</span>{% endif %}</h1>
-    <h2 class="mb-1"> {{seccion.nombre}}</h2>
-    <h5 class="mb-5"> {{seccion.subtitulo}}</h5>
+            <h1 class="mt-5 mb-3">CP-QOL {% if form %} - <span class="badge bg-success">Paso: {{seccion.numero}} / 10</span>{% endif %}</h1>
+            <h2 class="mb-1"> {{seccion.nombre}}</h2>
+            <h5 class="mb-5"> {{seccion.subtitulo}}</h5>
+            <div class="row">
+                <div class="col-md-6 offset-md-3">            
+        
+                    {% if form %}
+                        <form method="post" >{% csrf_token %}
+                            
+                            {{ form.as_p }}
+                
+                            <div class="d-flex justify-content-between my-5">
+                                {% if seccion.anterior %}<a href="{% url 'cpqol' %}?seccion={{seccion.anterior}}&codigo={{cpqol.codigo}}" class="btn btn-secondary">Anterior</a>{% else %}<div></div>{% endif %}
+                                {% if cpqol.confirmado %}
+                                    <a href="{% url 'cpqol' %}?seccion={{seccion.siguiente}}&codigo={{cpqol.codigo}}" class="btn btn-primary">Siguiente</a>
+                                {% else %}
+                                    <button type="submit" class="btn btn-primary">{% if seccion.numero == 11 %}Enviar{% else %}Siguiente{% endif %}</button>
+                                {% endif %}
+                            </div>
+                        </form>
+                    {% else %}        
+                        <div class="alert alert-success mb-5" role="alert">¡Gracias por completar la encuesta!</div>
+                        <a href="{% url 'home' %}" class="btn btn-secondary">Volver al inicio</a>
+                    {% endif %}
 
-    {% if form %}
-        <form method="post" >{% csrf_token %}
-            
-            {{ form.as_p }}
-
-            <div class="d-flex justify-content-between my-5">
-                {% if seccion.anterior %}<a href="{% url 'cpqol' %}?seccion={{seccion.anterior}}&codigo={{cpqol.codigo}}" class="btn btn-secondary">Anterior</a>{% else %}<div></div>{% endif %}
-                <button type="submit" class="btn btn-primary">{% if seccion.numero == 11 %}Enviar{% else %}Siguiente{% endif %}</button>
-            </div>
-        </form>
-    {% else %}        
-        <div class="alert alert-success" role="alert">¡Gracias por completar la encuesta!</div>
-    {% endif %}
-
-
-
+                </div>
+            </div>            
 </div>
+{% if cpqol.confirmado %}
+    <script>
+
+    // Selecciona todos los campos de entrada, áreas de texto y menús desplegables
+    const fields = document.querySelectorAll('input, textarea, select');
+
+    // Itera sobre cada campo y lo deshabilita
+    fields.forEach(field => {
+        field.disabled = true;
+    });
+
+    </script>
+{% endif %}
 {% endblock %}
