@@ -1,12 +1,15 @@
 {% extends '_base.html' %}  
-
+{% load static %}
 
 {% block contenido %}
 
 
       <div class="d-flex align-items-center justify-content-center min-vh-100">
-        <div class="card">
+        <div class="card w-25">
           <div class="card-body">
+            <div class="text-center">
+              <img src="{% static 'img/logo.png' %}" height="150" alt="Logo de Salud con Voz">
+            </div>
             <form method="POST">{% csrf_token %}
               <div class="form-group mt-3">
                 <label for="user">Usuario</label>
@@ -16,7 +19,7 @@
                 <label for="password">Contraseña</label>
                 <input type="password" class="form-control" name="password" id="password" placeholder="****">
               </div>
-              <button type="submit" class="btn btn-primary btn-block mt-3">Entrar</button>
+              <button type="submit" class="btn btn-primary w-100 mt-5">Entrar a CPQOL</button>
             </form>
           </div>
         </div>
