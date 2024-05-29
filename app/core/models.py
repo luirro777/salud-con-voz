@@ -10,11 +10,11 @@ class Tutor(models.Model):
 	quien_cuida = models.CharField(max_length=100, verbose_name="¿Usted es la persona que se ocupa principalmente del cuidado?")
 	estudios_alcanzados = models.CharField(max_length=100, verbose_name="¿Cuál es el nivel máximo de estudios finalizado por la madre del niño/a o adolescente?")
 	CHOICES_SALUD = {
-		'excelente': 'Excelente',
-		'muy-buena': 'Muy buena',
-		'buena': 'Buena',
-		'regular': 'Regular',
 		'mala': 'Mala',
+		'regular': 'Regular',
+		'buena': 'Buena',
+		'muy-buena': 'Muy buena',
+		'excelente': 'Excelente',
 	}
 	estado_salud = models.CharField(max_length=20, choices=CHOICES_SALUD, verbose_name="Usted diría que SU SALUD es: [De la persona que responde]")
 
@@ -45,37 +45,37 @@ class Paciente(models.Model):
 
 CHOICES_SENTIMIENTOS = {
 	1:'1 - Muy Desconforme',
-	2:'2 - Muy Desconforme',
-	3:'3 - Desconforme',
-	4:'4 - Desconforme',
-	5:'5 - Ni conforme ni desconforme',
-	6:'6 - Ni conforme ni desconforme',
-	7:'7 - Conforme',
-	8:'8 - Conforme',
+	2:'2',
+	3:'3',
+	4:'4',
+	5:'5',
+	6:'6',
+	7:'7',
+	8:'8',
 	9:'9 - Muy Conforme',
 	}
 
 CHOICES_DOLOR = {
 	1:'1 - Nada de dolor',
-	2:'2 - Nada de dolor',
-	3:'3 - Nada de dolor',
-	4:'4 - Nada de dolor',
-	5:'5 - Nada de dolor',
-	6:'6 - Mucho dolor',
-	7:'7 - Mucho dolor',
-	8:'8 - Mucho dolor',
+	2:'2',
+	3:'3',
+	4:'4',
+	5:'5',
+	6:'6',
+	7:'7',
+	8:'8',
 	9:'9 - Mucho dolor',
 	}
 
 CHOICES_MOLESTIA = {
 	1:'1 - Nada molesto',
-	2:'2 - Nada molestor',
-	3:'3 - Nada molestor',
-	4:'4 - Nada molesto',
-	5:'5 - Muy molesto',
-	6:'6 - Muy molesto',
-	7:'7 - Muy molesto',
-	8:'8 - Muy molesto',
+	2:'2',
+	3:'3',
+	4:'4',
+	5:'5',
+	6:'6',
+	7:'7',
+	8:'8',
 	9:'9 - Muy molesto',
 	}
 
