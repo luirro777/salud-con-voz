@@ -19,8 +19,8 @@ def vista_formulario(request):
 
     # Formularios
     seccion = [
-        {'form': CodigoForm, 'nombre': "Código", 'subtitulo': "Generación de código de identificación"},
-        {'form': TutorForm, 'nombre': "Tutor", 'subtitulo': 'Información general sobre la persona que responde'},
+        {'form': CodigoForm, 'nombre': "Código de participante", 'subtitulo': "Generación de código de identificación"},
+        {'form': TutorForm, 'nombre': "Padre, madre o cuidador", 'subtitulo': 'Información general sobre la persona que responde'},
         {'form': PacienteForm, 'nombre': "Paciente", 'subtitulo': 'Datos generales de niño/a o adolescente'},
         {'form': SentimientosForm, 'nombre': "Sentimientos",  'subtitulo': "Datos sobre sus sentimientos"},
         {'form': RelacionesForm, 'nombre': "Relaciones", 'subtitulo': 'Datos sobre sus relaciones con los demás'},
