@@ -8,7 +8,10 @@
         <div class="card w-25">
           <div class="card-body">
             <div class="text-center">
-              <img src="{% static 'img/logo.png' %}" height="150" alt="Logo de Salud con Voz">
+              <div class="d-flex justify-content-between px-2">
+                  <img src="{% static 'img/logo-ciecs.png' %}" height="80" alt="Logo de Salud con Voz">
+                  <img src="{% static 'img/logo-scv.png' %}" height="80" alt="Logo de Salud con Voz">
+              </div>
             </div>
             <form method="POST">{% csrf_token %}
               <div class="form-group mt-3">
@@ -19,7 +22,7 @@
                 <label for="password">Contraseña</label>
                 <input type="password" class="form-control" name="password" id="password" placeholder="****">
               </div>
-              <button type="submit" class="btn btn-primary w-100 mt-5">Entrar a CPQOL</button>
+              <button type="submit" class="btn btn-primary w-100 mt-5">Entrar</button>
             </form>
           </div>
         </div>
