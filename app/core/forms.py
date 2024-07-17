@@ -47,7 +47,7 @@ class BaseForm(forms.ModelForm):
         self.user = user        
         super().__init__(*args, **kwargs)
         for field_name, field in self.fields.items():
-            field.widget.attrs.update({'class': 'form-control'})
+            field.widget.attrs.update({'class': 'form-control h5'})
 
 
     def save(self, cpqol, atributo):

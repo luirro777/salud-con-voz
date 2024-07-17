@@ -1,0 +1,69 @@
+{% extends '_base.html' %}  
+{% load static %}
+
+{% block contenido %}
+
+
+      <div class="d-flex align-items-center justify-content-center py-5">
+          <div class="container">
+            <div class="text-center">
+              <div class="d-flex justify-content-between px-2">
+                  <img src="{% static 'img/logo-ciecs.png' %}" height="80" alt="Logo de Salud con Voz">
+                  <img src="{% static 'img/logo-scv.png' %}" height="80" alt="Logo de Salud con Voz">
+              </div>
+            </div>
+            <blockquote class="blockquote text-black">
+              <p class="mt-5">Desde la Universidad Nacional de Córdoba y CONICET nuestro equipo trabaja investigando la calidad de vida relacionada a la salud (CVRS) con cuestionarios adaptados a la cultura, modos de vivir y forma de entender el mundo de la población argentina.</p>
+              <p class="">La CVRS nos ayuda a conocer cómo nos sentimos con nuestra salud y se refleja en distintas áreas de nuestra vida. Además del bienestar físico, tiene en cuenta factores como el bienestar psicológico, emocional y general, la relación con nuestras familias y amigos y la calidad del ambiente en el que vivimos, entre otros.</p>
+              <p class="">En el caso de las chicas y chicos con parálisis cerebral, la CVRS permite conocer su percepción sobre situaciones relacionadas a su salud y su vida cotidiana, por ejemplo, cómo se sienten con sus tratamientos, cómo se sienten ante alguna incomodidad física o el dolor; cómo se sienten en situaciones sociales en general o con sus pares, si se sienten discriminadas o discriminados de alguna forma o cómo se sienten emocionalmente, entre otras.</p>
+              <p class="">Conocer cómo se sienten los niños, niñas, adolescentes y jóvenes con parálisis cerebral ayuda a planificar medidas de salud que tengan en cuenta sus necesidades, basándose en la persona y su entorno particular.</p>
+              <p class="">¡Agradecemos tu colaboración porque es muy importante!</p>
+              <p class="">Hacé click debajo para responder.</p>
+            </blockquote>
+
+
+                <div class="card bg-light">
+                  <div class="card-body">
+                    
+    
+    
+                  <form method="POST" class="text-black mt-5">{% csrf_token %}
+                    <div class="form-check">
+                      <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+                      <label class="form-check-label text-dark h5" for="flexRadioDefault1">
+                        Soy familiar o cuidador/a y quiero responder el cuestionario sobre calidad de vida en chicos y chicas con parálisis cerebral.
+                      </label>
+                    </div>
+                    <div class="form-check">
+                      <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2">
+                      <label class="form-check-label text-dark h5" for="flexRadioDefault2">
+                        Soy profesional de la salud que realiza atención a chicos/as con parálisis cerebral y quiero colaborar.
+                      </label>
+                    </div>
+                  </div>
+                  <div class="px-5">
+                    <div class="row">
+                      <div class="col-md-8 offset-md-2">                    
+
+                    {{ form }}
+    
+                    <button type="submit" class="btn btn-primary w-100 my-5">Registrarse</button>
+                  </div>
+                </div>                    
+                  </div>
+                  </form>
+      
+    
+                </div>
+
+
+
+
+
+
+          </div>
+
+
+      </div>
+
+{% endblock %}
