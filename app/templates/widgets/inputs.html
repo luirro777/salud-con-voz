@@ -1,0 +1,25 @@
+{% for field in form %}
+<div class="mb-4 text-dark">
+    <label for="{{ field.id_for_label }}" class="form-label"><b>{{ field.label }}</b></label>
+    {% if field.field.widget.input_type == "radio" %}
+        <div class="pb-4 pt-2 {% if field.name != 'grupo' %}d-flex justify-content-between{% endif %}">
+            {% for choice in field.field.choices %}
+                {% if choice.1 != "---------" %}
+                <div>
+                    <input type="radio" name="{{field.name}}" value="{{choice.0}}" {% if field.value == choice.0 %}checked{% endif %}>
+                    <i style="max-width: 10px;">{{choice.1}}</i> <br>
+                </div>
+                {% endif %}
+            {% endfor %}
+            </div>
+    {% else %}
+        {{ field }}
+    {% endif %}
+    {% if field.help_text %}
+        <div class="form-text text-dark">{{ field.help_text }}</div>
+    {% endif %}
+    {% for error in field.errors %}
+        <div class="invalid-feedback text-danger d-block">{{ error }}</div>
+    {% endfor %}
+</div>
+{% endfor %}

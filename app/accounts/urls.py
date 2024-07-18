@@ -18,5 +18,5 @@ from django.urls import path
 from .views import *
 
 urlpatterns = [
-    path("registrarse", SignUpView.as_view(), name='cpqol'),
+    path("registrarse", SignUpView.as_view(), name='registro'),
 ]

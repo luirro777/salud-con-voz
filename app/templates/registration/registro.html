@@ -28,29 +28,16 @@
     
     
                   <form method="POST" class="text-black mt-5">{% csrf_token %}
-                    <div class="form-check">
-                      <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
-                      <label class="form-check-label text-dark h5" for="flexRadioDefault1">
-                        Soy familiar o cuidador/a y quiero responder el cuestionario sobre calidad de vida en chicos y chicas con parálisis cerebral.
-                      </label>
-                    </div>
-                    <div class="form-check">
-                      <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2">
-                      <label class="form-check-label text-dark h5" for="flexRadioDefault2">
-                        Soy profesional de la salud que realiza atención a chicos/as con parálisis cerebral y quiero colaborar.
-                      </label>
-                    </div>
-                  </div>
-                  <div class="px-5">
-                    <div class="row">
-                      <div class="col-md-8 offset-md-2">                    
+                    <div class="px-5">
+                      <div class="row">
+                        <div class="col-md-8 offset-md-2">                    
 
-                    {{ form }}
-    
-                    <button type="submit" class="btn btn-primary w-100 my-5">Registrarse</button>
-                  </div>
-                </div>                    
-                  </div>
+                          {% include 'widgets/inputs.html' %}
+      
+                          <button type="submit" class="btn btn-primary w-100 my-5">Registrarse</button>
+                        </div>
+                      </div>                    
+                    </div>
                   </form>
       
     
