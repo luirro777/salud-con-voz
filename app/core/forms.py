@@ -3,6 +3,17 @@ from django import forms
 
 from .models import *
 
+class TerminosYCondicionesForm(forms.Form):
+
+    consentimiento = forms.BooleanField(label="He leído esta información sobre la investigación y acepto participar.")
+
+    def __init__(self, user=None, *args, **kwargs):
+        self.user = user    
+        super().__init__(*args, **kwargs)
+
+    def save(self):
+        return        
+    
 
 class CodigoForm(forms.Form):
     dni = forms.CharField(label="Ingrese los últimos 3 números del DNI del paciente", max_length=3, widget=forms.TextInput(attrs={'class': 'form-control'}))

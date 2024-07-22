@@ -2,12 +2,17 @@
 
 {% block contenido %}
 <div class="container">
-            <h1 class="mt-5 mb-3">Encuesta {% if form %} - <span class="badge bg-success">Paso: {{seccion.numero}} / 10</span>{% endif %}</h1>
+            <h1 class="mt-5 mb-3">Encuesta {% if form %}{% if seccion.numero > 0 %} - <span class="badge bg-success">Paso: {{seccion.numero}} / {{total_secciones}}</span>{% endif %}{% endif %}</h1>
             <h2 class="mb-1"> {{seccion.nombre}}</h2>
             <h5 class="mb-5"> {{seccion.subtitulo}}</h5>
             <div class="row">
-                <div class="col-md-8 offset-md-2 text-center">            
-        
+                <div class="col-md-8 offset-md-2 text-center">      
+                    {% if seccion.numero == 0 %}
+                        {% include 'core/tyc.html' %}
+                    {% elif seccion.numero == 12 %}
+                        {% include 'core/resultados.html' %}
+                    {% endif %}      
+                    
                     {% if form %}
                         <form method="post" >{% csrf_token %}
                             
@@ -22,9 +27,6 @@
                                 {% endif %}
                             </div>
                         </form>
-                    {% else %}        
-                        <div class="alert alert-success mb-5" role="alert">¡Gracias por completar la encuesta!</div>
-                        <a href="{% url 'home' %}" class="btn btn-secondary">Volver al inicio</a>
                     {% endif %}
 
                 </div>
