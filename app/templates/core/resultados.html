@@ -1,38 +1,62 @@
-<div class="text-start text-dark">
-    <p>La Calidad de Vida Relacionada a la Salud o CVRS nos ayuda a conocer cómo nos sentimos con nosotros mismos y con nuestra salud. Se refleja en distintas áreas como el bienestar físico, el bienestar psicológico, emocional y general, la relación con nuestra familia y amigos, la sensación de autonomía o la falta de ella, la posibilidad de hacer lo que queremos o la calidad del ambiente en el que vivimos, entre otras. Los valores o puntajes de CVRS se utilizan para estudiar cómo la vida está influenciada por el estado de salud y otras situaciones como los tratamientos o terapias. </p>
-    <p>La encuesta que usted acaba de responder fue implementada por un equipo de la Universidad Nacional de Córdoba y CONICET para lograr información sobre la Calidad de Vida Relacionada a la Salud en niñas, niños, adolescentes y jóvenes con parálisis cerebral de Argentina. Mediante esta encuesta esperamos obtener información nueva e importante acerca de cómo se siente y cómo está afectada esta población en nuestro país. </p>
-    <p>Le agradecemos su participación y, a continuación, le ofrecemos algunos resultados basados en sus respuestas. En esta ocasión, le estamos brindando una devolución individualizada inmediatamente después de responder el cuestionario. En adelante, sus respuestas formarán parte de un conjunto de datos anónimos que estamos recolectando en todo el país, por lo que no será posible identificar a quién pertenecen los datos ingresados. </p>
+{% load static %}
+<div class="text-start text-dark mb-5" id="resultados">
+        <div class="d-flex justify-content-between px-2 mb-4">
+            <img src="{% static 'img/logo-ciecs.png' %}" height="80" alt="Logo de Salud con Voz">
+            <img src="{% static 'img/logo-scv.png' %}" height="80" alt="Logo de Salud con Voz">
+        </div>
+    <p>La <b>Calidad de Vida Relacionada a la Salud</b> o CVRS nos ayuda a conocer cómo nos sentimos con nosotros mismos y con nuestra salud. Se refleja en distintas áreas como el bienestar físico, el bienestar psicológico, emocional y general, la relación con nuestra familia y amigos, la sensación de autonomía o la falta de ella, la posibilidad de hacer lo que queremos o la calidad del ambiente en el que vivimos, entre otras. Los valores o puntajes de CVRS se utilizan para estudiar cómo la vida está influenciada por el estado de salud y otras situaciones como los tratamientos o terapias. </p>
+    <p>La encuesta que usted acaba de responder fue implementada por un equipo de la Universidad Nacional de Córdoba y CONICET para lograr información sobre la <b>Calidad de Vida Relacionada a la Salud</b> en niñas, niños, adolescentes y jóvenes con parálisis cerebral de Argentina. Mediante esta encuesta esperamos obtener información nueva e importante acerca de cómo se siente y cómo está afectada esta población en nuestro país. </p>
+    <p>Le agradecemos su participación y, a continuación, le ofrecemos algunos resultados basados en sus respuestas. <b>En esta ocasión, le estamos brindando una devolución individualizada</b> inmediatamente después de responder el cuestionario. En adelante, sus respuestas formarán parte de un conjunto de datos anónimos que estamos recolectando en todo el país, por lo que no será posible identificar a quién pertenecen los datos ingresados. </p>
     <p>Las preguntas de esta encuesta permiten obtener puntajes de CVRS en diferentes dimensiones o áreas como el bienestar emocional, las relaciones con la familia, la autonomía, o bien, como un puntaje general de CVRS. </p>
     <p>Los resultados se muestran en una escala de 0 a 100, en la que los valores más altos significan mejor percepción de la salud y los valores más bajos significan peor percepción de la salud. Las puntuaciones de CVRS son solo orientativas y no indican un diagnóstico o problema de salud. </p>
 
     <h1>RESULTADO</h1>
 
 
-    <small>
         <p>
             Fecha: DD/MM/AAAA;   <br />
-            Código de participante: MMAADNILL;  <br />
-            Respuesta del / de la: cuidador/a.
+            Código de participante: {{cpqol.codigo}}  <br />
+            Respuesta del / de la: {{grupo}}
         </p>
-    </small>
     
-    <small>
+    <small> 
         <p><b>Información del proyecto: </b><br />
-        Responsables: Silvina Berra (sberra@unc.edu.ar), Natalia Herrera Sterren, Yasmin Dame. Programa de Salud del Centro de Investigaciones y Estudios sobre Cultura y Sociedad, CONICET, Universidad Nacional de Córdoba. <br />
-        Sitio web: https://ciess.sitios.fcm.unc.edu.ar/estudio-salud-pc/ <br />
-        Instagram: @saludconvoz <br />
-        Comité de ética de la investigación en salud: Hospital Nacional de Clínicas. Contacto: cieis-hnc@fcm.unc.edu.ar </p>
+        Responsables: Silvina Berra (<a href="mailto:sberra@unc.edu.ar">sberra@unc.edu.ar</a>), Natalia Herrera Sterren, Yasmin Dame. Programa de Salud del Centro de Investigaciones y Estudios sobre Cultura y Sociedad, CONICET, Universidad Nacional de Córdoba. <br />
+        Sitio web: <a href="https://ciess.sitios.fcm.unc.edu.ar/estudio-salud-pc/">https://ciess.sitios.fcm.unc.edu.ar/estudio-salud-pc/</a> <br />
+        Instagram: <a href="https://www.instagram.com/saludconvoz/">@saludconvoz</a> <br />
+        <a href="https://cieis.sitios.fcm.unc.edu.ar/">Comité de ética de la investigación en salud: Hospital Nacional de Clínicas</a>. Contacto: <a href="mailto:cieis-hnc@fcm.unc.edu.ar">cieis-hnc@fcm.unc.edu.ar</a> </p>
     </small>
 
     <small>
-        <p><b>Referencias</b></p>
-        <p>(1) Herrera Sterren N, Berra S. Revista Argentina de Salud Pública. 2020;12:22-22.</p>
-        <p>(2) Berra S, Herrera Sterren N, Sánchez-Rosas J. Revista de la Facultad de Ciencias Médicas 2023;80(3):188-204. </p>
-        <p>(3) Berra S, Tebé C, Esandi ME, Carignano C. Archivos Argentinos de Pediatría. 2013;111(1):29-36.</p>
+        <p>
+            <b>Referencias</b>
+            <ol>
+                <li>Herrera Sterren N, Berra S. Revista Argentina de Salud Pública. 2020;12:22-22.</li>
+                <li>Berra S, Herrera Sterren N, Sánchez-Rosas J. Revista de la Facultad de Ciencias Médicas 2023;80(3):188-204. </li>
+                <li>Berra S, Tebé C, Esandi ME, Carignano C. Archivos Argentinos de Pediatría. 2013;111(1):29-36.</li>
+            </ol>
+        </p>
 
     </small>
-    
 
 </div>
+<div class="text-center">
 
-<a href="{% url 'home' %}" class="btn btn-secondary">Volver al inicio</a>
+    <button class="btn my-5 btn-outline-dark" onclick="imprimirDiv()"><i class="bi-printer"></i> Imprimir</button>
+    <a href="{% url 'home' %}" class="btn my-5 btn-secondary">Volver al inicio</a>
+</div>
+
+
+
+<script>
+    function imprimirDiv() {
+        var resultados = document.getElementById('resultados').innerHTML;
+        var ventanaImpresion = window.open('', '', 'height=500,width=800');
+        ventanaImpresion.document.write('<html><head><title>Imprimir</title>');
+        ventanaImpresion.document.write('</head><body >');
+        ventanaImpresion.document.write(resultados);
+        ventanaImpresion.document.write('</body></html>');
+        ventanaImpresion.document.close();
+        ventanaImpresion.print();
+    }
+</script>

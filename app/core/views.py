@@ -34,7 +34,7 @@ def vista_formulario(request):
         {'form': SaludForm, 'nombre': "Salud", 'subtitulo': 'Datos sobre su salud'},
         {'form': DolorForm, 'nombre': "Dolor", 'subtitulo': 'Datos sobre sus dolores y/o molestias'},
         {'form': ServiciosForm, 'nombre': "Servicios", 'subtitulo': 'Datos sobre accesos a servicios'},
-        {'form': None, 'nombre': "Calidad de vida relacionada con la salud en niñas, niños, adolescentes y jóvenes con parálisis cerebral", 'subtitulo': 'Informe de resultados'},
+        {'form': None, 'nombre': "Informe de resultados", 'subtitulo': 'Calidad de vida relacionada con la salud en niñas, niños, adolescentes y jóvenes con parálisis cerebral'},
     ]
     total_secciones = len(secciones) - 1
     
