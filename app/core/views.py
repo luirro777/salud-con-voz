@@ -10,7 +10,7 @@ from .forms import *
 def vista_formulario(request):
 
     # Obtenemos el grupo
-    grupo = request.user.groups.first().name
+    grupo = request.user.groups.first().name if request.user.groups.all() else "profesional"
 
     # Obtenemos numero de seccion
     numero_seccion = int(request.GET['seccion'])
