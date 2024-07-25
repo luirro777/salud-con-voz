@@ -1,24 +1,66 @@
 {% load static %}
+{% block assets %}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{% endblock %}
 <div class="text-start text-dark mb-5" id="resultados">
         <div class="d-flex justify-content-between px-2 mb-4">
             <img src="{% static 'img/logo-ciecs.png' %}" height="80" alt="Logo de Salud con Voz">
             <img src="{% static 'img/logo-scv.png' %}" height="80" alt="Logo de Salud con Voz">
         </div>
-    <p>La <b>Calidad de Vida Relacionada a la Salud</b> o CVRS nos ayuda a conocer cómo nos sentimos con nosotros mismos y con nuestra salud. Se refleja en distintas áreas como el bienestar físico, el bienestar psicológico, emocional y general, la relación con nuestra familia y amigos, la sensación de autonomía o la falta de ella, la posibilidad de hacer lo que queremos o la calidad del ambiente en el que vivimos, entre otras. Los valores o puntajes de CVRS se utilizan para estudiar cómo la vida está influenciada por el estado de salud y otras situaciones como los tratamientos o terapias. </p>
+    <p class="mt-5">La <b>Calidad de Vida Relacionada a la Salud</b> o CVRS nos ayuda a conocer cómo nos sentimos con nosotros mismos y con nuestra salud. Se refleja en distintas áreas como el bienestar físico, el bienestar psicológico, emocional y general, la relación con nuestra familia y amigos, la sensación de autonomía o la falta de ella, la posibilidad de hacer lo que queremos o la calidad del ambiente en el que vivimos, entre otras. Los valores o puntajes de CVRS se utilizan para estudiar cómo la vida está influenciada por el estado de salud y otras situaciones como los tratamientos o terapias. </p>
     <p>La encuesta que usted acaba de responder fue implementada por un equipo de la Universidad Nacional de Córdoba y CONICET para lograr información sobre la <b>Calidad de Vida Relacionada a la Salud</b> en niñas, niños, adolescentes y jóvenes con parálisis cerebral de Argentina. Mediante esta encuesta esperamos obtener información nueva e importante acerca de cómo se siente y cómo está afectada esta población en nuestro país. </p>
     <p>Le agradecemos su participación y, a continuación, le ofrecemos algunos resultados basados en sus respuestas. <b>En esta ocasión, le estamos brindando una devolución individualizada</b> inmediatamente después de responder el cuestionario. En adelante, sus respuestas formarán parte de un conjunto de datos anónimos que estamos recolectando en todo el país, por lo que no será posible identificar a quién pertenecen los datos ingresados. </p>
     <p>Las preguntas de esta encuesta permiten obtener puntajes de CVRS en diferentes dimensiones o áreas como el bienestar emocional, las relaciones con la familia, la autonomía, o bien, como un puntaje general de CVRS. </p>
     <p>Los resultados se muestran en una escala de 0 a 100, en la que los valores más altos significan mejor percepción de la salud y los valores más bajos significan peor percepción de la salud. Las puntuaciones de CVRS son solo orientativas y no indican un diagnóstico o problema de salud. </p>
 
-    <h1>RESULTADO</h1>
+    <h4 class="mt-5">Puntajes de calidad de vida relacionada con la salud</h4>
+    <canvas id="myChart" height="100"></canvas>
+    <script>
+        // Obtener el contexto del canvas donde se dibujará el gráfico
+        var ctx = document.getElementById('myChart').getContext('2d');
+        
+        // Crear un nuevo gráfico
+        var myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: [
+                    'Bienestar emocional', 
+                    'Bienestar y aceptación social', 
+                    'Relaciones en la familia', 
+                    'Participación', 
+                    'Entorno escolar', 
+                    'Autonomía',
+                    'Dolor',
+                    'Puntaje general de CVRS'
+                ],
+                datasets: [{
+                    data: [60, 63, 78, 70, 75, 55, 65, 55],
+                    backgroundColor: 'rgba(154, 141, 219, 1)'
+                }]
+            },
+            options: {
+                indexAxis: 'y', 
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+            }                
+            }
+        });
+    </script>
 
 
-        <p>
-            Fecha: DD/MM/AAAA;   <br />
-            Código de participante: {{cpqol.codigo}}  <br />
-            Respuesta del / de la: {{grupo}}
-        </p>
-    
+    <p class="mt-5">
+        Fecha: DD/MM/AAAA;   <br />
+        Código de participante: {{cpqol.codigo}}  <br />
+        Respuesta del / de la: {{grupo}}
+    </p>
+
     <small> 
         <p><b>Información del proyecto: </b><br />
         Responsables: Silvina Berra (<a href="mailto:sberra@unc.edu.ar">sberra@unc.edu.ar</a>), Natalia Herrera Sterren, Yasmin Dame. Programa de Salud del Centro de Investigaciones y Estudios sobre Cultura y Sociedad, CONICET, Universidad Nacional de Córdoba. <br />
