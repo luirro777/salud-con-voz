@@ -2,7 +2,7 @@
 
 {% block contenido %}
 <div class="container">
-            <h1 class="mt-5 mb-3">Encuesta {% if form %}{% if seccion.numero > 0 %} - <span class="badge bg-success">Paso: {{seccion.numero}} / {{total_secciones}}</span>{% endif %}{% endif %}</h1>
+            <h1 class="mt-5 mb-3">Encuesta {% if form %}{% if seccion.numero > 0 %} <span class="badge bg-success">Paso: {{seccion.numero}} / {{total_secciones}}</span>{% endif %}{% endif %}</h1>
             <h2 class="mb-1"> {{seccion.nombre}}</h2>
             <h5 class="mb-5"> {{seccion.subtitulo}}</h5>
             <div class="row">

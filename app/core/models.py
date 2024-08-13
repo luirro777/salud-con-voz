@@ -171,16 +171,16 @@ class Cpqol(models.Model):
 	@property
 	def current_seccion(self):
 		if self.servicios: return 12
-		if not self.tutor: return 1 
-		if not self.paciente: return 2
-		if not self.sentimientos: return 3
-		if not self.relaciones: return 4
-		if not self.familia: return 5
-		if not self.participacion: return 6
-		if not self.escuela: return 7
-		if not self.salud: return 8
-		if not self.dolor: return 9 
-		if not self.servicios: return 10
+		if not self.tutor: return 2 
+		if not self.paciente: return 3
+		if not self.sentimientos: return 4
+		if not self.relaciones: return 5
+		if not self.familia: return 6
+		if not self.participacion: return 7
+		if not self.escuela: return 8
+		if not self.salud: return 9
+		if not self.dolor: return 10 
+		if not self.servicios: return 11
 		return 0
 	
 	@property
