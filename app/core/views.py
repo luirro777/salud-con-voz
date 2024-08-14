@@ -24,16 +24,16 @@ def vista_formulario(request):
     secciones = [
         {'form': TerminosYCondicionesForm, 'nombre': "Términos y condiciones", 'subtitulo': ""},
         {'form': CodigoForm, 'nombre': "Código de participante", 'subtitulo': "Generación de código de identificación"},
-        {'form': TutorForm, 'nombre': "Padre, madre o cuidador", 'subtitulo': 'Información general sobre la persona que responde'},
-        {'form': PacienteForm, 'nombre': "Paciente", 'subtitulo': 'Datos generales de niño/a o adolescente'},
-        {'form': SentimientosForm, 'nombre': "Sus sentimientos",  'subtitulo': ""},
-        {'form': RelacionesForm, 'nombre': "Relaciones con los demás", 'subtitulo': ''},
-        {'form': FamiliaForm, 'nombre': "Familia", 'subtitulo': ''},
-        {'form': ParticipacionForm, 'nombre': "Participacion", 'subtitulo': ''},
-        {'form': EscuelaForm, 'nombre': "Escuela o Colegio", 'subtitulo': ''},
-        {'form': SaludForm, 'nombre': "Salud", 'subtitulo': ''},
-        {'form': DolorForm, 'nombre': "Dolor y molestias", 'subtitulo': ''},
-        {'form': ServiciosForm, 'nombre': "Acceso a servicios", 'subtitulo': ''},
+        {'form': TutorForm, 'attr': "tutor", 'nombre': "Padre, madre o cuidador", 'subtitulo': 'Información general sobre la persona que responde'},
+        {'form': PacienteForm, 'attr': "paciente", 'nombre': "Paciente", 'subtitulo': 'Datos generales de niño/a o adolescente'},
+        {'form': SentimientosForm, 'attr': "sentimientos", 'nombre': "Sus sentimientos",  'subtitulo': ""},
+        {'form': RelacionesForm, 'attr': "relaciones", 'nombre': "Relaciones con los demás", 'subtitulo': ''},
+        {'form': FamiliaForm, 'attr': "familia", 'nombre': "Familia", 'subtitulo': ''},
+        {'form': ParticipacionForm, 'attr': "participacion", 'nombre': "Participacion", 'subtitulo': ''},
+        {'form': EscuelaForm, 'attr': "escuela", 'nombre': "Escuela o Colegio", 'subtitulo': ''},
+        {'form': SaludForm, 'attr': "salud", 'nombre': "Salud", 'subtitulo': ''},
+        {'form': DolorForm, 'attr': "dolor", 'nombre': "Dolor y molestias", 'subtitulo': ''},
+        {'form': ServiciosForm, 'attr': "servicios", 'nombre': "Acceso a servicios", 'subtitulo': ''},
         {'form': None, 'nombre': "Informe de resultados", 'subtitulo': 'Calidad de vida relacionada con la salud en niñas, niños, adolescentes y jóvenes con parálisis cerebral'},
     ]
     total_secciones = len(secciones) - 1
@@ -57,14 +57,18 @@ def vista_formulario(request):
             elif numero_seccion == 1:
                 cpqol = form.save()
             else:
-                instance = form.save(cpqol, seccion['nombre'].lower())
+                instance = form.save(cpqol, seccion['attr'].lower())
             return HttpResponseRedirect(reverse('cpqol') + f'?seccion={numero_seccion+1}&codigo={cpqol.codigo}')   
     else:
         if not numero_seccion == total_secciones:
             if numero_seccion > 1:
-                instance = getattr(cpqol, seccion['nombre'].lower(), None)
+                instance = getattr(cpqol, seccion['attr'].lower(), None)
                 form = current_form(instance=instance)
             else:
                 form = current_form(request.user)
+
+    if numero_seccion == 12: 
+        labels = list(cpqol.resultados.keys())
+        values = list(cpqol.resultados.values())
 
     return render(request, "core/formulario.html", locals())

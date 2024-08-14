@@ -23,18 +23,9 @@
         var myChart = new Chart(ctx, {
             type: 'bar',
             data: {
-                labels: [
-                    'Bienestar emocional', 
-                    'Bienestar y aceptación social', 
-                    'Relaciones en la familia', 
-                    'Participación', 
-                    'Entorno escolar', 
-                    'Autonomía',
-                    'Dolor',
-                    'Puntaje general de CVRS'
-                ],
+                labels: {{ labels|safe }},
                 datasets: [{
-                    data: [60, 63, 78, 70, 75, 55, 65, 55],
+                    data: {{ values|safe }},
                     backgroundColor: 'rgba(154, 141, 219, 1)'
                 }]
             },
