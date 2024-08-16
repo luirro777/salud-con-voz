@@ -6,8 +6,26 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 class Tutor(models.Model):
 	
 	edad = models.IntegerField(verbose_name="Edad: [De la persona que responde]")
-	relacion = models.CharField(max_length=50, verbose_name="¿Cuál es su relación con el niño/a o adolescente?")
-	quien_cuida = models.CharField(max_length=100, verbose_name="¿Usted es la persona que se ocupa principalmente del cuidado?")
+	CHOICES_RELACION = {
+		'madre': 'Madre',
+		'padre': 'Padre',
+		'tutor': 'Tutor/a legal',
+		'pareja-padre-madre': 'Pareja de la madre o el padre',
+		'abuelo': 'Abuela/o',
+		'hermano': 'Hermana/o',
+		'otro-familiar': 'Otro familiar',
+		'otro-no-familiar': 'Otra persona, no familiar',
+	}	
+	relacion = models.CharField(max_length=100, choices=CHOICES_RELACION, verbose_name="¿Cuál es su relación con el niño/a o adolescente?")
+	relacion_otro = models.CharField(max_length=100, verbose_name="¿Cuál?", blank=True, null=True)
+	CHOICES_QUIEN_CUIDA = {
+		'solo': 'Sí, generalmente sola /solo',
+		'con-ayuda': 'Sí, con la ayuda de otra/s persona/s',
+		'otra-persona': 'No, generalmente otra/s persona/s se ocupan del chico/a',
+		'otra-opcion': '¿Otra opción?',
+	}		
+	quien_cuida = models.CharField(max_length=100, choices=CHOICES_QUIEN_CUIDA, verbose_name="¿Usted es la persona que se ocupa principalmente del cuidado?")
+	quien_cuida_otro = models.CharField(max_length=100, verbose_name="¿Quién/es? Por favor, especifique", blank=True, null=True)
 	estudios_alcanzados = models.CharField(max_length=100, verbose_name="¿Cuál es el nivel máximo de estudios finalizado por la madre del niño/a o adolescente?")
 	CHOICES_SALUD = {
 		'mala': 'Mala',
@@ -17,21 +35,82 @@ class Tutor(models.Model):
 		'excelente': 'Excelente',
 	}
 	estado_salud = models.CharField(max_length=20, choices=CHOICES_SALUD, verbose_name="Usted diría que SU SALUD es: [De la persona que responde]")
+	CHOICES_GENERO = {
+		'femenino': 'Femenino',
+		'masculino': 'Masculino',
+		'no-binario': 'No binario',
+		'otro': 'Otro',
+	}
+	genero = models.CharField(max_length=20, choices=CHOICES_GENERO, verbose_name="Género")
+	genero_otro = models.CharField(max_length=20, verbose_name="¿Cuál?")	
+
+
+
+
+
+
+
+
+
+
 
 class Paciente(models.Model):
 	edad = models.IntegerField(blank=True, null=True, verbose_name="Edad: [Del niño/a o adolescente]")
 	CHOICES_GENERO = {
-		'mujer': 'Mujer',
-		'varon': 'Varón',
+		'femenino': 'Femenino',
+		'masculino': 'Masculino',
+		'no-binario': 'No binario',
 		'otro': 'Otro',
-
 	}
 	genero = models.CharField(max_length=20, choices=CHOICES_GENERO, verbose_name="Género")
-	provincia = models.CharField(max_length=30, verbose_name="Lugar de residencia: [Provincia]")
-	ciudad = models.CharField(max_length=30, verbose_name="Lugar de residencia: [Ciudad]")
-	obra_social = models.CharField(max_length=30, blank=True, null=True, verbose_name="¿Cuenta con obra social (por ejemplo: APROSS, OSECAC, UOM, OSPACA, OSPECOM, UOCRA, UPCN, etc.)? ¿Cuál?")
-	prepaga = models.CharField(max_length=30, blank=True, null=True, verbose_name="¿Cuenta con medicina prepaga o plan privado de salud (por ejemplo: GEA, MEDIFE, SIPSSA, OMINT, SWISS MEDICAL, etc.)? ¿Cuál?")
-	servicio_publico = models.CharField(max_length=30, blank=True, null=True, verbose_name="¿Hace uso del sistema de servicios o programas públicos de salud (por ejemplo: Hospitales públicos, Dispensarios, Incluir Salud, etc.)? ¿Cuál?")
+	genero_otro = models.CharField(max_length=20, verbose_name="¿Cuál?")
+	CHOICES_PROVINCIA = {
+			"Ciudad Autónoma de Buenos Aires": "Ciudad Autónoma de Buenos Aires",
+			"Buenos Aires": "Buenos Aires",
+			"Catamarca": "Catamarca",
+			"Córdoba": "Córdoba",
+			"Corrientes": "Corrientes",
+			"Entre Ríos": "Entre Ríos",
+			"Jujuy": "Jujuy",
+			"Mendoza": "Mendoza",
+			"La Rioja": "La Rioja",
+			"Salta": "Salta",
+			"San Juan": "San Juan",
+			"San Luis": "San Luis",
+			"Santa Fe": "Santa Fe",
+			"Santiago del Estero": "Santiago del Estero",
+			"Tucumán": "Tucumán",
+			"Chaco": "Chaco",
+			"Chubut": "Chubut",
+			"Formosa": "Formosa",
+			"Misiones": "Misiones",
+			"Neuquén": "Neuquén",
+			"La Pampa": "La Pampa",
+			"Río Negro": "Río Negro",
+			"Santa Cruz": "Santa Cruz",
+			"Tierra del Fuego": "Tierra del Fuego",
+	}
+
+	provincia = models.CharField(max_length=100, choices=CHOICES_PROVINCIA, verbose_name="Lugar de residencia: [Provincia]")
+	ciudad = models.CharField(max_length=100, verbose_name="Lugar de residencia: [Ciudad]")
+	CHOICES_COBERTURA = {
+		"sistema-publico": "Utiliza el sistema público exclusivamente.",
+		"programa-estatal": "Programas o planes estatales de salud",
+		"pami": "PAMI",
+		"obra-social": "Obra social (por ejemplo: APROSS, OSECAC, UOM, OSPACA, OSPECOM, UOCRA, UPCN, etc.)",
+		"prepaga-obra-social": "Prepaga a través de obra social (por ejemplo: GEA, MEDIFE, OSDE, SIPSSA, OMINT, SWISS MEDICAL, etc.)",
+		"prepaga-voluntaria": "Prepaga por contratación voluntaria (por ejemplo: GEA, MEDIFE, OSDE, SIPSSA, OMINT, SWISS MEDICAL, etc.)",
+		"emergencia-medica": "Emergencia médica (por ejemplo: URG, EMI, etc.)",
+		"nsnr": "No sé / No respondo."
+	}
+	cobertura = models.CharField(max_length=100, choices=CHOICES_COBERTURA, verbose_name="¿Qué tipo de cobertura de salud tiene su hijo/a actualmente?")
+	cobertura_cual = models.CharField(max_length=100, blank=True, null=True, verbose_name="¿Cuál?")
+	CHOICES_CUD = {
+		"no": "No",
+		"si": "Si",
+		"nsnr": "No sé / No respondo",
+	}
+	certificado_discapacidad = models.CharField(max_length=100, choices=CHOICES_CUD, verbose_name="¿Su hijo tiene Certificado Único de Discapacidad (CUD)?")	
 	CHOICES_MOVIMIENTO = {
 		1: 'Tiene dificultad para mantenerse sentado y para poder controlar la cabeza y el tronco en cualquier posición.',
 		2: 'Puede mantenerse sentado con algún soporte en pelvis o en tronco, pero no estar de pie, ni caminar sin gran ayuda.',
@@ -178,7 +257,7 @@ class Servicios(models.Model, Calculadora):
 class Cpqol(models.Model):
 	creacion = models.DateTimeField('creacion',auto_now_add=True)    
 	user=models.ForeignKey(User, blank=True, null=True, on_delete=models.PROTECT)
-	codigo=models.CharField(max_length=30, blank=True, null=True)
+	codigo=models.CharField(max_length=100, blank=True, null=True)
 	tutor=models.ForeignKey(Tutor, blank=True, null=True, on_delete=models.PROTECT)
 	paciente=models.ForeignKey(Paciente, blank=True, null=True, on_delete=models.PROTECT)
 	sentimientos=models.ForeignKey(Sentimientos, blank=True, null=True, on_delete=models.PROTECT)
