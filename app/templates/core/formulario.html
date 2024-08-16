@@ -1,7 +1,7 @@
 {% extends '_base.html' %}
 
 {% block contenido %}
-<div class="container">
+<div class="container px-1">
             <h1 class="mt-5 mb-3">Encuesta {% if form %}{% if seccion.numero > 0 %} <span class="badge bg-success">Paso: {{seccion.numero}} / {{total_secciones}}</span>{% endif %}{% endif %}</h1>
             <h2 class="mb-1"> {{seccion.nombre}}</h2>
             <h5 class="mb-5"> {{seccion.subtitulo}}</h5>
@@ -32,6 +32,84 @@
                 </div>
             </div>            
 </div>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+
+    // Mostrar Relacion Otro
+    const selectRelacion = document.getElementById('id_relacion');
+    const divRelacionOtro = document.getElementById('div_relacion_otro');
+
+    // Función para ajustar la visibilidad del campo "¿Cuál?"
+    if (selectRelacion) {
+        function toggleRelacionOtro() {
+            if (selectRelacion.value === 'otro-familiar' || selectRelacion.value === 'otro-no-familiar') {
+                divRelacionOtro.style.display = 'block';
+            } else {
+                divRelacionOtro.style.display = 'none';
+            }
+        }
+    
+        // Comprueba el valor inicial
+        toggleRelacionOtro();
+    
+        // Añade el evento para manejar cambios
+        selectRelacion.addEventListener('change', toggleRelacionOtro);
+
+    }
+
+
+
+
+    // Mostrar Quien cuida otro
+    const selectQuienCuida = document.getElementById('id_quien_cuida');
+    const divQuienCuidaOtro = document.getElementById('div_quien_cuida_otro');
+
+    // Función para ajustar la visibilidad del campo "¿Cuál?"
+    if (selectQuienCuida) {    
+    function toggleQuienCuidaOtro() {
+        if (selectQuienCuida.value === 'con-ayuda' || selectQuienCuida.value === 'otra-persona' || selectQuienCuida.value === 'otra-opcion') {
+            divQuienCuidaOtro.style.display = 'block';
+        } else {
+            divQuienCuidaOtro.style.display = 'none';
+        }
+    }
+
+    // Comprueba el valor inicial
+    toggleQuienCuidaOtro();
+
+    // Añade el evento para manejar cambios
+    selectQuienCuida.addEventListener('change', toggleQuienCuidaOtro);
+    }
+
+
+
+    
+    // Mostrar Genero otro
+    const selectGenero = document.getElementById('id_genero');
+    const divGeneroOtro = document.getElementById('div_genero_otro');
+
+    // Función para ajustar la visibilidad del campo "¿Cuál?"
+    if (selectGenero) {
+        function toggleGeneroOtro() {
+            if (selectGenero.value === 'otro') {
+                divGeneroOtro.style.display = 'block';
+            } else {
+                divGeneroOtro.style.display = 'none';
+            }
+        }
+    
+        // Comprueba el valor inicial
+        toggleGeneroOtro();
+    
+        // Añade el evento para manejar cambios
+        selectGenero.addEventListener('change', toggleGeneroOtro);
+    }
+
+    });    
+</script>
+
 {% if cpqol.confirmado %}
     <script>
 
