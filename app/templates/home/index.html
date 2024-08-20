@@ -5,7 +5,10 @@
         <div class="container px-2">
 
             <h1 class="mt-5">Cuestionarios cargados</h1>
-            <div class="text-end"><a href="{% url 'cpqol' %}?seccion=0" class="btn btn-outline-primary ">Nuevo cuestionario</a></div>
+            <div class="text-end">
+                <a href="{% url 'cpqol' %}?seccion=0" class="btn btn-outline-primary ">Nuevo cuestionario</a>
+                <a href="{% url 'exportar_excel' %}" class="btn btn-outline-success"><i class="bi-filetype-xlsx"></i></a>
+            </div>
             <table class="table table-striped mt-5">
                 <thead>
                     <tr>

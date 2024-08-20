@@ -1,7 +1,8 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse
+from .resources import CpqolResource
 
 from .forms import *
 
@@ -72,3 +73,12 @@ def vista_formulario(request):
         values = list(cpqol.resultados.values())
 
     return render(request, "core/formulario.html", locals())
+
+
+
+def exportar_excel(request):
+    modelo_resource = CpqolResource()
+    dataset = modelo_resource.export(Cpqol.objects.filter(user=request.user))
+    response = HttpResponse(dataset.export('xlsx'), content_type='application/vnd.ms-excel')
+    response['Content-Disposition'] = 'attachment; filename="resultados.xlsx"'
+    return response

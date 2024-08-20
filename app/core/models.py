@@ -42,7 +42,7 @@ class Tutor(models.Model):
 		'otro': 'Otro',
 	}
 	genero = models.CharField(max_length=20, choices=CHOICES_GENERO, verbose_name="Género")
-	genero_otro = models.CharField(max_length=20, verbose_name="¿Cuál?")	
+	genero_otro = models.CharField(max_length=20, verbose_name="¿Cuál?", blank=True, null=True)	
 
 
 
@@ -63,7 +63,7 @@ class Paciente(models.Model):
 		'otro': 'Otro',
 	}
 	genero = models.CharField(max_length=20, choices=CHOICES_GENERO, verbose_name="Género")
-	genero_otro = models.CharField(max_length=20, verbose_name="¿Cuál?")
+	genero_otro = models.CharField(max_length=20, verbose_name="¿Cuál?", blank=True, null=True)
 	CHOICES_PROVINCIA = {
 			"Ciudad Autónoma de Buenos Aires": "Ciudad Autónoma de Buenos Aires",
 			"Buenos Aires": "Buenos Aires",
@@ -182,6 +182,7 @@ class Calculadora:
 				suma += self.MAPPER[getattr(self, field_name)]
 		
 		return suma/len(fields)	
+	
 
 class Sentimientos(models.Model, Calculadora):
 	hacer_cosas = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS, verbose_name="¿Cómo piensa que su hijo/a se siente con respecto a su capacidad para hacer las cosas que quiere hacer?") 
@@ -190,6 +191,8 @@ class Sentimientos(models.Model, Calculadora):
 	oportunidades = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS, verbose_name="¿Cómo piensa que su hijo/a se siente con respecto a sus oportunidades en la vida?")
 	aspecto_fisico = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS, verbose_name="¿Cómo piensa que su hijo/a se siente con respecto a su aspecto físico?")
 
+	
+	
 
 class Relaciones(models.Model, Calculadora):
 	con_gente = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS, verbose_name="¿Cómo piensa que su hijo/a se siente con respecto a cómo se lleva con la gente en general?") 
