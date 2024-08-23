@@ -27,7 +27,7 @@ SECRET_KEY = "django-insecure-9zf*l-2_463u1j0t=ju&@8tpkklgaxl5loq6h795v9!asfyon1
 DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
-
+CSRF_TRUSTED_ORIGINS = ['https://saludconvoz.fcm.unc.edu.ar']
 # Application definition
 
 INSTALLED_APPS = [
