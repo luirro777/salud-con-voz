@@ -193,8 +193,64 @@ class ServiciosForm(BaseForm):
             "acceso_ayuda_aprendizaje": forms.RadioSelect,
         }                    
 
+class Salud_ultimasemana_Form(BaseForm):
+    class Meta:
+        model = Salud_ultimasemana
+        fields = '__all__'
+        widgets = {
+                    "frustra": forms.RadioSelect,
+                    "correr": forms.RadioSelect,
+                    "nadar": forms.RadioSelect,
+                    "vestirse": forms.RadioSelect,
+                    "inteligencia": forms.RadioSelect,
+                    "edificios": forms.RadioSelect,
+                    "piernas": forms.RadioSelect,
+                    "caminar": forms.RadioSelect,
+                    "caminar_2": forms.RadioSelect,
+                    "bañarse": forms.RadioSelect,
+                    "bañarse_2": forms.RadioSelect,
+                    "ir_baño": forms.RadioSelect,
+                    "ir_baño_2": forms.RadioSelect,
+                    "comunicarse": forms.RadioSelect,
+                    "comunicarse_2": forms.RadioSelect,
+                    "hablar": forms.RadioSelect,
+                    "hablar_2": forms.RadioSelect
+        } 
 
+class Salud_ultimasemana2_Form(BaseForm):
+    class Meta:
+        model = Salud_ultimasemana_2
+        fields = '__all__'
+        widgets = {
+                    "fisicamente": forms.RadioSelect,
+                    "energia": forms.RadioSelect,
+                    "tristeza": forms.RadioSelect,
+                    "soledad": forms.RadioSelect,
+                    "tiempo_libre": forms.RadioSelect,
+                    "cosas_queria": forms.RadioSelect,
+                    "justicia": forms.RadioSelect,
+                    "diversion": forms.RadioSelect,
+                    "colegio": forms.RadioSelect,
+                    "atencion": forms.RadioSelect
+        }   
 
+class Caracteristicas_hogar_Form(BaseForm):
+    class Meta:
+        model = caracteristicas_hogar
+        fields = '__all__'
+        widgets = {
+                    "dormitorio_propio": forms.RadioSelect,
+                    "autos": forms.RadioSelect,
+                    "computadoras": forms.RadioSelect,
+                    "duchas": forms.RadioSelect,
+                    "lavaplatos": forms.RadioSelect,
+                    "tareas_hogar": forms.RadioSelect,
+                    "vacaciones": forms.RadioSelect,
+                    "nivel_estudio": forms.RadioSelect,
+                    "sosten_economico": forms.RadioSelect,
+                    "otros": forms.RadioSelect,
+                    "nivel_estudio_2": forms.RadioSelect
+                    }
 
 
 
