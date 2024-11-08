@@ -16,8 +16,10 @@ class TerminosYCondicionesForm(forms.Form):
     
 
 class CodigoForm(forms.Form):
+    mes_ano = forms.CharField(label="Ingrese Mes y Año de Nacimiento en formato MMAA", min_length=4, max_length=4, widget=forms.TextInput(attrs={'class': 'form-control',}))
     dni = forms.CharField(label="Ingrese los últimos 3 números del DNI del paciente", min_length=3, max_length=3, widget=forms.TextInput(attrs={'class': 'form-control'}))
-    nombre = forms.CharField(label="Ingrese el primer nombre del paciente", max_length=100, widget=forms.TextInput(attrs={'class': 'form-control'}))
+    nombre = forms.CharField(label="Ingrese la inicial del primer nombre", min_length=1, max_length=1, widget=forms.TextInput(attrs={'class': 'form-control'}))
+    apellido = forms.CharField(label="Ingrese la inicial del primer apellido", min_length=1, max_length=1, widget=forms.TextInput(attrs={'class': 'form-control'}))
 
     def __init__(self, user=None, *args, **kwargs):
         self.user = user
@@ -25,15 +27,17 @@ class CodigoForm(forms.Form):
 
     def clean(self):
         cleaned_data = super().clean()
+        mes_ano = cleaned_data.get('mes_ano')
         dni = cleaned_data.get('dni')
-        nombre = cleaned_data.get('nombre')
-        codigo = f'{self.user.username}-{dni}-{nombre}'
+        nombre = cleaned_data.get('nombre').upper()
+        apellido = cleaned_data.get('apellido').upper()
+        codigo = f'{self.user.username}-{mes_ano}{dni}{nombre}{apellido}'
         try:
             _ = Cpqol.objects.get(
                 user=self.user,
                 codigo=codigo
             )
-            self.add_error('dni', "Ya posee un CPQOL con esta combinación de DNI y NOMBRE")
+            self.add_error('dni', "Ya posee un CPQOL con esta combinación")
         except:
             pass
             
@@ -43,14 +47,26 @@ class CodigoForm(forms.Form):
 
     def save(self):
         dni = self.cleaned_data.get('dni')
-        nombre = self.cleaned_data.get('nombre')
-        codigo = f'{self.user.username}-{dni}-{nombre}'
+        mes_ano = self.cleaned_data.get('mes_ano')
+        dni = self.cleaned_data.get('dni')
+        nombre = self.cleaned_data.get('nombre').upper()
+        apellido = self.cleaned_data.get('apellido').upper()
+        codigo = f'{self.user.username}-{mes_ano}{dni}{nombre}{apellido}'
         cpqol_instance = Cpqol.objects.create(
             user=self.user,
             codigo=codigo
         )
         return cpqol_instance
 
+    def help_text(self):
+        return """
+Esta plataforma es segura y sus
+responsables se comprometen a respetar la confidencialidad de la información que
+ingrese. Igualmente, por razones éticas y de seguridad, ahora se generará un código
+anónimo único por participante para que no se pueda identificar a las personas con las
+respuestas, pero que en el futuro facilite reunir datos de la misma persona bajo ese
+código.
+"""
 
 class BaseForm(forms.ModelForm):
 
@@ -80,6 +96,9 @@ class PacienteForm(BaseForm):
     class Meta:
         model = Paciente
         fields = '__all__'
+        widgets = {
+            "fecha_nacimiento": forms.DateInput,
+        }
 
 
 class SentimientosForm(BaseForm):
@@ -193,9 +212,9 @@ class ServiciosForm(BaseForm):
             "acceso_ayuda_aprendizaje": forms.RadioSelect,
         }                    
 
-class Salud_ultimasemana_Form(BaseForm):
+class SaludUltimaSemanaForm(BaseForm):
     class Meta:
-        model = Salud_ultimasemana
+        model = SaludUltimaSemana
         fields = '__all__'
         widgets = {
                     "frustra": forms.RadioSelect,
@@ -217,9 +236,9 @@ class Salud_ultimasemana_Form(BaseForm):
                     "hablar_2": forms.RadioSelect
         } 
 
-class Salud_ultimasemana2_Form(BaseForm):
+class SaludUltimaSemana2Form(BaseForm):
     class Meta:
-        model = Salud_ultimasemana_2
+        model = SaludUltimaSemana2
         fields = '__all__'
         widgets = {
                     "fisicamente": forms.RadioSelect,
@@ -234,9 +253,9 @@ class Salud_ultimasemana2_Form(BaseForm):
                     "atencion": forms.RadioSelect
         }   
 
-class Caracteristicas_hogar_Form(BaseForm):
+class HogarForm(BaseForm):
     class Meta:
-        model = caracteristicas_hogar
+        model = Hogar
         fields = '__all__'
         widgets = {
                     "dormitorio_propio": forms.RadioSelect,
@@ -248,7 +267,6 @@ class Caracteristicas_hogar_Form(BaseForm):
                     "vacaciones": forms.RadioSelect,
                     "nivel_estudio": forms.RadioSelect,
                     "sosten_economico": forms.RadioSelect,
-                    "otros": forms.RadioSelect,
                     "nivel_estudio_2": forms.RadioSelect
                     }
 
