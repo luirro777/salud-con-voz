@@ -3,6 +3,18 @@ from django.contrib.auth.models import User
 
 from django.core.validators import MinValueValidator, MaxValueValidator
 
+CHOICES_NIVEL_EDUCATIVO = (
+	("1. No fue a la escuela", "1. No fue a la escuela"),
+	("2. Primaria incompleta (comenzó, pero no terminó la escuela primaria)", "2. Primaria incompleta (comenzó, pero no terminó la escuela primaria)"),
+	("3. Primaria completa", "3. Primaria completa"),
+	("4. Secundaria incompleta (comenzó, pero no terminó la secundaria)", "4. Secundaria incompleta (comenzó, pero no terminó la secundaria)"),
+	("5. Secundaria completa", "5. Secundaria completa"),
+	("6. Terciario o universitario incompleto (los comenzó, pero no los terminó)a", "6. Terciario o universitario incompleto (los comenzó, pero no los terminó)a"),
+	("7. Terciario completa", "7. Terciario completa"),
+	("8. Universitario de grado completo o posgrado completo", "8. Universitario de grado completo o posgrado completo")
+)
+
+
 class Tutor(models.Model):
 	
 	edad = models.IntegerField(verbose_name="Edad: [De la persona que responde]")
@@ -26,7 +38,7 @@ class Tutor(models.Model):
 	}		
 	quien_cuida = models.CharField(max_length=100, choices=CHOICES_QUIEN_CUIDA, verbose_name="¿Usted es la persona que se ocupa principalmente del cuidado?")
 	quien_cuida_otro = models.CharField(max_length=100, verbose_name="¿Quién/es? Por favor, especifique", blank=True, null=True)
-	estudios_alcanzados = models.CharField(max_length=100, verbose_name="¿Cuál es el nivel máximo de estudios finalizado por la madre del niño/a o adolescente?")
+	estudios_alcanzados = models.CharField(max_length=200, choices=CHOICES_NIVEL_EDUCATIVO, verbose_name="¿Cuál es el nivel máximo de estudios finalizado por la madre del niño/a o adolescente?")
 	CHOICES_SALUD = {
 		'mala': 'Mala',
 		'regular': 'Regular',
@@ -55,7 +67,8 @@ class Tutor(models.Model):
 
 
 class Paciente(models.Model):
-	edad = models.IntegerField(blank=True, null=True, verbose_name="Edad: [Del niño/a o adolescente]")
+	edad = models.IntegerField(verbose_name="Edad: [Del niño/a o adolescente]")
+	fecha_nacimiento = models.DateField(verbose_name="Fecha de Nacimiento: [Del niño/a o adolescente]")
 	CHOICES_GENERO = {
 		'femenino': 'Femenino',
 		'masculino': 'Masculino',
@@ -257,8 +270,101 @@ class Servicios(models.Model, Calculadora):
 	acceso_pediatria= models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS, verbose_name="¿Cómo se siente USTED con respecto a el acceso a atención de pediatría o medicina general?") 
 	acceso_ayuda_aprendizaje= models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS, verbose_name="¿Cómo se siente USTED con respecto a el acceso a ayuda adicional de aprendizaje dentro de la escuela o colegio?") 
 
+
+
+CHOICES_FINALES = (
+	('Nunca' , 'Nunca'),
+	('Casi Nunca', 'Casi Nunca'),
+	('Algunas Veces', 'Algunas Veces'),
+	('Casi Siempre', 'Casi Siempre'),
+	('Siempre', 'Siempre')
+)
+
+CHOICES_SI_NO = {
+		"No":"No" , 
+		"Si":"Si"
+	}
+CHOICES_INTENSIDAD = { 
+	('Nada', 'Nada'),
+	('Un poco', 'Un poco'),
+	('Moderadamente','Moderadamente'),
+	('Mucho','Mucho'),
+	('Muchísimo','Muchísimo')
+}
+CHOICES_0_2 = (
+	("No", "No"),
+	("Si, uno", "Si, uno"),
+	("Si, dos o más", "Si, dos o más")
+)
+CHOICES_0_3 = (
+	("Ninguna", "Ninguna"),
+	("Una", "Una"),
+	("Dos", "Dos"),
+	("Tres o más", "Tres o más")
+)
+CHOICES_SI_NO_NOSE = (
+	("No" , "No" ),
+	("Si" , "Si" ),
+	("No lo sé", "No lo sé")
+)
+CHOICES_PRINCIPAL_SOSTEN = (
+	("1. La madre del chico o chica", "1. La madre del chico o chica"),
+	("2. El padre del chico o chica", "2. El padre del chico o chica"),
+	("3. Un abuelo o abuela del chico o chica", "3. Un abuelo o abuela del chico o chica"),
+	("4. Otra persona", "4. Otra persona"),
+)
+
+class SaludUltimaSemana(models.Model):
+	frustra = models.CharField(max_length=100, choices=CHOICES_FINALES, verbose_name="¿Su hijo/a se frustra por no poder seguir el ritmo de otros chicos/as?")
+	correr= models.CharField(max_length=100, choices=CHOICES_FINALES, verbose_name="¿A su hijo/a le gustaría poder correr como los demás chicos/as?") 
+	nadar = models.CharField(max_length=100, choices=CHOICES_FINALES, verbose_name="¿A su hijo/a le gustaría poder nadar como los demás chicos/as?")  
+	vestirse = models.CharField(max_length=100, choices=CHOICES_FINALES, verbose_name="¿A su hijo/a le molesta tardar mucho en vestirse?")
+	inteligencia = models.CharField(max_length=100, choices=CHOICES_FINALES, verbose_name="¿Su hijo/a siente que las personas piensan que es menos inteligente de lo que realmente es?")
+	edificios = models.CharField(max_length=100, choices=CHOICES_FINALES, verbose_name="¿Su hijo/a tiene problemas para entrar y salir de los edificios?")
+	piernas = models.CharField(max_length=100, choices=CHOICES_FINALES, verbose_name="Aunque su hijo/a no pueda mover las piernas muy bien ¿puede hacer la mayoría de las cosas?")
+	caminar = models.CharField(max_length=100, choices=CHOICES_SI_NO, verbose_name="¿Su hijo/a tiene problemas para caminar sin ayuda?")
+	caminar_2 = models.CharField(max_length=100, choices=CHOICES_FINALES, verbose_name="¿A su hijo/a le molesta no poder caminar sin ayuda?")
+	bañarse = models.CharField(max_length=100, choices=CHOICES_SI_NO, verbose_name="¿Su hijo/a tiene problemas para vestirse o bañarse?")
+	bañarse_2 = models.CharField(max_length=100, choices=CHOICES_FINALES, verbose_name="¿A su hijo/a le molesta que lo/a tenga que vestir y bañar otra persona?")
+	ir_baño = models.CharField(max_length=100, choices=CHOICES_SI_NO, verbose_name="¿Su hijo/a tiene problemas para ir al baño solo/a?")
+	ir_baño_2 = models.CharField(max_length=100, choices=CHOICES_FINALES, verbose_name="¿A su hijo/a le molesta que lo/a tengan que ayudar para ir al baño?")
+	comunicarse = models.CharField(max_length=100, choices=CHOICES_SI_NO, verbose_name="¿Su hijo/a tiene problemas para comunicarse?")
+	comunicarse_2 = models.CharField(max_length=100, choices=CHOICES_FINALES, verbose_name="¿Su hijo/a se puede comunicar tan bien como quiere?")
+	hablar = models.CharField(max_length=100, choices=CHOICES_SI_NO, verbose_name="¿Su hijo/a tiene problemas para hablar?")
+	hablar_2 = models.CharField(max_length=100, choices=CHOICES_FINALES, verbose_name="¿A su hijo/a le molesta no poder hablar tan bien como los demás chicos/as?")
+
+class SaludUltimaSemana2(models.Model):
+	fisicamente = models.CharField(max_length=100, choices=CHOICES_INTENSIDAD, verbose_name="¿El chico/a se sintió bien y físicamente en forma?")
+	energia= models.CharField(max_length=100, choices=CHOICES_INTENSIDAD, verbose_name="¿El chico/a se sintió lleno/a de energía?") 
+	tristeza = models.CharField(max_length=100, choices=CHOICES_INTENSIDAD, verbose_name="¿El chico/a se sintió triste?")  
+	soledad = models.CharField(max_length=100, choices=CHOICES_INTENSIDAD, verbose_name="¿El chico/a se sintió solo/a?")
+	tiempo_libre = models.CharField(max_length=100, choices=CHOICES_INTENSIDAD, verbose_name="¿El chico/a tuvo suficiente tiempo para él/ella?")
+	cosas_queria = models.CharField(max_length=100, choices=CHOICES_INTENSIDAD, verbose_name="¿El chico/a hizo las cosas que quería hacer en su tiempo libre?")
+	justicia = models.CharField(max_length=100, choices=CHOICES_INTENSIDAD, verbose_name="¿Los padres del chico/a fueron justos con él/ella?")
+	diversion = models.CharField(max_length=100, choices=CHOICES_INTENSIDAD, verbose_name="¿El chico/a se divirtió con sus amigos/as?")
+	colegio = models.CharField(max_length=100, choices=CHOICES_INTENSIDAD, verbose_name="¿Al chico/a le fue bien en la escuela o en el colegio?")
+	atencion = models.CharField(max_length=100, choices=CHOICES_INTENSIDAD, verbose_name="¿El chico/a pudo prestar atención en clase?")
+
+class Hogar(models.Model):
+	dormitorio_propio = models.CharField(max_length=100, choices=CHOICES_SI_NO, verbose_name="¿El chico o chica cuenta con un dormitorio para el/ella solo/a?")
+	autos = models.CharField(max_length=100, choices=CHOICES_0_2, verbose_name="¿La familia tiene auto o camioneta propios?") 
+	computadoras = models.CharField(max_length=100, choices=CHOICES_0_3, verbose_name="¿Cuántas computadoras, notebooks o tablets en funcionamiento tiene en total la familia? No incluya videojuegos y teléfonos con acceso a internet.")  
+	duchas = models.CharField(max_length=100, choices=CHOICES_0_3, verbose_name="¿Cuántos baños con ducha (o bañera) hay en su casa?")
+	lavaplatos = models.CharField(max_length=100, choices=CHOICES_SI_NO, verbose_name="¿Su familia tiene una máquina lavaplatos en casa?")
+	tareas_hogar = models.CharField(max_length=100, choices=CHOICES_SI_NO_NOSE, verbose_name="¿Alguna persona que no sea de su familia va a su casa a hacer tareas del hogar? Tareas de servicio doméstico como limpiar, lavar, planchar, etc.")
+	vacaciones = models.CharField(max_length=100, choices=CHOICES_0_3, verbose_name="Durante los últimos 12 meses, ¿cuántas veces salió de vacaciones con su familia a algún lugar dónde se quedaron más de un día?")
+	nivel_estudio = models.CharField(max_length=100, choices=CHOICES_NIVEL_EDUCATIVO, verbose_name="¿Cuál es el nivel máximo de estudios finalizado por la madre del chico o chica?")
+	sosten_economico = models.CharField(max_length=100, choices=CHOICES_PRINCIPAL_SOSTEN, verbose_name="¿Quién es el principal sostén económico del hogar donde vive el chico o chica?")
+	otros=  models.CharField(max_length=100, blank=True, null=True, verbose_name="Si respondió: otra persona, por favor indique ¿Quién?")
+	nivel_estudio_2 = models.CharField(max_length=100, choices=CHOICES_NIVEL_EDUCATIVO, verbose_name="¿Cuál es el máximo nivel de estudios que alcanzó esta persona (principal sostén económico del hogar)?")
+
+
+
+
+
+
 class Cpqol(models.Model):
-	creacion = models.DateTimeField('creacion',auto_now_add=True)    
+	creacion = models.DateTimeField('creacion',auto_now_add=True)
 	user=models.ForeignKey(User, blank=True, null=True, on_delete=models.PROTECT)
 	codigo=models.CharField(max_length=100, blank=True, null=True)
 	tutor=models.ForeignKey(Tutor, blank=True, null=True, on_delete=models.PROTECT)
@@ -271,84 +377,18 @@ class Cpqol(models.Model):
 	salud=models.ForeignKey(Salud, blank=True, null=True, on_delete=models.PROTECT)
 	dolor=models.ForeignKey(Dolor, blank=True, null=True, on_delete=models.PROTECT)
 	servicios=models.ForeignKey(Servicios, blank=True, null=True, on_delete=models.PROTECT)
-
-
-CHOICES_FINALES = { 'nunca' : 'nunca', 'casi nunca':'casi nunca', 'algunas veces': 'algunas veces', 'casi siempre': 'casi siempre', 'siempre': 'siempre'}
-CHOICES_FINALES_2 = {"No":"No" , "Si":"Si"}
-CHOICES_FINALES_3 = { 'nada' : 'nada', 'un poco':'un poco', 'moderadamente': 'moderadamente', 'mucho': 'mucho', 'muchísimo': 'muchísimo'}
-CHOICES_FINALES_4 = {"No":"No" , "Si, uno":"Si, uno",  "Si, dos o más" : "Si, dos o más"}
-CHOICES_FINALES_5 = {"Ninguna":"Ninguna" , "Una":"Una",  "Dos" : "Dos", "Tres o más" : "Tres o más"}
-CHOICES_FINALES_6 = {"No":"No" , "Si":"Si",  "No lo sé" : "No lo sé"}
-CHOICES_FINALES_7 = {"Ninguna vez":"Ninguna vez" , "Una vez":"Una vez",  "Dos veces" : "Dos veces", "Tres veces o más":"Tres veces o más"}
-CHOICES_FINALES_8 = {
-					"1. No fue a la escuela":"1. No fue a la escuela" , 
-					"2. Primaria incompleta (comenzó, pero no terminó la escuela primaria)":"2. Primaria incompleta (comenzó, pero no terminó la escuela primaria)",
-					"3. Primaria completa":"3. Primaria completa",
-					"4. Secundaria incompleta (comenzó, pero no terminó la secundaria)":"4. Secundaria incompleta (comenzó, pero no terminó la secundaria)",
-					"5. Secundaria completa":"5. Secundaria completa",
-					"6. Terciario o universitario incompleto (los comenzó, pero no los terminó)":"6. Terciario o universitario incompleto (los comenzó, pero no los terminó)a",
-					"7. Terciario completa":"7. Terciario completa",
-					"8. Universitario de grado completo o posgrado completo":"8. Universitario de grado completo o posgrado completo"
-					}
-CHOICES_FINALES_9 = {
-					"1. La madre del chico o chica":"1. La madre del chico o chica" , 
-					"2. El padre del chico o chica":"2. El padre del chico o chica",
-					"3. Un abuelo o abuela del chico o chica":"3. Un abuelo o abuela del chico o chica",
-					"4. Otra persona":"4. Otra persona"
-					}
-
-class Salud_ultimasemana(models.Model):
-	frustra = models.CharField(max_length=100, choices=CHOICES_FINALES, verbose_name="¿Su hijo/a se frustra por no poder seguir el ritmo de otros chicos/as?")
-	correr= models.CharField(max_length=100, choices=CHOICES_FINALES, verbose_name="¿A su hijo/a le gustaría poder correr como los demás chicos/as?") 
-	nadar = models.CharField(max_length=100, choices=CHOICES_FINALES, verbose_name="¿A su hijo/a le gustaría poder nadar como los demás chicos/as?")  
-	vestirse = models.CharField(max_length=100, choices=CHOICES_FINALES, verbose_name="¿A su hijo/a le molesta tardar mucho en vestirse?")
-	inteligencia = models.CharField(max_length=100, choices=CHOICES_FINALES, verbose_name="¿Su hijo/a siente que las personas piensan que es menos inteligente de lo que realmente es?")
-	edificios = models.CharField(max_length=100, choices=CHOICES_FINALES, verbose_name="¿Su hijo/a tiene problemas para entrar y salir de los edificios?")
-	piernas = models.CharField(max_length=100, choices=CHOICES_FINALES, verbose_name="Aunque su hijo/a no pueda mover las piernas muy bien ¿puede hacer la mayoría de las cosas?")
-	caminar = models.CharField(max_length=100, choices=CHOICES_FINALES_2, verbose_name="¿Su hijo/a tiene problemas para caminar sin ayuda?")
-	caminar_2 = models.CharField(max_length=100, choices=CHOICES_FINALES, verbose_name="¿A su hijo/a le molesta no poder caminar sin ayuda?")
-	bañarse = models.CharField(max_length=100, choices=CHOICES_FINALES_2, verbose_name="¿Su hijo/a tiene problemas para vestirse o bañarse?")
-	bañarse_2 = models.CharField(max_length=100, choices=CHOICES_FINALES, verbose_name="¿A su hijo/a le molesta que lo/a tenga que vestir y bañar otra persona?")
-	ir_baño = models.CharField(max_length=100, choices=CHOICES_FINALES_2, verbose_name="¿Su hijo/a tiene problemas para ir al baño solo/a?")
-	ir_baño_2 = models.CharField(max_length=100, choices=CHOICES_FINALES, verbose_name="¿A su hijo/a le molesta que lo/a tengan que ayudar para ir al baño?")
-	comunicarse = models.CharField(max_length=100, choices=CHOICES_FINALES_2, verbose_name="¿Su hijo/a tiene problemas para comunicarse?")
-	comunicarse_2 = models.CharField(max_length=100, choices=CHOICES_FINALES, verbose_name="¿Su hijo/a se puede comunicar tan bien como quiere?")
-	hablar = models.CharField(max_length=100, choices=CHOICES_FINALES_2, verbose_name="¿Su hijo/a tiene problemas para hablar?")
-	hablar_2 = models.CharField(max_length=100, choices=CHOICES_FINALES, verbose_name="¿A su hijo/a le molesta no poder hablar tan bien como los demás chicos/as?")
-
-class Salud_ultimasemana_2(models.Model):
-	fisicamente = models.CharField(max_length=100, choices=CHOICES_FINALES_3, verbose_name="¿El chico/a se sintió bien y físicamente en forma?")
-	energia= models.CharField(max_length=100, choices=CHOICES_FINALES_3, verbose_name="¿El chico/a se sintió lleno/a de energía?") 
-	tristeza = models.CharField(max_length=100, choices=CHOICES_FINALES_3, verbose_name="¿El chico/a se sintió triste?")  
-	soledad = models.CharField(max_length=100, choices=CHOICES_FINALES_3, verbose_name="¿El chico/a se sintió solo/a?")
-	tiempo_libre = models.CharField(max_length=100, choices=CHOICES_FINALES_3, verbose_name="¿El chico/a tuvo suficiente tiempo para él/ella?")
-	cosas_queria = models.CharField(max_length=100, choices=CHOICES_FINALES_3, verbose_name="¿El chico/a hizo las cosas que quería hacer en su tiempo libre?")
-	justicia = models.CharField(max_length=100, choices=CHOICES_FINALES_3, verbose_name="¿Los padres del chico/a fueron justos con él/ella?")
-	diversion = models.CharField(max_length=100, choices=CHOICES_FINALES_3, verbose_name="¿El chico/a se divirtió con sus amigos/as?")
-	colegio = models.CharField(max_length=100, choices=CHOICES_FINALES_3, verbose_name="¿Al chico/a le fue bien en la escuela o en el colegio?")
-	atencion = models.CharField(max_length=100, choices=CHOICES_FINALES_3, verbose_name="¿El chico/a pudo prestar atención en clase?")
-
-class caracteristicas_hogar(models.Model):
-	dormitorio_propio = models.CharField(max_length=100, choices=CHOICES_FINALES_2, verbose_name="¿El chico o chica cuenta con un dormitorio para el/ella solo/a?")
-	autos= models.CharField(max_length=100, choices=CHOICES_FINALES_4, verbose_name="¿La familia tiene auto o camioneta propios?") 
-	computadoras = models.CharField(max_length=100, choices=CHOICES_FINALES_5, verbose_name="¿Cuántas computadoras, notebooks o tablets en funcionamiento tiene en total la familia? No incluya videojuegos y teléfonos con acceso a internet.")  
-	duchas = models.CharField(max_length=100, choices=CHOICES_FINALES_5, verbose_name="¿Cuántos baños con ducha (o bañera) hay en su casa?")
-	lavaplatos = models.CharField(max_length=100, choices=CHOICES_FINALES_2, verbose_name="¿Su familia tiene una máquina lavaplatos en casa?")
-	tareas_hogar = models.CharField(max_length=100, choices=CHOICES_FINALES_6, verbose_name="¿Alguna persona que no sea de su familia va a su casa a hacer tareas del hogar? Tareas de servicio doméstico como limpiar, lavar, planchar, etc.")
-	vacaciones = models.CharField(max_length=100, choices=CHOICES_FINALES_7, verbose_name="Durante los últimos 12 meses, ¿cuántas veces salió de vacaciones con su familia a algún lugar dónde se quedaron más de un día?")
-	nivel_estudio = models.CharField(max_length=100, choices=CHOICES_FINALES_8, verbose_name="¿Cuál es el nivel máximo de estudios finalizado por la madre del chico o chica?")
-	sosten_economico = models.CharField(max_length=100, choices=CHOICES_FINALES_9, verbose_name="¿Quién es el principal sostén económico del hogar donde vive el chico o chica?")
-	otros=  models.CharField(max_length=100, blank=True, null=True, verbose_name="Si respondió: otra persona, por favor indique ¿Quién?")
-	nivel_estudio_2 = models.CharField(max_length=100, choices=CHOICES_FINALES_8, verbose_name="¿Cuál es el máximo nivel de estudios que alcanzó esta persona (principal sostén económico del hogar)?")
-
-
+	salud_ultima_semana=models.ForeignKey(SaludUltimaSemana, blank=True, null=True, on_delete=models.PROTECT)
+	salud_ultima_semana_2=models.ForeignKey(SaludUltimaSemana2, blank=True, null=True, on_delete=models.PROTECT)
+	hogar=models.ForeignKey(Hogar, blank=True, null=True, on_delete=models.PROTECT)
+	
+	
 
 	class Meta:
 		verbose_name_plural = "Lista De Formularios"
 
 	@property
 	def current_seccion(self):
-		if self.servicios: return 12
+		if self.hogar: return 14
 		if not self.tutor: return 2 
 		if not self.paciente: return 3
 		if not self.sentimientos: return 4
@@ -359,11 +399,13 @@ class caracteristicas_hogar(models.Model):
 		if not self.salud: return 9
 		if not self.dolor: return 10 
 		if not self.servicios: return 11
+		if not self.salud_ultima_semana: return 12
+		if not self.salud_ultima_semana2: return 13
 		return 0
 	
 	@property
 	def confirmado(self):
-		return self.servicios != None
+		return self.hogar != None
 
 	@property
 	def resultados(self):
