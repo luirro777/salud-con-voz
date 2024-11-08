@@ -138,3 +138,9 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 LOGIN_URL = '/auth/login'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/auth/login'
+
+# Se habilita la caducidad de la sesión al cerrar el navegador
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+
+# Duración de la sesión en segundos (30 minutos = 1800 segundos)
+SESSION_COOKIE_AGE = 1800
