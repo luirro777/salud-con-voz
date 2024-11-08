@@ -35,11 +35,10 @@ def vista_formulario(request):
         {'form': SaludForm, 'attr': "salud", 'nombre': "Salud", 'subtitulo': ''},
         {'form': DolorForm, 'attr': "dolor", 'nombre': "Dolor y molestias", 'subtitulo': ''},
         {'form': ServiciosForm, 'attr': "servicios", 'nombre': "Acceso a servicios", 'subtitulo': ''},
+        {'form': SaludUltimaSemanaForm, 'attr': "salud_ultima_semana", 'nombre': "Más preguntas sobre la salud del niño/a o adolescente", 'subtitulo': 'Las siguientes preguntas son similares a algunas que ya respondió; pero ahora, por favor, piense en la última semana.'},
+        {'form': SaludUltimaSemana2Form, 'attr': "salud_ultima_semana_2", 'nombre': "Sobre la salud del chico o chica", 'subtitulo': 'Las preguntas a continuación corresponden a un cuestionario de salud que se aplica a cualquier niño/a o adolescente en cualquier situación (con o sin problemas de salud), por lo que pueden resultar difíciles de responder. Por favor, responda según lo mejor que usted conozca, asegurándose de que sus respuestas reflejen la perspectiva de su hijo/a. Trate de recordar las experiencias del chico/a durante la última semana.'},
+        {'form': HogarForm, 'attr': "hogar", 'nombre': "Características del hogar", 'subtitulo': 'Esta es la última parte de la encuesta y le solicitamos que responda acerca de algunas características del hogar donde vive la chica o el chico. Estos datos son muy importantes para analizar a qué hogares hemos podido llegar con este estudio, para ofrecer información sobre la población argentina con parálisis cerebral (recuerde que estos datos nunca se analizan ni informan individualmente).'},
         {'form': None, 'nombre': "Informe de resultados", 'subtitulo': 'Calidad de vida relacionada con la salud en niñas, niños, adolescentes y jóvenes con parálisis cerebral'},
-        {'form': Salud_ultimasemana_Form, 'nombre': "Más preguntas sobre la salud del niño/a o adolescente", 'subtitulo': 'Las siguientes preguntas son similares a algunas que ya respondió; pero ahora, por favor, piense en la última semana.'},
-        {'form': Salud_ultimasemana2_Form, 'nombre': "Sobre la salud del chico o chica", 'subtitulo': 'Las preguntas a continuación corresponden a un cuestionario de salud que se aplica a cualquier niño/a o adolescente en cualquier situación (con o sin problemas de salud), por lo que pueden resultar difíciles de responder. Por favor, responda según lo mejor que usted conozca, asegurándose de que sus respuestas reflejen la perspectiva de su hijo/a. Trate de recordar las experiencias del chico/a durante la última semana.'},
-        {'form': Caracteristicas_hogar_Form, 'nombre': "Características del hogar", 'subtitulo': 'Esta es la última parte de la encuesta y le solicitamos que responda acerca de algunas características del hogar donde vive la chica o el chico. Estos datos son muy importantes para analizar a qué hogares hemos podido llegar con este estudio, para ofrecer información sobre la población argentina con parálisis cerebral (recuerde que estos datos nunca se analizan ni informan individualmente).'},
-        {'form': None, 'nombre': "Acceso a servicios", 'subtitulo': '"Agradecemos que se haya tomado el tiempo de completar estos cuestionarios que nos ayudan a conocer la calidad de vida de las infancias y juventudes con parálisis cerebral; si quisiera que nos comuniquemos con Ud. para continuar colaborando y conocer más sobre nuestro trabajo, por favor, escriba su dirección de correo electrónico".'},
     ]
     total_secciones = len(secciones) - 1
     
@@ -65,6 +64,7 @@ def vista_formulario(request):
                 instance = form.save(cpqol, seccion['attr'].lower())
             return HttpResponseRedirect(reverse('cpqol') + f'?seccion={numero_seccion+1}&codigo={cpqol.codigo}')   
     else:
+        print(seccion)
         if not numero_seccion == total_secciones:
             if numero_seccion > 1:
                 instance = getattr(cpqol, seccion['attr'].lower(), None)
@@ -72,7 +72,7 @@ def vista_formulario(request):
             else:
                 form = current_form(request.user)
 
-    if numero_seccion == 12: 
+    if numero_seccion == 15: 
         labels = list(cpqol.resultados.keys())
         values = list(cpqol.resultados.values())
 
