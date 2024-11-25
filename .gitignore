@@ -274,6 +274,7 @@ app/media/
 .env
 .envs/*
 !.envs/.dev/
+app/.env
 
 circles.csv
 

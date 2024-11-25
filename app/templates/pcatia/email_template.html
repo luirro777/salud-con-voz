@@ -1,0 +1,42 @@
+<html>
+
+<body>
+    <h2>Nueva Solicitud Recibida</h2>
+    <p>Se ha recibido una nueva solicitud con los siguientes datos:</p>
+    <ul>
+        <li><h1>Contacto principal:</h1></li>
+        <li><strong>Nombres :</strong> {{ solicitud.nombres_principal }}</li>
+        <li><strong>Apellidos :</strong> {{ solicitud.apellidos_principal }}</li>
+        <li><strong>Cargo :</strong> {{ solicitud.cargo_principal }}</li>
+        <li><strong>Institución :</strong> {{ solicitud.institucion_principal }}</li>
+        <li><strong>Ciudad :</strong> {{ solicitud.ciudad_principal }}</li>
+        <li><strong>País :</strong> {{ solicitud.pais_principal }}</li>
+        <li><strong>Rol en el Estudio :</strong> {{ solicitud.rol_estudio_principal }}</li>
+        <li><strong>Correo Electrónico :</strong> {{ solicitud.email_principal }}</li>
+        <li><strong>Teléfono :</strong> {{ solicitud.telefono_principal }}</li>
+        <li><h1>Contacto alternativo:</h1></li>
+        <li><strong>Nombres :</strong> {{ solicitud.nombres_alterno }}</li>
+        <li><strong>Apellidos :</strong> {{ solicitud.apellidos_alterno }}</li>
+        <li><strong>Cargo :</strong> {{ solicitud.cargo_alterno }}</li>
+        <li><strong>Institución :</strong> {{ solicitud.institucion_alterno }}</li>
+        <li><strong>Ciudad :</strong> {{ solicitud.ciudad_alterno }}</li>
+        <li><strong>País :</strong> {{ solicitud.pais_alterno }}</li>
+        <li><strong>Rol en el Estudio :</strong> {{ solicitud.rol_estudio_alterno }}</li>
+        <li><strong>Correo Electrónico :</strong> {{ solicitud.email_alterno }}</li>
+        <li><strong>Teléfono :</strong> {{ solicitud.telefono_alterno }}</li>
+        <li><h1>Uso curricular:</h1></li>
+        <li><strong>Uso Curricular:</strong> {{ solicitud.uso_curricular }}</li>
+        <li><strong>Carrera de Posgrado:</strong> {{ solicitud.carrera_posgrado }}</li>
+        <li><strong>Estudiantes:</strong> {{ solicitud.estudiantes }}</li>
+        <li><strong>Responsables de Orientación:</strong> {{ solicitud.responsables_orientacion }}</li>
+        <li><h1>Datos del proyecto:</h1></li>
+        <li><strong>Título del Estudio:</strong> {{ solicitud.titulo_estudio }}</li>
+        <li><strong>Objetivo:</strong> {{ solicitud.objetivo }}</li>
+        <li><strong>Descripción de la Metodología:</strong> {{ solicitud.descripcion_metodologia }}</li>
+        <li><strong>Características de la Población:</strong> {{ solicitud.caracteristicas_poblacion }}</li>
+        <li><strong>Utilidad del Estudio:</strong> {{ solicitud.utilidad_estudio }}</li>
+        <li><strong>Institución que Avala:</strong> {{ solicitud.institucion_avala }}</li>
+    </ul>
+</body>
+
+</html>

@@ -1,0 +1,52 @@
+{% extends "base_login.html" %}
+
+{% block content %}
+  <h2>Detalle de la Solicitud</h2>
+  <p><strong>Fecha de Solicitud:</strong> {{ solicitud.fecha_solicitud }}</p>
+  
+  <!-- Información de contacto principal -->
+  <h3>Responsable Principal de la Aplicación</h3>
+  <p><strong>Nombres:</strong> {{ solicitud.nombres_principal }}</p>
+  <p><strong>Apellidos:</strong> {{ solicitud.apellidos_principal }}</p>
+  <p><strong>Cargo:</strong> {{ solicitud.cargo_principal }}</p>
+  <p><strong>Institución:</strong> {{ solicitud.institucion_principal }}</p>
+  <p><strong>Ciudad o Localidad:</strong> {{ solicitud.ciudad_principal }}</p>
+  <p><strong>País:</strong> {{ solicitud.pais_principal }}</p>
+  <p><strong>Rol en el Estudio:</strong> {{ solicitud.rol_estudio_principal }}</p>
+  <p><strong>Correo Electrónico:</strong> {{ solicitud.email_principal }}</p>
+  <p><strong>Teléfono Celular:</strong> {{ solicitud.telefono_principal }}</p>
+
+  <!-- Información de contacto secundario -->
+  <h3>Responsable Alterno de la Aplicación</h3>
+  <p><strong>Nombres:</strong> {{ solicitud.nombres_alterno }}</p>
+  <p><strong>Apellidos:</strong> {{ solicitud.apellidos_alterno }}</p>
+  <p><strong>Cargo:</strong> {{ solicitud.cargo_alterno }}</p>
+  <p><strong>Institución:</strong> {{ solicitud.institucion_alterno }}</p>
+  <p><strong>Ciudad o Localidad:</strong> {{ solicitud.ciudad_alterno }}</p>
+  <p><strong>País:</strong> {{ solicitud.pais_alterno }}</p>
+  <p><strong>Rol en el Estudio:</strong> {{ solicitud.rol_estudio_alterno }}</p>
+  <p><strong>Correo Electrónico:</strong> {{ solicitud.email_alterno }}</p>
+  <p><strong>Teléfono Celular:</strong> {{ solicitud.telefono_alterno }}</p>
+
+  <!-- Uso curricular de los instrumentos -->
+  <h3>Uso Curricular de los Instrumentos</h3>
+  <p><strong>¿Forma parte de un estudio curricular?:</strong> {{ solicitud.uso_curricular }}</p>
+  <p><strong>Carrera de Posgrado:</strong> {{ solicitud.carrera_posgrado }}</p>
+  <p><strong>Estudiantes:</strong> {{ solicitud.estudiantes }}</p>
+  <p><strong>Responsables de Orientación:</strong> {{ solicitud.responsables_orientacion }}</p>
+
+  <!-- Datos del proyecto -->
+  <h3>Datos del Proyecto</h3>
+  <p><strong>Título o Tema del Estudio:</strong> {{ solicitud.titulo_estudio }}</p>
+  <p><strong>Objetivo:</strong> {{ solicitud.objetivo }}</p>
+  <p><strong>Descripción de la Metodología:</strong> {{ solicitud.descripcion_metodologia }}</p>
+  <p><strong>Características de la Población:</strong> {{ solicitud.caracteristicas_poblacion }}</p>
+  <p><strong>Utilidad del Estudio:</strong> {{ solicitud.utilidad_estudio }}</p>
+  <p><strong>Institución que Avala:</strong> {{ solicitud.institucion_avala }}</p>
+  <br>
+  <a href="{% url 'solicitudes:generar_documento' solicitud.id %}"><button>Generar Acta</button></a>
+  <br>
+  
+  <!-- Botón para volver al listado -->
+  <a href="{% url 'solicitudes:solicitud_list' %}"><button>Volver al Listado</button></a>
+{% endblock %}

@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block content %}
+  
+
+<form action="{% url 'solicitudes:solicitud_confirmar' %}" method="post">
+  {% csrf_token %}
+  <h2>Detalle de la solicitud</h2>
+  
+  
+  <!-- Información de contacto principal -->
+  <h4>Responsable Principal de la Aplicación</h4>
+  <p><strong>Nombres:</strong> {{ form_data.nombres_principal }}</p>
+  <p><strong>Apellidos:</strong> {{ form_data.apellidos_principal }}</p>
+  <p><strong>Cargo:</strong> {{ form_data.cargo_principal }}</p>
+  <p><strong>Institución:</strong> {{ form_data.institucion_principal }}</p>
+  <p><strong>Ciudad o Localidad:</strong> {{ form_data.ciudad_principal }}</p>
+  <p><strong>País:</strong> {{ form_data.pais_principal }}</p>
+  <p><strong>Rol en el Estudio:</strong> {{ form_data.rol_estudio_principal }}</p>
+  <p><strong>Correo Electrónico:</strong> {{ form_data.email_principal }}</p>
+  <p><strong>Teléfono Celular:</strong> {{ form_data.telefono_principal }}</p>
+
+  <!-- Información de contacto secundario -->
+  <h4>Responsable Alterno de la Aplicación</h4>
+  <p><strong>Nombres:</strong> {{ form_data.nombres_alterno }}</p>
+  <p><strong>Apellidos:</strong> {{ form_data.apellidos_alterno }}</p>
+  <p><strong>Cargo:</strong> {{ form_data.cargo_alterno }}</p>
+  <p><strong>Institución:</strong> {{ form_data.institucion_alterno }}</p>
+  <p><strong>Ciudad o Localidad:</strong> {{ form_data.ciudad_alterno }}</p>
+  <p><strong>País:</strong> {{ form_data.pais_alterno }}</p>
+  <p><strong>Rol en el Estudio:</strong> {{ form_data.rol_estudio_alterno }}</p>
+  <p><strong>Correo Electrónico:</strong> {{ form_data.email_alterno }}</p>
+  <p><strong>Teléfono Celular:</strong> {{ form_data.telefono_alterno }}</p>
+
+  <!-- Uso curricular de los instrumentos -->
+  <h4>Uso Curricular de los Instrumentos</h4>
+  <p><strong>¿Forma parte de un estudio curricular?:</strong> {{ form_data.uso_curricular }}</p>
+  {% if form_data.uso_curricular == "Sí" %}
+    <p><strong>Carrera de Posgrado:</strong> {{ form_data.carrera_posgrado }}</p>
+    <p><strong>Estudiantes:</strong> {{ form_data.estudiantes }}</p>
+    <p><strong>Responsables de Orientación:</strong> {{ form_data.responsables_orientacion }}</p>
+{% endif %}
+
+  <!-- Datos del proyecto -->
+  <h4>Datos del Proyecto</h4>
+  <p><strong>Título o Tema del Estudio:</strong> {{ form_data.titulo_estudio }}</p>
+  <p><strong>Objetivo:</strong> {{ form_data.objetivo }}</p>
+  <p><strong>Descripción de la Metodología:</strong> {{ form_data.descripcion_metodologia }}</p>
+  <p><strong>Características de la Población:</strong> {{ form_data.caracteristicas_poblacion }}</p>
+  <p><strong>Utilidad del Estudio:</strong> {{ form_data.utilidad_estudio }}</p>
+  <p><strong>Institución que Avala:</strong> {{ form_data.institucion_avala }}</p>
+  <button type="submit" class="btn btn-success">Confirmar</button>
+</form>
+
+<a href="{% url 'solicitudes:solicitud_edit' %}" class="btn btn-warning">Editar</a>
+
+
+{% endblock %}

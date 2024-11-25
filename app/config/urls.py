@@ -16,7 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from .views import home
+from .views import home, SaludConVozView
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -24,5 +24,8 @@ urlpatterns = [
     path("auth/", include("django.contrib.auth.urls")),
     #####################################################
     path("cpqol/", include("core.urls")),
-    path("", home, name="home"),
+    path("pcatia/", include("pcatia.urls")),
+    path('captcha/', include('captcha.urls')),
+    #path("", home, name="home"),
+    path("", SaludConVozView.as_view(), name="principal"),
 ]

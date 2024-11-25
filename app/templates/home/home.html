@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+    <div class="container mt-5">
+        <!-- Header con logo y texto a la derecha -->
+        <div class="header">
+            <img src="{% static 'img/logo-ciecs.png' %}" alt="Logo">
+            <img src="{% static 'img/logo-scv.png' %}" alt="Logo">
+            <div>
+                <h1>Salud con Voz</h1>
+                <p>
+                    Somos un grupo de docentes e investigadorxs de la Universidad Nacional de Córdoba 
+                    <a href="#" target="_blank">[CIESS]</a> y CONICET 
+                    <a href="#" target="_blank">[CIECS de nuestro equipo]</a> que trabaja para conocer cómo nos sentimos con nuestra salud y cómo son nuestras experiencias de atención y cuidado de la salud.
+                </p>
+            </div>
+        </div>
+
+        <!-- Cuerpo del contenido -->
+        <div class="content">
+            <p>
+                Este es el portal de un servidor seguro de la UNC donde podemos entrar y resguardar datos de nuestros trabajos.
+            </p>
+            <h2 class="mt-4">¿Estás buscando un cuestionario?</h2>
+            <p>Estas son las herramientas que tenemos a disposición:</p>
+
+            <!-- Lista de herramientas -->
+            <div class="tools-list">
+                <h3>Herramientas PCATIA para valorar la atención primaria de la salud</h3>
+                <ul>
+                    <li>
+                        <a href="#" target="_blank">Información sobre PCATIA [página en CIESS/FCM]</a>
+                    </li>
+                    <li>
+                        <a href="#" target="_blank">Solicitar los cuestionarios PCATIA</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    {% endblock %}
+

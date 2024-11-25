@@ -1,0 +1,32 @@
+{% extends "base_login.html" %}
+
+{% block content %}
+  <h2>Listado de Solicitudes</h2>
+  <table class="table table-striped">
+    <thead>
+      <tr>        
+        <th>Responsable Principal</th>
+        <th>Email Principal</th>
+        <th>Institución Principal</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for solicitud in solicitudes %}
+        <tr>         
+          <td>{{ solicitud.nombres_principal }} {{ solicitud.apellidos_principal }}</td>
+          <td>{{ solicitud.email_principal }}</td>
+          <td>{{ solicitud.institucion_principal }}</td>
+          <td>
+            <a href="{% url 'solicitudes:solicitud_detail' solicitud.id %}">
+              <button>Ver</button>
+            </a>            
+            <a href="{% url 'solicitudes:solicitud_delete' solicitud.id %}">
+              <button>Borrar</button>
+            </a>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}
