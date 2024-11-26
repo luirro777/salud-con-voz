@@ -14,7 +14,8 @@ def vista_formulario(request):
     grupo = request.user.groups.first().name if request.user.groups.all() else "profesional"
 
     # Obtenemos numero de seccion
-    numero_seccion = int(request.GET['seccion'])
+    #numero_seccion = int(request.GET['seccion'])
+    numero_seccion = int(request.GET.get('seccion', 0))
     # Obtenemos cpqol si existe
     try:
         cpqol = Cpqol.objects.get(user=request.user, codigo=request.GET['codigo'])
