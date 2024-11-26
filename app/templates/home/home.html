@@ -1,43 +1,57 @@
-{% extends "base.html" %}
-{% load static %}
-{% block content %}
-    <div class="container mt-5">
-        <!-- Header con logo y texto a la derecha -->
-        <div class="header">
-            <img src="{% static 'img/logo-ciecs.png' %}" alt="Logo">
-            <img src="{% static 'img/logo-scv.png' %}" alt="Logo">
-            <div>
-                <h1>Salud con Voz</h1>
-                <p>
-                    Somos un grupo de docentes e investigadorxs de la Universidad Nacional de Córdoba 
-                    <a href="#" target="_blank">[CIESS]</a> y CONICET 
-                    <a href="#" target="_blank">[CIECS de nuestro equipo]</a> que trabaja para conocer cómo nos sentimos con nuestra salud y cómo son nuestras experiencias de atención y cuidado de la salud.
-                </p>
+{% extends "_base.html" %} {% load static %} {% block contenido %}
+<div class="d-flex align-items-center justify-content-center min-vh-100 text-center">
+    <div class="card w-75 mx-auto">
+        <div class="card-body">
+            <!-- Encabezado con los logos -->
+            <div class="d-flex justify-content-center mb-4">
+                <img src="{% static 'img/logo-ciecs.png' %}" height="80" alt="Logo CIECS" class="me-3">
+                <img src="{% static 'img/logo-scv.png' %}" height="80" alt="Logo Salud con Voz">
             </div>
-        </div>
-
-        <!-- Cuerpo del contenido -->
-        <div class="content">
-            <p>
-                Este es el portal de un servidor seguro de la UNC donde podemos entrar y resguardar datos de nuestros trabajos.
-            </p>
-            <h2 class="mt-4">¿Estás buscando un cuestionario?</h2>
-            <p>Estas son las herramientas que tenemos a disposición:</p>
-
-            <!-- Lista de herramientas -->
-            <div class="tools-list">
-                <h3>Herramientas PCATIA para valorar la atención primaria de la salud</h3>
+            <!-- Título principal -->
+            <h2 class="mb-4">Salud con Voz</h2>
+            <!-- Contenido del texto -->
+            <div class="text-start">
+                <p>
+                    Somos un grupo de docentes e investigadorxs de la Universidad Nacional de Córdoba
+                    <a href="#">[enlace CIESS]</a> y CONICET
+                    <a href="#">[¿enlace CIECS de nuestro equipo?]</a> que trabaja para conocer cómo nos sentimos con nuestra salud y cómo son nuestras experiencias de atención y cuidado de la salud.
+                </p>
+                <p>
+                    Este es el portal de un servidor seguro de la UNC donde podemos entrar y resguardar datos de nuestros trabajos.
+                </p>
+                <h5 class="mt-4">¿Estás buscando un cuestionario?</h5>
                 <ul>
                     <li>
-                        <a href="#" target="_blank">Información sobre PCATIA [página en CIESS/FCM]</a>
+                        <strong>Herramientas PCATIA para valorar la atención primaria de la salud</strong>
+                        <ul>
+                            <li><a href="https://ciess.sitios.fcm.unc.edu.ar/pcatia/" target="_blank">Información sobre PCATIA [página en CIESS/FCM]</a></li>
+                            <li><a href="{% url 'pcatia:home' %} ">Solicitar los cuestionarios PCATIA</a></li>
+                        </ul>
                     </li>
                     <li>
-                        <a href="#" target="_blank">Solicitar los cuestionarios PCATIA</a>
+                        <strong>Cuestionarios de salud percibida o calidad de vida relacionada con la salud</strong>
+                        <ul>
+                            <li><a href="#">Solicitar un cuestionario [acceso común para formulario de solicitud]</a></li>
+                            <li><a href="#">KIDSCREEN: Calidad de vida en niñas, niños y jóvenes</a></li>
+                            <li><a href="{% url 'cpqol' %}">CP-QOL: Calidad de vida en personas con discapacidad motora</a></li>
+                            <li><a href="#">DISABKIDS: Calidad de vida relacionada con la salud</a></li>
+                            <li><a href="#">TWVQ-AR: Vivencias de mujeres trans y percepción de su voz</a></li>
+                            <li><a href="#">CVHI: Vivencias de niñas y niños sobre la percepción de su voz</a></li>
+                            <li><a href="#">VRBQ: Resultados de la rehabilitación de trastornos vestibulares</a></li>
+                        </ul>
                     </li>
+                </ul>
+                <h5 class="mt-4">¿Vas a participar?</h5>
+                <a href="{% url 'registro' %}" class="btn" style="background-color: #8e44ad; color: white;"">Registrarme</a>
+
+                <p>Estos son los estudios que estamos haciendo:</p>
+                <ul>
+                    <li><strong>Calidad de vida en personas con discapacidad motora en Argentina:</strong> Descripción breve</li>
                 </ul>
             </div>
         </div>
     </div>
+</div>
 
-    {% endblock %}
 
+{% endblock %}

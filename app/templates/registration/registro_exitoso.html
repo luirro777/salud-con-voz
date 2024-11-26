@@ -1,0 +1,18 @@
+{% extends '_base.html' %} {% load static %} {% block contenido %}
+
+<div class="col-md-6 px-4 d-flex align-items-center text-start small">
+    <div class="">
+        <p><br>¡Gracias por registrarte en Salud con Voz! Somos un equipo que trabaja desde la Universidad Nacional de Córdoba y CONICET para conocer cómo nos sentimos las personas de Argentina con nuestra salud.
+        </p>
+        <p>Al ingresar podrás responder preguntas relacionadas a distintas situaciones de la vida cotidiana para que puedas expresar cómo te sentís con tu salud.
+        </p>
+        <p>La información que ingreses está protegida por las leyes de protección de datos personales vigentes en nuestro país y te garantizamos que no te pediremos nunca ningún tipo de información que permita tu identificación y tus respuestas serán tratadas
+            con la más estricta confidencialidad.
+        </p>
+        <p>Por favor, registrate si aún no posees una cuenta o ingresá con tu usuario y contraseña para responder los cuestionarios.
+        </p>
+        <a href="{% url 'login' %}" class="btn b-0 btn-outline-primary">Ingresar</a>
+    </div>
+    <div>
+
+        {% endblock %}

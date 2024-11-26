@@ -1,14 +1,10 @@
-{% extends "base.html" %}
-{% load crispy_forms_tags %}
-{% block content %}
+{% extends "base.html" %} {% load crispy_forms_tags %} {% block content %}
 <div class="container mt-4 mb-4">
-   
+
     <!-- Formulario de Solicitud -->
     <h2 class="mt-5">Formulario de Solicitud</h2>
     <form method="post">
-        {% csrf_token %}
-
-        {% if form.non_field_errors %}
+        {% csrf_token %} {% if form.non_field_errors %}
         <div class="alert alert-danger">
             {{ form.non_field_errors }}
         </div>
@@ -16,14 +12,7 @@
 
         <!-- Información de contacto principal -->
         <h4 class="mt-4">Responsable principal de la aplicación</h4>
-        {{ form.nombres_principal|as_crispy_field }}
-        {{ form.apellidos_principal|as_crispy_field }}
-        {{ form.cargo_principal|as_crispy_field }}
-        {{ form.institucion_principal|as_crispy_field }}
-        {{ form.ciudad_principal|as_crispy_field }}
-        {{ form.pais_principal|as_crispy_field }}
-        {{ form.rol_estudio_principal|as_crispy_field }}
-        {{ form.email_principal|as_crispy_field }}
+        {{ form.nombres_principal|as_crispy_field }} {{ form.apellidos_principal|as_crispy_field }} {{ form.cargo_principal|as_crispy_field }} {{ form.institucion_principal|as_crispy_field }} {{ form.ciudad_principal|as_crispy_field }} {{ form.pais_principal|as_crispy_field }} {{ form.rol_estudio_principal|as_crispy_field }} {{ form.email_principal|as_crispy_field }}
         <p>Teléfono:</p>
         <div class="form-row">
             <div class="col">
@@ -36,17 +25,10 @@
                 {{ form.numero_telefono|as_crispy_field }}
             </div>
         </div>
-    
+
         <!-- Información de contacto secundario -->
         <h4 class="mt-4">Responsable alterno de la aplicación</h4>
-        {{ form.nombres_alterno|as_crispy_field }}
-        {{ form.apellidos_alterno|as_crispy_field }}
-        {{ form.cargo_alterno|as_crispy_field }}
-        {{ form.institucion_alterno|as_crispy_field }}
-        {{ form.ciudad_alterno|as_crispy_field }}
-        {{ form.pais_alterno|as_crispy_field }}
-        {{ form.rol_estudio_alterno|as_crispy_field }}
-        {{ form.email_alterno|as_crispy_field }}
+        {{ form.nombres_alterno|as_crispy_field }} {{ form.apellidos_alterno|as_crispy_field }} {{ form.cargo_alterno|as_crispy_field }} {{ form.institucion_alterno|as_crispy_field }} {{ form.ciudad_alterno|as_crispy_field }} {{ form.pais_alterno|as_crispy_field }} {{ form.rol_estudio_alterno|as_crispy_field }} {{ form.email_alterno|as_crispy_field }}
         <p>Teléfono:</p>
         <div class="form-row">
             <div class="col">
@@ -59,37 +41,30 @@
                 {{ form.numero_telefono_alterno|as_crispy_field }}
             </div>
         </div>
-    
+
         <!-- Uso curricular de los instrumentos -->
         <h4 class="mt-4">Uso curricular de los instrumentos</h4>
         {{ form.uso_curricular|as_crispy_field }}
         <!-- Estos campos se ocultan por defecto -->
-    <div id="extra-fields" style="display: none;">
-        {{ form.carrera_posgrado|as_crispy_field }}
-        {{ form.estudiantes|as_crispy_field }}
-        {{ form.responsables_orientacion|as_crispy_field }}
-    </div>
-    
+        <div id="extra-fields" style="display: none;">
+            {{ form.carrera_posgrado|as_crispy_field }} {{ form.estudiantes|as_crispy_field }} {{ form.responsables_orientacion|as_crispy_field }}
+        </div>
+
         <!-- Datos del proyecto -->
         <h4 class="mt-4">Datos del proyecto</h4>
-        {{ form.titulo_estudio|as_crispy_field }}
-        {{ form.objetivo|as_crispy_field }}
-        {{ form.descripcion_metodologia|as_crispy_field }}
-        {{ form.caracteristicas_poblacion|as_crispy_field }}
-        {{ form.utilidad_estudio|as_crispy_field }}
-        {{ form.institucion_avala|as_crispy_field }}
+        {{ form.titulo_estudio|as_crispy_field }} {{ form.objetivo|as_crispy_field }} {{ form.descripcion_metodologia|as_crispy_field }} {{ form.caracteristicas_poblacion|as_crispy_field }} {{ form.utilidad_estudio|as_crispy_field }} {{ form.institucion_avala|as_crispy_field }}
 
         <!-- CAPTCHA -->
-        <h4 class="mt-4">Verificación CAPTCHA</h4>        
-            {{ form.captcha | as_crispy_field}} 
-        
-    
-    
+        <h4 class="mt-4">Verificación CAPTCHA</h4>
+        {{ form.captcha | as_crispy_field}}
+
+
+
         <!-- Botón de envío -->
         <button type="submit" class="btn btn-primary mt-4">Enviar Solicitud</button>
     </form>
-    
-   
+
+
 </div>
 
 <!-- JavaScript para manejar la visibilidad de los campos -->
@@ -100,9 +75,9 @@
         function toggleFields() {
             var selectedValue = $('#id_uso_curricular').val();
             if (selectedValue === 'Sí') {
-                $('#extra-fields').show();  // Muestra los campos si la opción es 'Sí'
+                $('#extra-fields').show(); // Muestra los campos si la opción es 'Sí'
             } else {
-                $('#extra-fields').hide();  // Oculta los campos si la opción es 'No'
+                $('#extra-fields').hide(); // Oculta los campos si la opción es 'No'
             }
         }
 
@@ -117,7 +92,7 @@
 </script>
 <!-- Con esto se maneja lo del "required" en ciertos campos -->
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', function() {
         const usoCurricularField = document.getElementById('id_uso_curricular');
         const carreraPosgradoField = document.getElementById('id_carrera_posgrado');
         const estudiantesField = document.getElementById('id_estudiantes');
