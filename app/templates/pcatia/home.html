@@ -1,38 +1,50 @@
-{% extends "_base.html" %} {% block contenido %}
-<div class="container mt-4 mb-4">
-    <h2 class="mb-4">Solicitud de instrumentos PCATIA</h1>
-
-    <!-- Información sobre la colaboración y condiciones -->
-    <p class="mb-4">
-        La Colaboración PCATIA pone a disposición de la comunidad internacional el producto del trabajo de adaptación, actualización y armonización de los cuestionarios PCAT (Primary Care Assessment Tools) para ser aplicados en diferentes países de Iberoamérica.
-        El proceso realizado con participación de todos los grupos de investigación que al 2016 (fecha de inicio del proyecto) contaban con versiones adaptadas a su país (nueve) logró esta nueva generación de versiones que hemos denominado PCATIA en las
-        cuales hemos comprobado buena aceptabilidad lingüística de las poblaciones de todas las subregiones de Iberoamérica que utilizan la lengua española (Mesoamérica, Países andinos, Cono Sur e Iberia). La Colaboración PCATIA autoriza el uso de los
-        instrumentos PCATIA-A, PCATIA-C, PCATIA-G o PCATIA-P sin abonar arancel alguno. Al mismo tiempo requiere de las personas usuarias de PCATIA los siguientes compromisos, necesarios para la preservación de la fiabilidad del instrumento, así como
-        para el mantenimiento de la red de solidaridad en la cual se funda este trabajo:
-    </p>
-    <ul class="list-unstyled mb-4">
-        <li>1. No alterar el contenido de las escalas de cada dimensión, es decir, el número de ítems de cada apartado, la redacción de las preguntas ni las opciones de respuestas, ya que la validez interna, consistencia y equivalencia internacional de los
-            datos requiere del uso de los cuestionarios tal como se ofrecen.</li>
-        <li>2. Consultar a la Colaboración PCATIA en caso de necesitar introducir alguna modificación a los cuestionarios;</li>
-        <li>3. Mantener informadas a las coordinadoras de la Colaboración PCATIA de resultados, publicaciones derivadas y posibles cambios en los términos aquí manifestados.</li>
-        <li>4. Respetar y mencionar los créditos de autoría que aquí se mencionan: “Los cuestionarios PCATIA fueron producidos por el Grupo IA-PCAT, coordinado por las Profesoras Jacqueline Ponzo y Silvina Berra, a partir de la armonización de versiones adaptadas
-            del conjunto PCAT, desarrollado por la Prof. Barbara Starfield y el Dr. Leiyu Shi de Johns Hopkins University, USA”</li>
-    </ul>
-    <p class="mb-4">
-        Citando a tal fin las publicaciones que sean pertinentes, entre las cuales se sugiere:
-    </p>
-    <ul class="list-unstyled mb-4">
-        <li>Ponzo J, Berra S, Giraldo Osorio A, Pasarín MI, Leyns C, Vélez Álvarez C, Soto Chávez CA, Molina V, Fuentes-García A, Hauser L, grupo de trabajo IA-PCAT. Armonización iberoamericana de los instrumentos PCAT para la evaluación del primer nivel.
-            Revista Panamericana de Salud Pública. 2018;42:e80. <a href="https://doi.org/10.26633/RPSP.2018.80" target="_blank">https://doi.org/10.26633/RPSP.2018.80</a></li>
-        <li>Berra S, Rivadero L; Grupo IA-PCAT; Otros investigadores del Grupo IA-PCAT. Aceptabilidad lingüística en la comprensión de cuestionarios de valoración de servicios de salud en Iberoamérica. [published online ahead of print, 2020 Jul 9]. Gac Sanit.
-            2020; S0213-9111(20)30123-0. <a href="https://doi.org/10.1016/j.gaceta.2020.04.019" target="_blank">doi:10.1016/j.gaceta.2020.04.019</a></li>
-        <li>Página web: <a href="http://ciess.webs.fcm.unc.edu.ar/ia-pcat/" target="_blank">http://ciess.webs.fcm.unc.edu.ar/ia-pcat/</a></li>
-    </ul>
-    <p class="mb-4">
-        Apelando a la misma solidaridad con la que la Colaboración PCATIA realizó este trabajo para poner a disposición los instrumentos, se solicita a quienes los utilicen que faciliten el uso de datos obtenidos (con la anonimización necesaria) para conformar
-        bases de datos colaborativas internacionales que permitan realizar análisis de propiedades métricas y comparaciones internacionales.
-    </p>
-    <a href="{% url 'pcatia:crear_solicitud' %}" class="btn btn-warning">Ir al formulario</a>
+{% extends "_base.html" %} 
+{% block contenido %}
+<div class="d-flex align-items-center justify-content-center min-vh-100 text-left">
+    <div class="card w-75 mx-auto">
+        <div class="card-body">
+            <!-- Encabezado con los logos -->
+            {% include 'logos.html' %}
+            <!-- Título principal -->
+            <h2 class="mb-4">Solicitud de instrumentos PCATIA
+            </h2>
+            <!-- Información sobre la colaboración y condiciones -->
+    <!-- Contenido del texto -->
+             
+            <div class="text-start">
+                <p class="mb-4">
+                    La Colaboración PCATIA pone a disposición de la comunidad internacional el producto del trabajo de adaptación, actualización y armonización de los cuestionarios PCAT (Primary Care Assessment Tools) para ser aplicados en diferentes países de Iberoamérica.
+                    El proceso realizado con participación de todos los grupos de investigación que al 2016 (fecha de inicio del proyecto) contaban con versiones adaptadas a su país (nueve) logró esta nueva generación de versiones que hemos denominado PCATIA en las
+                    cuales hemos comprobado buena aceptabilidad lingüística de las poblaciones de todas las subregiones de Iberoamérica que utilizan la lengua española (Mesoamérica, Países andinos, Cono Sur e Iberia). La Colaboración PCATIA autoriza el uso de los
+                    instrumentos PCATIA-A, PCATIA-C, PCATIA-G o PCATIA-P sin abonar arancel alguno. Al mismo tiempo requiere de las personas usuarias de PCATIA los siguientes compromisos, necesarios para la preservación de la fiabilidad del instrumento, así como
+                    para el mantenimiento de la red de solidaridad en la cual se funda este trabajo:
+                </p>
+                <ul class="list-unstyled mb-4">
+                    <li>1. No alterar el contenido de las escalas de cada dimensión, es decir, el número de ítems de cada apartado, la redacción de las preguntas ni las opciones de respuestas, ya que la validez interna, consistencia y equivalencia internacional de los
+                        datos requiere del uso de los cuestionarios tal como se ofrecen.</li>
+                    <li>2. Consultar a la Colaboración PCATIA en caso de necesitar introducir alguna modificación a los cuestionarios;</li>
+                    <li>3. Mantener informadas a las coordinadoras de la Colaboración PCATIA de resultados, publicaciones derivadas y posibles cambios en los términos aquí manifestados.</li>
+                    <li>4. Respetar y mencionar los créditos de autoría que aquí se mencionan: “Los cuestionarios PCATIA fueron producidos por el Grupo IA-PCAT, coordinado por las Profesoras Jacqueline Ponzo y Silvina Berra, a partir de la armonización de versiones adaptadas
+                        del conjunto PCAT, desarrollado por la Prof. Barbara Starfield y el Dr. Leiyu Shi de Johns Hopkins University, USA”</li>
+                </ul>
+                <p class="mb-4">
+                    Citando a tal fin las publicaciones que sean pertinentes, entre las cuales se sugiere:
+                </p>
+                <ul class="list-unstyled mb-4">
+                    <li>Ponzo J, Berra S, Giraldo Osorio A, Pasarín MI, Leyns C, Vélez Álvarez C, Soto Chávez CA, Molina V, Fuentes-García A, Hauser L, grupo de trabajo IA-PCAT. Armonización iberoamericana de los instrumentos PCAT para la evaluación del primer nivel.
+                        Revista Panamericana de Salud Pública. 2018;42:e80. <a href="https://doi.org/10.26633/RPSP.2018.80" target="_blank">https://doi.org/10.26633/RPSP.2018.80</a></li>
+                    <li>Berra S, Rivadero L; Grupo IA-PCAT; Otros investigadores del Grupo IA-PCAT. Aceptabilidad lingüística en la comprensión de cuestionarios de valoración de servicios de salud en Iberoamérica. [published online ahead of print, 2020 Jul 9]. Gac Sanit.
+                        2020; S0213-9111(20)30123-0. <a href="https://doi.org/10.1016/j.gaceta.2020.04.019" target="_blank">doi:10.1016/j.gaceta.2020.04.019</a></li>
+                    <li>Página web: <a href="http://ciess.webs.fcm.unc.edu.ar/ia-pcat/" target="_blank">http://ciess.webs.fcm.unc.edu.ar/ia-pcat/</a></li>
+                </ul>
+                <p class="mb-4">
+                    Apelando a la misma solidaridad con la que la Colaboración PCATIA realizó este trabajo para poner a disposición los instrumentos, se solicita a quienes los utilicen que faciliten el uso de datos obtenidos (con la anonimización necesaria) para conformar
+                    bases de datos colaborativas internacionales que permitan realizar análisis de propiedades métricas y comparaciones internacionales.
+                </p>
+                <a href="{% url 'pcatia:crear_solicitud' %}" class="btn btn-warning">Ir al formulario</a>
+            </div>
+        </div>
+    </div>
 </div>
 
 {% endblock %}

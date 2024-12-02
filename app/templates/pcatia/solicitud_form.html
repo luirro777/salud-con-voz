@@ -1,8 +1,25 @@
-{% extends "base.html" %} {% load crispy_forms_tags %} {% block content %}
-<div class="container mt-4 mb-4">
+{% extends "base.html" %} {% load crispy_forms_tags %} 
+{% block content %}
 
-    <!-- Formulario de Solicitud -->
+<div class="d-flex align-items-center justify-content-center min-vh-100 text-left">
+    <div class="card w-75 mx-auto">
+        <div class="card-body">
+            <!-- Encabezado con los logos -->
+            {% include 'logos.html' %}
+           
+    <!-- Contenido del texto -->
+             
+            <div class="text-start">
+              <!-- Formulario de Solicitud -->
     <h2 class="mt-5">Formulario de Solicitud</h2>
+    <h4>¿Para qué se piden los siguientes datos y cómo serán utilizados?</h4>
+    <p>Con la información de contacto, en el futuro podremos enviar información sobre cualquier novedad sobre los materiales solicitados. 
+        Los datos sobre los ámbitos y propósitos de aplicación, serán analizados en conjunto para informar anualmente en CONICET y la Universidad 
+        Nacional de Córdoba dónde, cómo y para qué se utilizan los materiales que hemos desarrollado. </p>
+    <p>Los datos que pedimos ingresan a un servidor seguro de la UNC, por lo que no 
+        estarán disponibles en otros espacios abiertos o privados susceptibles de 
+        comercialización. 
+    </p>
     <form method="post">
         {% csrf_token %} {% if form.non_field_errors %}
         <div class="alert alert-danger">
@@ -28,6 +45,9 @@
 
         <!-- Información de contacto secundario -->
         <h4 class="mt-4">Responsable alterno de la aplicación</h4>
+        <p>Por favor, consignar datos de un colaborador o tutor (Director o similar) responsable del 
+            trabajo. Esto nos permitirá también contar con una dirección correo alternativo, 
+            para situaciones en que no podamos contactarle en la dirección que indicó anteriormente.  </p>
         {{ form.nombres_alterno|as_crispy_field }} {{ form.apellidos_alterno|as_crispy_field }} {{ form.cargo_alterno|as_crispy_field }} {{ form.institucion_alterno|as_crispy_field }} {{ form.ciudad_alterno|as_crispy_field }} {{ form.pais_alterno|as_crispy_field }} {{ form.rol_estudio_alterno|as_crispy_field }} {{ form.email_alterno|as_crispy_field }}
         <p>Teléfono:</p>
         <div class="form-row">
@@ -63,8 +83,9 @@
         <!-- Botón de envío -->
         <button type="submit" class="btn btn-primary mt-4">Enviar Solicitud</button>
     </form>
-
-
+            </div>
+        </div>
+    </div>
 </div>
 
 <!-- JavaScript para manejar la visibilidad de los campos -->

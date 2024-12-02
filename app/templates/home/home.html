@@ -3,12 +3,10 @@
     <div class="card w-75 mx-auto">
         <div class="card-body">
             <!-- Encabezado con los logos -->
-            <div class="d-flex justify-content-center mb-4">
-                <img src="{% static 'img/logo-ciecs.png' %}" height="80" alt="Logo CIECS" class="me-3">
-                <img src="{% static 'img/logo-scv.png' %}" height="80" alt="Logo Salud con Voz">
-            </div>
+            {% include 'logos.html' %}
             <!-- Título principal -->
-            <h2 class="mb-4">Salud con Voz</h2>
+            <h2 class="mb-4">¿Qué es Salud con voz?
+            </h2>
             <!-- Contenido del texto -->
              
             <div class="text-start">
@@ -17,38 +15,65 @@
                     <a href="https://ciess.sitios.fcm.unc.edu.ar/" target="_blank" >Universidad Nacional de Córdoba</a> y 
                     <a href="#">CONICET</a> que trabaja para conocer cómo nos sentimos con nuestra salud y cómo son nuestras experiencias de atención y cuidado de la salud.
                 </p>
-                <p>
-                    Este es el portal de un servidor seguro de la UNC donde podemos entrar y resguardar datos de nuestros trabajos.
-                </p>
+                <p>En este portal ofrecemos enlaces con información de nuestros trabajos, formularios 
+                    para que puedan solicitarnos materiales y acceso a participantes de nuestros estudios. </p>
+                
                 <h5 class="mt-4">¿Estás buscando un cuestionario?</h5>
+                <p>Estas son las herramientas que tenemos a disposición:</p>
                 <ul>
                     <li>
                         <strong>Herramientas PCATIA para valorar la atención primaria de la salud</strong>
                         <ul>
                             <li><a href="https://ciess.sitios.fcm.unc.edu.ar/pcatia/" target="_blank">Información sobre PCATIA </a></li>
-                            <li><a href="{% url 'pcatia:home' %} ">Solicitar los cuestionarios PCATIA</a></li>
+                            
                         </ul>
+                        <div><a href="{% url 'pcatia:home' %} " class="btn" style="background-color: #8e44ad; color: white;"">Solicitar los cuestionarios PCATIA</a></div>
                     </li>
+                    <br><br>
                     <li>
                         <strong>Cuestionarios de salud percibida o calidad de vida relacionada con la salud</strong>
                         <ul>
-                            <li><a href="#">Solicitar un cuestionario [acceso común para formulario de solicitud]</a></li>
-                            <li><a href="#">KIDSCREEN: Calidad de vida en niñas, niños y jóvenes</a></li>
-                            <li><a href="{% url 'cpqol' %}">CP-QOL: Calidad de vida en personas con discapacidad motora</a></li>
+                           
+                            
+                            <li><a href="https://ciess.sitios.fcm.unc.edu.ar/kidscreen/" target="_blank">KIDSCREEN: Calidad de vida en niñas, niños y jóvenes</a></li>
+                            <li><a href="https://ciess.sitios.fcm.unc.edu.ar/cpqol/" target="_blank">CP-QOL: Calidad de vida en personas con discapacidad motora</a></li>
                             <li><a href="#">DISABKIDS: Calidad de vida relacionada con la salud</a></li>
-                            <li><a href="#">TWVQ-AR: Vivencias de mujeres trans y percepción de su voz</a></li>
-                            <li><a href="#">CVHI: Vivencias de niñas y niños sobre la percepción de su voz</a></li>
-                            <li><a href="#">VRBQ: Resultados de la rehabilitación de trastornos vestibulares</a></li>
+                            <li><a href="https://ciess.sitios.fcm.unc.edu.ar/twvq/" target="_blank">TWVQ-AR: Vivencias de mujeres trans y percepción de su voz</a></li>
+                            <li><a href="https://ciess.sitios.fcm.unc.edu.ar/vhi/" target="_blank">CVHI: Vivencias de niñas y niños sobre la percepción de su voz</a></li>
+                            <li><a href="https://ciess.sitios.fcm.unc.edu.ar/vrbq/" target="_blank">VRBQ: Resultados de la rehabilitación de trastornos vestibulares</a></li>
+                            
                         </ul>
                     </li>
+                    <div><a href="#" class="btn" style="background-color: #8e44ad; color: white;"">Solicitar cuestionario</a></div>
                 </ul>
-                <h5 class="mt-4">¿Vas a participar?</h5>
-                <a href="{% url 'registro' %}" class="btn" style="background-color: #8e44ad; color: white;"">Registrarme</a>
+                <h5 class="mt-4">¿Te interesa participar en un estudio?</h5>
+                
 
                 <p>Estos son los estudios que estamos haciendo:</p>
                 <ul>
                     <li><strong>Calidad de vida en personas con discapacidad motora en Argentina:</strong> 
-                       <br> Descripción breve</li>
+                       </li>
+                       <p>Descripción breve</p>
+                       <p>Los indicadores de calidad de vida relacionada a la salud (CVRS) nos ayudan a conocer 
+                        cómo se sienten las personas en aspectos relacionados a su salud y a los tratamientos 
+                        e intervenciones que realizan para mejorar su salud. En las personas con discapacidad 
+                        motora, estos indicadores pueden dar cuenta de distintos aspectos psicosociales y 
+                        físicos que pueden verse comprometidos: ¿Cómo se sienten las personas en situaciones de 
+                        participación social?, ¿cómo se sienten con su capacidad de movimiento? o ¿cómo influyen 
+                        las distintas terapias en cómo se siente la persona? Los indicadores de CVRS nos pueden 
+                        ayudar a orientar las terapias en base a las sensaciones y sentimientos de los usuarios
+                         de los servicios de salud.</p>
+                         <div>
+                            <a href="#" class="btn" style="background-color: #8e44ad; color: white;"">Participar</a>
+                         </div>
+                         <br><br>
+                         <li><strong>Valoración de atributos de atención primaria de la salud según profesionales, 
+                            equipos y gestores de servicios / centros / clínicas.</strong></li>
+                            <br><br>
+                         <li>
+                            <strong>Experiencias de usuarios de servicios / centros / clínicas: calidad de la atención de la salud.
+                            </strong>
+                         </li>
                 </ul>
             </div>
         </div>
