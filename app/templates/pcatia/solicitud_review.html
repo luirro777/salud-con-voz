@@ -3,7 +3,7 @@
 {% block content %}
   
 
-<form action="{% url 'solicitudes:solicitud_confirmar' %}" method="post">
+<form action="{% url 'pcatia:solicitud_confirmar' %}" method="post">
   {% csrf_token %}
   <h2>Detalle de la solicitud</h2>
   
@@ -52,7 +52,7 @@
   <button type="submit" class="btn btn-success">Confirmar</button>
 </form>
 
-<a href="{% url 'solicitudes:solicitud_edit' %}" class="btn btn-warning">Editar</a>
+<a href="{% url 'pcatia:solicitud_edit' %}" class="btn btn-warning">Editar</a>
 
 
 {% endblock %}
