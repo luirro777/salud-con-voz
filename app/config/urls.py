@@ -23,7 +23,7 @@ urlpatterns = [
     path("auth/", include("accounts.urls")),
     path("auth/", include("django.contrib.auth.urls")),
     #####################################################
-    path("cpqol/", include("core.urls")),
+    #path("cpqol/", include("core.urls")),
     path("pcatia/", include("pcatia.urls")),
     path('captcha/', include('captcha.urls')),
     #path("", home, name="home"),
