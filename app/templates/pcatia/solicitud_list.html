@@ -18,10 +18,10 @@
           <td>{{ solicitud.email_principal }}</td>
           <td>{{ solicitud.institucion_principal }}</td>
           <td>
-            <a href="{% url 'solicitudes:solicitud_detail' solicitud.id %}">
+            <a href="{% url 'pcatia:solicitud_detail' solicitud.id %}">
               <button>Ver</button>
             </a>            
-            <a href="{% url 'solicitudes:solicitud_delete' solicitud.id %}">
+            <a href="{% url 'pcatia:solicitud_delete' solicitud.id %}">
               <button>Borrar</button>
             </a>
           </td>
