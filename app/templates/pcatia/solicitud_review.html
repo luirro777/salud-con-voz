@@ -2,7 +2,15 @@
 
 {% block content %}
   
-
+<div class="d-flex align-items-center justify-content-center min-vh-100 text-left">
+  <div class="card mx-auto" style="width: 90%;">
+      <div class="card-body">
+          <!-- Encabezado con los logos -->
+          {% include 'logos.html' %}
+         
+  <!-- Contenido del texto -->
+           
+          <div class="text-start">
 <form action="{% url 'pcatia:solicitud_confirmar' %}" method="post">
   {% csrf_token %}
   <h2>Detalle de la solicitud</h2>
@@ -51,8 +59,11 @@
   <p><strong>Institución que Avala:</strong> {{ form_data.institucion_avala }}</p>
   <button type="submit" class="btn btn-success">Confirmar</button>
 </form>
-
+<br>
 <a href="{% url 'pcatia:solicitud_edit' %}" class="btn btn-warning">Editar</a>
 
-
+</div>
+</div>
+</div>
+</div>
 {% endblock %}
