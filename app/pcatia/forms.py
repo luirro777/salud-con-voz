@@ -3,12 +3,12 @@ from .models import Solicitud
 from captcha.fields import CaptchaField
 
 class SolicitudForm(forms.ModelForm):
-    codigo_internacional = forms.CharField(max_length=5, required=True, label="Cód Int")
+    codigo_internacional = forms.CharField(max_length=5, required=True, label="Cód Internacional")
     codigo_area = forms.CharField(max_length=5, required=True, label="Cód Área")
-    numero_telefono = forms.CharField(max_length=10, required=True, label="Número de Teléfono")
-    codigo_internacional_alterno = forms.CharField(max_length=5, required=True, label="Cód Int")
+    numero_telefono = forms.CharField(max_length=10, required=True, label="Núm de Teléfono")
+    codigo_internacional_alterno = forms.CharField(max_length=5, required=True, label="Cód Internacional")
     codigo_area_alterno  = forms.CharField(max_length=5, required=True, label="Cód Área")
-    numero_telefono_alterno  = forms.CharField(max_length=10, required=True, label="Número de Teléfono")
+    numero_telefono_alterno  = forms.CharField(max_length=10, required=True, label="Núm de Teléfono")
 
     class Meta:
         model = Solicitud
@@ -42,7 +42,7 @@ class SolicitudForm(forms.ModelForm):
             'email_alterno': 'Correo Electrónico',
             #'telefono_alterno': 'Teléfono',    
             'uso_curricular': '¿Forma parte de un estudio curricular?',
-            'carrera_posgrado': 'Carrera de Posgrado',
+            'carrera_posgrado': 'Nombre de la Carrera de Posgrado',
             'estudiantes': 'Estudiantes',
             'responsables_orientacion': 'Responsables de Orientación',            
             'titulo_estudio': 'Título del Estudio',
