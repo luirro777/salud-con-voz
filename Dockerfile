@@ -1,55 +1,41 @@
-# Utiliza una imagen base de Linux, como Ubuntu
-FROM python:3.10
+# Imagen base de python
+FROM python:3.10-slim
 
-# Add user that will be used in the container.
-RUN useradd ciecs
+# Variables de entorno
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
 
-# Port used by this container to serve HTTP.
-EXPOSE 8000
-
-# Set environment variables.
-# 1. Force Python stdout and stderr streams to be unbuffered.
-# 2. Set PORT variable that is used by Gunicorn. This should match "EXPOSE"
-#    command.
-ENV PYTHONUNBUFFERED=1 \
-    PORT=8000
-
-# Instalación de netcat
-RUN apt-get update && \
-    apt-get install -y netcat-openbsd \
+# Instalar dependencias
+RUN apt-get update && apt-get install -y \
+    libpq-dev gcc \
+    && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# Instalación de las dependencias del proyecto Python
-ADD requirements.txt ./
-RUN pip install -r /requirements.txt
+# Crear un usuario non-root
+RUN useradd --create-home saludconvoz
 
-# Establece el directorio de trabajo dentro del contenedor
+# Establecer el directorio de trabajo 
 WORKDIR /app
-RUN chown ciecs:ciecs /app
 
-# Use user "ciecs" to run the build commands below and the server itself.
-USER ciecs
+# Copiar el código fuente
+COPY ./app /app/
 
-# Set this directory to be owned by the "ciecs" user. This ciecs project
-# uses SQLite, the folder needs to be owned by the user that
-# will be writing to the database file.
-COPY --chown=ciecs:ciecs app .
+# Copiar y instalar dependencias de Python
+COPY requirements.txt /app/
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Collect static files.
-RUN python manage.py collectstatic --noinput --clear
+# Crear directorios
+RUN mkdir -p /app/media/temp
+RUN mkdir -p /app/staticfiles
 
-# Copia el archivo wait-for-mysql.sh al contenedor
-COPY --chown=ciecs:ciecs wait-for-mysql.sh /
+# Cambiar permisos directorio de la app
+RUN chown -R saludconvoz:saludconvoz /app
 
-ENTRYPOINT ["/wait-for-mysql.sh"]
+# Cambiar a usuario non-root
+USER saludconvoz
 
-# Runtime command that executes when "docker run" is called, it does the
-# following:
-#   1. Migrate the database.
-#   2. Start the application server.
-# WARNING:
-#   Migrating database at the same time as starting the server IS NOT THE BEST
-#   PRACTICE. The database should be migrated manually or using the release
-#   phase facilities of your hosting platform. This is used only so the
-#   app instance can be started with a simple "docker run" command.
-CMD set -xe; python manage.py migrate --noinput; gunicorn config.wsgi:application
+# Exponer el puerto
+EXPOSE 8000
+
+# Comando de ejecución de la aplicación
+CMD ["gunicorn", "config.wsgi:application", "--bind", "0.0.0.0:8000"]
