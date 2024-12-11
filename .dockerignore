@@ -1,0 +1,52 @@
+# Ignorar archivos y carpetas de control de versiones
+.git
+.gitignore
+
+# Archivos de configuración local
+.env
+*.env
+
+# Archivos de Python no compilados
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+
+# Archivos de configuración y de desarrollo
+*.sqlite3
+*.log
+*.bak
+*.swp
+*.swo
+
+# Archivos creados por herramientas de desarrollo
+.vscode/
+.idea/
+*.iml
+
+# Carpetas relacionadas con dependencias locales
+venv/
+virtualenv/
+env/
+__pycache__/
+
+# Archivos creados por el sistema operativo
+.DS_Store
+Thumbs.db
+
+# Archivos de construcción o temporales
+*.tmp
+*.temp
+*.pid
+
+# Archivos de salida de la compilación
+dist/
+build/
+
+# Archivos estáticos y de medios recolectados
+app/staticfiles/
+app/media/
+
+# Archivos específicos de Docker
+Dockerfile~
+*.dockerignore~
