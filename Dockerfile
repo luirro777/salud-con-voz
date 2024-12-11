@@ -24,9 +24,10 @@ COPY ./app /app/
 COPY requirements.txt /app/
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Crear directorios
+# Crear directorios y archivo de log
 RUN mkdir -p /app/media/temp
 RUN mkdir -p /app/staticfiles
+RUN touch /app/django_debug.log
 
 # Cambiar permisos directorio de la app
 RUN chown -R saludconvoz:saludconvoz /app
