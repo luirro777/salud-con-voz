@@ -1,39 +1,30 @@
-version: '3.8'
-
 services:
   web:
     build:
       context: .
     container_name: django_web
-    #command: gunicorn config.wsgi:application --bind 0.0.0.0:8001
-    command: python manage.py runserver 0.0.0.0:8000 --insecure
-    #volumes:
-      #- ./app:/app
-      #- static_volume:/app/staticfiles
-      #- media_volume:/app/media
-    env_file: "./app/.env"
-    #  - path: ./app/.env
+    command: gunicorn config.wsgi:application --bind 0.0.0.0:8001
+    volumes:
+      - ./app:/app  # Monta la carpeta de la aplicación en el contenedor
+      - ./staticfiles:/app/staticfiles  # Bind mount para archivos estáticos
+      - ./media:/app/media  # Bind mount para archivos multimedia
+    env_file: ./app/.env
     ports:
-      - "80:8000"  
+      - "127.0.0.1:8001:8001"  # Expone el puerto 8001 solo en localhost
     depends_on:
       - db
 
   db:
     image: postgres:15
     container_name: postgres_db
-    env_file: "./app/.env"
-    #  - path: ./app/.env
+    env_file: ./app/.env
     environment:
       POSTGRES_USER: ${DJANGO_DB_USER}
       POSTGRES_PASSWORD: ${DJANGO_DB_PASSWORD}
       POSTGRES_DB: ${DJANGO_DB_NAME}
       POSTGRES_HOST_AUTH_METHOD: trust
-    ports:
-      - "${DJANGO_DB_PORT}:${DJANGO_DB_PORT}"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql/data  # Volumen con nombre para PostgreSQL
 
 volumes:
-  postgres_data:
-  #static_volume:
-  #media_volume:
+  postgres_data:  # Volumen con nombre para la base de datos
