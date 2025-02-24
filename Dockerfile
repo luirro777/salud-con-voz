@@ -39,4 +39,4 @@ USER saludconvoz
 EXPOSE 8000
 
 # Comando de ejecución de la aplicación
-CMD ["gunicorn", "config.wsgi:application", "--bind", "0.0.0.0:8000"]
+#CMD ["gunicorn", "config.wsgi:application", "--bind", "0.0.0.0:8000"]

@@ -23,7 +23,7 @@ class CpqolResource(resources.ModelResource):
 			'paciente__provincia',
 			'paciente__ciudad',
 			'paciente__cobertura',
-			'paciente__movimiento',
+			'sentimientos__movimiento',
 			'sentimientos__hacer_cosas',
 			'sentimientos__uno_mismo',
 			'sentimientos__motivacion',

@@ -16,7 +16,7 @@ class TerminosYCondicionesForm(forms.Form):
     
 
 class CodigoForm(forms.Form):
-    mes_ano = forms.CharField(label="Ingrese Mes y Año de Nacimiento en formato MMAA", min_length=4, max_length=4, widget=forms.TextInput(attrs={'class': 'form-control',}))
+    mes_ano = forms.CharField(label="Ingrese Mes y Año de Nacimiento (del paciente) en formato MMAA", min_length=4, max_length=4, widget=forms.TextInput(attrs={'class': 'form-control',}))
     dni = forms.CharField(label="Ingrese los últimos 3 números del DNI del paciente", min_length=3, max_length=3, widget=forms.TextInput(attrs={'class': 'form-control'}))
     nombre = forms.CharField(label="Ingrese la inicial del primer nombre", min_length=1, max_length=1, widget=forms.TextInput(attrs={'class': 'form-control'}))
     apellido = forms.CharField(label="Ingrese la inicial del primer apellido", min_length=1, max_length=1, widget=forms.TextInput(attrs={'class': 'form-control'}))
@@ -91,7 +91,7 @@ class TutorForm(BaseForm):
         widgets = {
             'estado_salud': forms.RadioSelect,
         }
-
+'''
 class PacienteForm(BaseForm):
     class Meta:
         model = Paciente
@@ -99,7 +99,22 @@ class PacienteForm(BaseForm):
         widgets = {
             "fecha_nacimiento": forms.DateInput,
         }
+'''
 
+
+class PacienteForm(BaseForm):
+    class Meta:
+        model = Paciente
+        fields = '__all__'
+        widgets = {
+            "fecha_nacimiento": forms.DateInput(
+                format='%d/%m/%Y',  
+                attrs={
+                    'type': 'date',  
+                    #'class': 'form-control',  
+                }
+            ),
+        }
 
 class SentimientosForm(BaseForm):
     class Meta:

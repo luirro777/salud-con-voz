@@ -26,6 +26,6 @@ urlpatterns = [
     path("cpqol/", include("core.urls")),
     path("pcatia/", include("pcatia.urls")),
     path('captcha/', include('captcha.urls')),
-    #path("", home, name="home"),
+    path("cpqol/quizes/", home, name="home"),
     path("", SaludConVozView.as_view(), name="principal"),
 ]
