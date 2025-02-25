@@ -28,6 +28,7 @@ def vista_formulario(request):
         {'form': CodigoForm, 'nombre': "Código de participante", 'subtitulo': "Generación de código de identificación"},
         {'form': TutorForm, 'attr': "tutor", 'nombre': "Padre, madre o cuidador", 'subtitulo': 'Información general sobre la persona que responde'},
         {'form': PacienteForm, 'attr': "paciente", 'nombre': "Paciente", 'subtitulo': 'Datos generales de niño/a o adolescente'},
+        {'form': MovimientoForm, 'attr': "movimiento", 'nombre': "Movilidad", 'subtitulo': 'Datos generales sobre la movilidad del niño/a o adolescente'},
         {'form': SentimientosForm, 'attr': "sentimientos", 'nombre': "Sus sentimientos",  'subtitulo': ""},
         {'form': RelacionesForm, 'attr': "relaciones", 'nombre': "Relaciones con los demás", 'subtitulo': ''},
         {'form': FamiliaForm, 'attr': "familia", 'nombre': "Familia", 'subtitulo': ''},
@@ -63,13 +64,21 @@ def vista_formulario(request):
                 cpqol = form.save()
             else:
                 instance = form.save(cpqol, seccion['attr'].lower())
+            
+            if numero_seccion == 3:  # PacienteForm es la sección 3. De ahi obtengo la edad
+                request.session['edad_paciente'] = instance.edad
+
             return HttpResponseRedirect(reverse('cpqol') + f'?seccion={numero_seccion+1}&codigo={cpqol.codigo}')   
     else:
         print(seccion)
         if not numero_seccion == total_secciones:
             if numero_seccion > 1:
                 instance = getattr(cpqol, seccion['attr'].lower(), None)
-                form = current_form(instance=instance)
+                if numero_seccion == 4:  # MovimientoForm es la sección 4
+                    edad = request.session.get('edad_paciente')  # Recuperar la edad de la sesión
+                    form = current_form(edad=edad, instance=instance)
+                else:
+                    form = current_form(instance=instance)                
             else:
                 form = current_form(request.user)
 

@@ -115,6 +115,142 @@ class PacienteForm(BaseForm):
                 }
             ),
         }
+'''
+class MovimientoForm(BaseForm):
+    class Meta:
+        model = Movimiento
+        fields = '__all__'
+
+'''
+
+
+class MovimientoForm(BaseForm):
+    class Meta:
+        model = Movimiento
+        fields = '__all__'
+
+    def __init__(self, edad=None, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        
+        # Definir las opciones y la ayuda basado en la edad del paciente
+        if edad is not None:
+            if 4 <= edad <= 6:
+                opciones = [
+                    (1, "Tiene dificultad para mantenerse sentado y para controlar la cabeza y el tronco en la mayoría de las posiciones."),
+                    (2, "Puede mantenerse sentado, pero no es capaz de mantenerse de pie o caminar sin gran ayuda y supervisión de un adulto."),
+                    (3, "Puede caminar usando alguna ayuda para la marcha (como un andador, bastones o muletas)."),
+                    (4, "Puede caminar sin ayudas para la marcha, pero con dificultad para largas distancias o terreno irregular."),
+                    (5, "Puede caminar sin ayudas para la marcha, incluyendo largas distancias en exteriores y superficies irregulares."),
+                ]
+
+                help_text = """               
+                
+                **Ayuda para responder:**
+                1. Tiene dificultad para mantenerse sentado y para controlar la cabeza y el tronco en la mayoría de las posiciones.
+                Dificultad para el control voluntario de cualquier movimiento. Para una sedestación confortable necesita adaptaciones
+                especiales en la silla. Para trasladarlo tiene que ser cogido en brazos por otra persona.
+
+                2. Puede mantenerse sentado, pero no es capaz de mantenerse de pie o caminar sin gran ayuda y supervisión de un adulto.
+                Puede necesitar soporte del tronco para mejorar la función del brazo y de la mano. Normalmente necesita la ayuda de un adulto para
+                sentarse o levantarse de una silla. Con silla de ruedas eléctrica puede desplazarse de manera independiente en exteriores o en 
+                silla manual propulsada por otra persona.
+
+                3. Puede caminar usando alguna ayuda para la marcha (como un andador, bastones o muletas).
+                Es capaz de sentarse y levantarse de una silla sin ayuda. Puede necesitar de una silla de ruedas para largas distancias o fuera
+                de casa. Tiene difucultad para subir escaleras o caminar por terreno irregular sin una ayuda considerable.
+
+                4. Puede caminar sin ayudas para la marcha, pero con dificultad para largas distancias o terreno irregular.
+                Es capaz de sentarse en una silla normal de adulto, sin ayuda de las manos. Puede ponerse de pie desde el suelo, sin ayuda 
+                de un adulto. Necesita apoyarse en el pasamanos para subir y bajar escaleras. Todavía no es capaz de correr ni de saltar.
+
+                5. Puede caminar sin ayudas para la marcha, incluyendo largas distancias en exteriores y superficies irregulares.
+                Puede ponerse de pie desde el suelo o levantarse de una silla sin usar las manos como apoyo. Es capaz de subir y bajar 
+                escaleras sin apoyarse en el pasamanos. Comienza a correr y saltar.
+                """
+            elif 7 <= edad <= 11:
+                opciones = [
+                    (1, "Tiene dificultad para mantenerse sentado y para controlar la cabeza y el tronco en la mayoría de las posiciones."),
+                    (2, "Puede mantenerse sentado, pero no es capaz de mantenerse de pie o caminar sin gran ayuda."),
+                    (3, "Es capaz de mantenerse de pie por sí mismo y de caminar sólo si usa alguna ayuda para la marcha (andador, muletas, bastones)."),
+                    (4, "Puede caminar sin ayudas para la marcha, pero necesita apoyarse en el pasamanos para subir y bajar escaleras."),
+                    (5, "Puede caminar sin ayudas para la marcha, incluyendo largas distancias en exteriores y superficies irregulares."),
+                ]
+                help_text = """
+                                
+                **Ayuda para responder:**
+                1. Tiene dificultad para mantenerse sentado y para controlar la cabeza y el tronco en la mayoría de las posiciones.
+                Tiene dificultad para controlar cualquier movimiento voluntario. Para una sedestación confortable necesita una silla 
+                especialmente adaptada. Para trasladarlo tiene que ser cogido en brazos por otra persona.
+
+                2. Puede mantenerse sentado, pero no es capaz de mantenerse de pie o caminar sin gran ayuda.
+                Está la mayor parte del tiempo en silla de ruedas en casa, en la escuela y en la comunidad. A menudo necesita soportes de 
+                tronco para mejorar la función del brazo y de la mano. Puede desplazarse de manera independiente con una silla de ruedas 
+                eléctrica.
+
+                3. Es capaz de mantenerse de pie por sí mismo y de caminar sólo si usa alguna ayuda para la marcha (andador, muletas, bastones).
+                Le resulta difícil subir escaleras o caminar sobre una superficie irregular. Puede necesitar una silla para desplazamientos 
+                largos o en espacios multitudinarios.
+
+                4. Puede caminar sin ayudas para la marcha, pero necesita apoyarse en el pasamanos para subir y bajar escaleras.
+                Habitualmente tiene dificultad para caminar por superficies irregulares o pendientes o en espacios multitudinarios.
+
+                5. Puede caminar sin ayudas para la marcha, incluyendo largas distancias en exteriores y superficies irregulares.
+                Puede ponerse de pie desde el suelo o levantarse de una silla sin usar las manos como apoyo. Es capaz de subir y bajar 
+                escaleras sin apoyarse en el pasamanos. Comienza a correr y saltar
+                """
+            elif edad >= 12:
+                opciones = [
+                    (1, "Tiene dificultad para mantenerse sentado y para controlar la cabeza y el tronco en cualquier posición."),
+                    (2, "Puede mantenerse sentado con algún soporte en pelvis o en tronco, pero no estar de pie, ni caminar sin gran apoyo."),
+                    (3, "Es capaz de mantenerse de pie por sí mismo y de caminar, sólo si usa alguna ayuda para la marcha (como un andador, muletas, bastones, etc.)."),
+                    (4, "Puede caminar sin ayudas para la marcha, pero necesita apoyarse en el pasamanos para subir y bajar escaleras."),
+                    (5, "Puede caminar sin ayudas para la marcha y subir y bajar escaleras sin necesidad de apoyarse en el pasamanos."),
+                ]
+                help_text = """
+                                
+                **Ayuda para responder:**
+                1. Tiene dificultad para mantenerse sentado y para controlar la cabeza y el tronco en cualquier posición.
+                Tiene dificultad para controlar cualquier movimiento voluntario. Necesita una silla con adaptaciones especiales 
+                para estar confortablemente sentado y para sus desplazamientos. Para trasladarlo, tiene que ser cogido en brazos por otra 
+                persona o usar grúa.
+
+                2. Puede mantenerse sentado con algún soporte en pelvis o en tronco, pero no estar de pie, ni caminar sin gran apoyo.
+                Siempre usa silla de ruedas en el exterior. Puede desplazarse de manera autónoma en una silla de ruedas eléctrica.
+                Dentro de casa, puede arrastrarse o voltearse distancias pequeñas.
+
+                3. Es capaz de mantenerse de pie por sí mismo y de caminar, sólo si usa alguna ayuda para la marcha (como un andador, muletas, bastones, etc.).
+                Le resulta difícil subir escaleras o caminar sobre una superficie irregular sin ayuda. Para desplazarse utiliza muchos métodos, 
+                dependiendo de las circunstancias. Prefiere usar una silla de ruedas para desplazarse rápidamente o para largas distancias.
+
+                4. Puede caminar sin ayudas para la marcha, pero necesita apoyarse en el pasamanos para subir y bajar escaleras.
+                Habitualmente camina en la mayoría de los entornos.Normalmente tiene dificultades para caminar por terreno irregular, 
+                pendientes o en espacios multitudinarios. De vez en cuando prefiere utilizar ayudas para la marcha (bastones o muletas) o 
+                una silla de ruedas para desplazarse rápidamente o para largas distancias.
+
+                5. Puede caminar sin ayudas para la marcha y subir y bajar escaleras sin necesidad de apoyarse en el pasamanos.
+                Camina por cualquier parte (incluyendo terreno irregular, pendientes o espacios multitudinarios). Puede correr y saltar, 
+                aunque su velocidad, equilibrio y coordinación estén ligeramente limitadas.
+                """
+            else:
+                help_text = "Por favor, seleccione la opción que mejor describa la capacidad de su hijo/a para moverse."
+
+            # Asignar el help_text al campo movimiento
+            self.fields['movimiento'].help_text = help_text
+
+'''
+class SentimientosForm(BaseForm):
+    class Meta:
+        model = Sentimientos
+        fields = '__all__'
+        widgets = {
+            "hacer_cosas": forms.RadioSelect,
+            "uno_mismo": forms.RadioSelect,
+            "motivacion": forms.RadioSelect,
+            "oportunidades": forms.RadioSelect,
+            "aspecto_fisico": forms.RadioSelect,
+        }
+
+'''
 
 class SentimientosForm(BaseForm):
     class Meta:
@@ -127,6 +263,19 @@ class SentimientosForm(BaseForm):
             "oportunidades": forms.RadioSelect,
             "aspecto_fisico": forms.RadioSelect,
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        
+        # Agregar el help_text como un atributo del formulario
+        self.help_text = """
+        Queremos preguntarle sobre cómo piensa que su hijo/a SE SIENTE respecto a algunos aspectos de su vida, como su familia,
+        amigos, salud y escuela. El cuestionario mide cómo se siente su hijo/a, no lo que puede hacer.
+        Cuando lea las preguntas, piense que no hay respuestas correctas e incorrectas, sino que es importante que responda lo 
+        que es más adecuado a su caso. En cada pregunta, marque con un círculo el número que mejor exprese cómo piensa usted que 
+        SE SIENTE su hijo/a. Puede escoger cualquier número del 1 (Muy desconforme) al 9 (Muy conforme).
+        """
+
 
 
 class RelacionesForm(BaseForm):
@@ -182,7 +331,7 @@ class EscuelaForm(BaseForm):
             "mismo_trato": forms.RadioSelect,
             "participacion_colegio": forms.RadioSelect,
         }                
-
+'''
 class SaludForm(BaseForm):
     class Meta:
         model = Salud
@@ -199,6 +348,39 @@ class SaludForm(BaseForm):
             "beber": forms.RadioSelect,
             "ir_al_banio": forms.RadioSelect,
         }              
+'''
+
+class SaludForm(BaseForm):
+    class Meta:
+        model = Salud
+        fields = '__all__'
+        widgets = {
+            "hacer_cosas_solo": forms.RadioSelect,
+            "movilidad": forms.RadioSelect,
+            "independencia": forms.RadioSelect,
+            "moverse_dentro_barrio": forms.RadioSelect,
+            "transporte": forms.RadioSelect,
+            "brazos_y_manos": forms.RadioSelect,
+            "piernas": forms.RadioSelect,
+            "vestirse": forms.RadioSelect,
+            "beber": forms.RadioSelect,
+            "ir_al_banio": forms.RadioSelect,
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        
+        # Texto antes de "brazos_y_manos"
+        self.fields['brazos_y_manos'].help_text = """
+        Las próximas 2 preguntas se refieren a cómo se siente su hijo/a con respecto al uso de partes de su cuerpo, no si su hijo/a 
+        puede usar parte de su cuerpo.
+        """
+        
+        # Texto antes de "vestirse"
+        self.fields['vestirse'].help_text = """
+        Las próximas 3 preguntas se refieren a cómo se siente su hijo/a con respecto a su capacidad de realizar actividades diarias, 
+        no si su hijo/a puede realizarlas.
+        """
 
 class DolorForm(BaseForm):
     class Meta:
@@ -213,7 +395,14 @@ class DolorForm(BaseForm):
             "como_afecta": forms.RadioSelect,
             "impedimentos": forms.RadioSelect,
             "no_disfrutar_dia": forms.RadioSelect,
-        }             
+        }
+        def __init__(self, *args, **kwargs):
+            super().__init__(*args, **kwargs)
+        
+        # Agregar el help_text al campo "cuanto_dolor"
+        self.fields['cuanto_dolor'].help_text = """
+        La siguiente pregunta se refiere al dolor que pueda sentir su hijo/a:
+        """             
 
 class ServiciosForm(BaseForm):
     class Meta:
