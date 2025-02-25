@@ -396,8 +396,8 @@ class DolorForm(BaseForm):
             "impedimentos": forms.RadioSelect,
             "no_disfrutar_dia": forms.RadioSelect,
         }
-        def __init__(self, *args, **kwargs):
-            super().__init__(*args, **kwargs)
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         
         # Agregar el help_text al campo "cuanto_dolor"
         self.fields['cuanto_dolor'].help_text = """

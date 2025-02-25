@@ -373,6 +373,7 @@ class Cpqol(models.Model):
 	codigo=models.CharField(max_length=100, blank=True, null=True)
 	tutor=models.ForeignKey(Tutor, blank=True, null=True, on_delete=models.PROTECT)
 	paciente=models.ForeignKey(Paciente, blank=True, null=True, on_delete=models.PROTECT)
+	movimiento=models.ForeignKey(Movimiento, blank=True, null=True, on_delete=models.PROTECT)
 	sentimientos=models.ForeignKey(Sentimientos, blank=True, null=True, on_delete=models.PROTECT)
 	relaciones=models.ForeignKey(Relaciones, blank=True, null=True, on_delete=models.PROTECT)
 	familia=models.ForeignKey(Familia, blank=True, null=True, on_delete=models.PROTECT)
