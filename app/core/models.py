@@ -53,7 +53,7 @@ class Tutor(models.Model):
 		'no-binario': 'No binario',
 		'otro': 'Otro',
 	}
-	genero = models.CharField(max_length=20, choices=CHOICES_GENERO, verbose_name="Género")
+	genero = models.CharField(max_length=20, choices=CHOICES_GENERO, verbose_name="Género [de la persona que responde]")
 	genero_otro = models.CharField(max_length=20, verbose_name="¿Cuál?", blank=True, null=True)	
 
 
@@ -75,7 +75,7 @@ class Paciente(models.Model):
 		'no-binario': 'No binario',
 		'otro': 'Otro',
 	}
-	genero = models.CharField(max_length=20, choices=CHOICES_GENERO, verbose_name="Género")
+	genero = models.CharField(max_length=20, choices=CHOICES_GENERO, verbose_name="Género [Del niño/a o adolescente]")
 	genero_otro = models.CharField(max_length=20, verbose_name="¿Cuál?", blank=True, null=True)
 	CHOICES_PROVINCIA = {
 			"Ciudad Autónoma de Buenos Aires": "Ciudad Autónoma de Buenos Aires",

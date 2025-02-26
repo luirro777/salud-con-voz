@@ -2,42 +2,53 @@
 
 {% block contenido %}
 <div class="container px-1">
-            <h1 class="mt-5 mb-3">Encuesta {% if form %}{% if seccion.numero > 0 %} <span class="badge bg-success">Paso: {{seccion.numero}} / {{total_secciones}}</span>{% endif %}{% endif %}</h1>
-            <h2 class="mb-1"> {{seccion.nombre}}</h2>
-            <h5 class="mb-5"> {{seccion.subtitulo}}</h5>
-            <div class="row">
-                <div class="col-md-8 offset-md-2">      
-                    {% if seccion.numero == 0 %}
-                        {% include 'core/tyc.html' %}
-                    {% elif seccion.numero == 15 %}
-                        {% include 'core/resultados.html' %}
-                    {% endif %}      
-                    
-                    {% if form %}
-                        {% if form.help_text %}
-                        <div class="alert alert-warning mb-5">
-                            <p class="text-dark text">{{ form.help_text }}</p>
-                        </div>
-                        {% endif %}
-                        <form method="post" >{% csrf_token %}
-                            
-                            {% include 'widgets/inputs.html' %}
-                
-                            <div class="d-flex justify-content-between my-5">
-                                {% if seccion.anterior %}<a href="{% url 'cpqol' %}?seccion={{seccion.anterior}}&codigo={{cpqol.codigo}}" class="btn btn-secondary">Anterior</a>{% else %}<div></div>{% endif %}
-                                {% if cpqol.confirmado %}
-                                    <a href="{% url 'cpqol' %}?seccion={{seccion.siguiente}}&codigo={{cpqol.codigo}}" class="btn btn-primary">Siguiente</a>
-                                {% else %}
-                                    <button type="submit" class="btn btn-primary">{% if seccion.numero == 11 %}Enviar{% else %}Siguiente{% endif %}</button>
-                                {% endif %}
-                            </div>
-                        </form>
-                    {% endif %}
-
+    <h1 class="mt-5 mb-3">Encuesta {% if form %}{% if seccion.numero > 0 %} <span class="badge bg-success">Paso: {{seccion.numero}} / {{total_secciones}}</span>{% endif %}{% endif %}</h1>
+    <h2 class="mb-1"> {{seccion.nombre}}</h2>
+    <h5 class="mb-5"> {{seccion.subtitulo}}</h5>
+    <div class="row">
+        <div class="col-md-8 offset-md-2">      
+            {% if seccion.numero == 0 %}
+                {% include 'core/tyc.html' %}
+            {% elif seccion.numero == 15 %}
+                {% include 'core/resultados.html' %}
+            {% endif %}      
+            
+            {% if form %}
+                {% if form.help_text %}
+                <div class="alert alert-warning mb-5">
+                    <p class="text-dark text">{{ form.help_text }}</p>
                 </div>
-            </div>            
+                {% endif %}
+                <form method="post">{% csrf_token %}
+                    
+                    <!-- Caso especial para MovimientoForm -->
+                    {% if form.form_name == "MovimientoForm" %}
+                        <div class="form-group">
+                            <label for="{{ form.movimiento.id_for_label }}">{{ form.movimiento.label }}</label>
+                            <select name="{{ form.movimiento.name }}" id="{{ form.movimiento.id_for_label }}" class="form-control">
+                                {% for value, label in form.movimiento.field.choices %}
+                                    <option value="{{ value }}" title="{{ label }}">{{ value }}. {{ label }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    {% else %}
+                        <!-- Para otros formularios, usa la plantilla general -->
+                        {% include 'widgets/inputs.html' %}
+                    {% endif %}
+        
+                    <div class="d-flex justify-content-between my-5">
+                        {% if seccion.anterior %}<a href="{% url 'cpqol' %}?seccion={{seccion.anterior}}&codigo={{cpqol.codigo}}" class="btn btn-secondary">Anterior</a>{% else %}<div></div>{% endif %}
+                        {% if cpqol.confirmado %}
+                            <a href="{% url 'cpqol' %}?seccion={{seccion.siguiente}}&codigo={{cpqol.codigo}}" class="btn btn-primary">Siguiente</a>
+                        {% else %}
+                            <button type="submit" class="btn btn-primary">{% if seccion.numero == 11 %}Enviar{% else %}Siguiente{% endif %}</button>
+                        {% endif %}
+                    </div>
+                </form>
+            {% endif %}
+        </div>
+    </div>            
 </div>
-
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -64,9 +75,6 @@
 
     }
 
-
-
-
     // Mostrar Quien cuida otro
     const selectQuienCuida = document.getElementById('id_quien_cuida');
     const divQuienCuidaOtro = document.getElementById('div_quien_cuida_otro');
@@ -88,9 +96,6 @@
     selectQuienCuida.addEventListener('change', toggleQuienCuidaOtro);
     }
 
-
-
-    
     // Mostrar Genero otro
     const selectGenero = document.getElementById('id_genero');
     const divGeneroOtro = document.getElementById('div_genero_otro');
@@ -117,7 +122,6 @@
 
 {% if cpqol.confirmado %}
     <script>
-
     // Selecciona todos los campos de entrada, áreas de texto y menús desplegables
     const fields = document.querySelectorAll('input, textarea, select');
 
@@ -125,7 +129,6 @@
     fields.forEach(field => {
         field.disabled = true;
     });
-
     </script>
 {% endif %}
 {% endblock %}

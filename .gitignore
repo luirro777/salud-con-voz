@@ -286,3 +286,4 @@ tmp/
 db/
 
 app/templates/pcatia/ActaUso.docx
+app/core/migrations/*

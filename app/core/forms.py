@@ -128,12 +128,16 @@ class MovimientoForm(BaseForm):
     class Meta:
         model = Movimiento
         fields = '__all__'
+        widgets = {
+            'movimiento': forms.Select,  
+        }
 
     def __init__(self, edad=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.form_name = "MovimientoForm"        
         
-        # Definir las opciones y la ayuda basado en la edad del paciente
         if edad is not None:
+            edad = int(str(edad))
             if 4 <= edad <= 6:
                 opciones = [
                     (1, "Tiene dificultad para mantenerse sentado y para controlar la cabeza y el tronco en la mayoría de las posiciones."),
@@ -232,9 +236,10 @@ class MovimientoForm(BaseForm):
                 aunque su velocidad, equilibrio y coordinación estén ligeramente limitadas.
                 """
             else:
+                opciones = []
                 help_text = "Por favor, seleccione la opción que mejor describa la capacidad de su hijo/a para moverse."
 
-            # Asignar el help_text al campo movimiento
+            self.fields['movimiento'].choices = opciones
             self.fields['movimiento'].help_text = help_text
 
 '''
