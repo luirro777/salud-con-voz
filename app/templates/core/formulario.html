@@ -30,6 +30,9 @@
                                     <option value="{{ value }}" title="{{ label }}">{{ value }}. {{ label }}</option>
                                 {% endfor %}
                             </select>
+                            <div class="alert alert-warning mb-5">
+                                <p class="text-dark text">{{ form.help_text }}</p>
+                            </div>
                         </div>
                     {% else %}
                         <!-- Para otros formularios, usa la plantilla general -->

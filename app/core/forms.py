@@ -132,12 +132,19 @@ class MovimientoForm(BaseForm):
             'movimiento': forms.Select,  
         }
 
-    def __init__(self, edad=None, *args, **kwargs):
+    def __init__(self,  *args, edad=None, **kwargs):             
         super().__init__(*args, **kwargs)
         self.form_name = "MovimientoForm"        
+
+        print(f"Valor recibido para edad (en MovimientoForm): {edad}")
+        print(f"Tipo de edad: {type(edad)} - Valor: {edad}")        
         
         if edad is not None:
-            edad = int(str(edad))
+            try:
+                edad = int(edad)  
+            except (ValueError, TypeError):
+                raise ValueError(f"El valor de edad es inválido: {edad}")
+            #edad = int(str(edad))
             if 4 <= edad <= 6:
                 opciones = [
                     (1, "Tiene dificultad para mantenerse sentado y para controlar la cabeza y el tronco en la mayoría de las posiciones."),

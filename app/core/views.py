@@ -139,7 +139,7 @@ def vista_formulario(request):
     current_form = seccion['form']
 
     if request.method == 'POST':
-        # Procesar el formulario enviado
+        # Procesar el formulario enviado        
         form = current_form(request.user, request.POST)
         if form.is_valid():
             if numero_seccion == 0:
@@ -151,8 +151,8 @@ def vista_formulario(request):
 
             # Guardar la edad en la sesión si es el PacienteForm (sección 3)
             if numero_seccion == 3:
-                request.session['edad_paciente'] = instance.edad
-                print(f"Edad guardada en la sesión: {instance.edad}")  # Depuración
+                print(f"Guardando en sesión: {instance.edad}")
+                request.session['edad_paciente'] = instance.edad                
 
             return HttpResponseRedirect(reverse('cpqol') + f'?seccion={numero_seccion + 1}&codigo={cpqol.codigo}')
     else:
@@ -161,8 +161,12 @@ def vista_formulario(request):
             if numero_seccion > 1:
                 instance = getattr(cpqol, seccion['attr'].lower(), None)
                 if numero_seccion == 4:  # MovimientoForm es la sección 4
+                    print(f"Recuperando de sesión: {request.session.get('edad_paciente')}")
                     edad = request.session.get('edad_paciente')
-                    print(f"Edad recuperada de la sesión: {edad}")  # Depuración
+                    try:
+                        edad = int(edad)
+                    except (ValueError, TypeError):
+                        edad = None  # O asignar un valor por defecto                    
                     form = current_form(edad=edad, instance=instance)
                 else:
                     form = current_form(instance=instance)
