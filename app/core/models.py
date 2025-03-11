@@ -288,6 +288,7 @@ CHOICES_SI_NO = {
 		"No":"No" , 
 		"Si":"Si"
 	}
+'''
 CHOICES_INTENSIDAD = { 
 	('Nada', 'Nada'),
 	('Un poco', 'Un poco'),
@@ -295,6 +296,15 @@ CHOICES_INTENSIDAD = {
 	('Mucho','Mucho'),
 	('Muchísimo','Muchísimo')
 }
+'''
+
+CHOICES_INTENSIDAD = [
+    ('Muchísimo', 'Muchísimo'),
+    ('Mucho', 'Mucho'),
+    ('Moderadamente', 'Moderadamente'),
+    ('Un poco', 'Un poco'),
+    ('Nada', 'Nada')
+]
 CHOICES_0_2 = (
 	("No", "No"),
 	("Si, uno", "Si, uno"),

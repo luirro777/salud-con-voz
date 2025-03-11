@@ -9,16 +9,11 @@
         <div class="col-md-8 offset-md-2">      
             {% if seccion.numero == 0 %}
                 {% include 'core/tyc.html' %}
-            {% elif seccion.numero == 15 %}
+            {% elif seccion.numero == 16 %}
                 {% include 'core/resultados.html' %}
             {% endif %}      
             
-            {% if form %}
-                {% if form.help_text %}
-                <div class="alert alert-warning mb-5">
-                    <p class="text-dark text">{{ form.help_text }}</p>
-                </div>
-                {% endif %}
+            {% if form %}                
                 <form method="post">{% csrf_token %}
                     
                     <!-- Caso especial para MovimientoForm -->
@@ -31,7 +26,7 @@
                                 {% endfor %}
                             </select>
                             <div class="alert alert-warning mb-5">
-                                <p class="text-dark text">{{ form.help_text }}</p>
+                                <p class="text-dark text">{{ form.movimiento.help_text |linebreaks }}</p>
                             </div>
                         </div>
                     {% else %}
