@@ -57,15 +57,6 @@ class Tutor(models.Model):
 	genero_otro = models.CharField(max_length=20, verbose_name="¿Cuál?", blank=True, null=True)	
 
 
-
-
-
-
-
-
-
-
-
 class Paciente(models.Model):
 	edad = models.IntegerField(verbose_name="Edad: [Del niño/a o adolescente]")
 	fecha_nacimiento = models.DateField(verbose_name="Fecha de Nacimiento: [Del niño/a o adolescente]")

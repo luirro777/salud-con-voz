@@ -55,7 +55,20 @@
     const selectRelacion = document.getElementById('id_relacion');
     const divRelacionOtro = document.getElementById('div_relacion_otro');
 
-    // Función para ajustar la visibilidad del campo "¿Cuál?"
+    // Mostrar Quien cuida otro
+    const selectQuienCuida = document.getElementById('id_quien_cuida');
+    const divQuienCuidaOtro = document.getElementById('div_quien_cuida_otro');
+
+    // Mostrar Genero otro
+    const selectGenero = document.getElementById('id_genero');
+    const divGeneroOtro = document.getElementById('div_genero_otro');
+
+    // Mostrar Que cobertura otro.
+    const coberturaSelect = document.getElementById("id_cobertura");      
+    const coberturaCualContainer = document.getElementById("div_cobertura_cual");  
+    //coberturaCualContainer.style.display = "none";
+
+    // Función para ajustar la visibilidad del campo "¿Cuál?" en relacion_otro
     if (selectRelacion) {
         function toggleRelacionOtro() {
             if (selectRelacion.value === 'otro-familiar' || selectRelacion.value === 'otro-no-familiar') {
@@ -73,11 +86,7 @@
 
     }
 
-    // Mostrar Quien cuida otro
-    const selectQuienCuida = document.getElementById('id_quien_cuida');
-    const divQuienCuidaOtro = document.getElementById('div_quien_cuida_otro');
-
-    // Función para ajustar la visibilidad del campo "¿Cuál?"
+    // Función para ajustar la visibilidad del campo "¿Cuál?" en otra-persona
     if (selectQuienCuida) {    
     function toggleQuienCuidaOtro() {
         if (selectQuienCuida.value === 'con-ayuda' || selectQuienCuida.value === 'otra-persona' || selectQuienCuida.value === 'otra-opcion') {
@@ -93,12 +102,9 @@
     // Añade el evento para manejar cambios
     selectQuienCuida.addEventListener('change', toggleQuienCuidaOtro);
     }
+    
 
-    // Mostrar Genero otro
-    const selectGenero = document.getElementById('id_genero');
-    const divGeneroOtro = document.getElementById('div_genero_otro');
-
-    // Función para ajustar la visibilidad del campo "¿Cuál?"
+    // Función para ajustar la visibilidad del campo "¿Cuál?" en genero_otro
     if (selectGenero) {
         function toggleGeneroOtro() {
             if (selectGenero.value === 'otro') {
@@ -114,6 +120,26 @@
         // Añade el evento para manejar cambios
         selectGenero.addEventListener('change', toggleGeneroOtro);
     }
+
+    // Función para ajustar la visibilidad del campo "¿Cuál?" en cobertura_otro
+    if(coberturaSelect){
+        function toggleCoberturaCual() {
+        // Opciones para las cuales se ocultará el campo cobertura_cual
+            const opcionesOcultar = ["sistema-publico", "pami", "nsnr", ""];
+            console.log(coberturaSelect.value);
+            if (opcionesOcultar.includes(coberturaSelect.value)) {
+                coberturaCualContainer.style.display = "none";
+            } else {
+                coberturaCualContainer.style.display = "block";
+            }
+        }
+    
+        // Ejecuta la función al cargar la página para tener el estado correcto
+        toggleCoberturaCual();
+        // Agrega el listener para detectar cambios
+        coberturaSelect.addEventListener("change", toggleCoberturaCual);
+    }
+    
 
     });    
 </script>

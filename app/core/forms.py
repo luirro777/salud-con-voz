@@ -124,6 +124,15 @@ class PacienteForm(BaseForm):
                 }
             ),
         }
+    def clean(self):
+        cleaned_data = super().clean()
+        cobertura = cleaned_data.get("cobertura")
+        cobertura_cual = cleaned_data.get("cobertura_cual")        
+        if cobertura not in ["sistema-publico", "pami", "nsnr"]:
+            if not cobertura_cual:
+                self.add_error("cobertura_cual", "Este campo es obligatorio para la opción seleccionada.")
+        return cleaned_data
+
 '''
 class MovimientoForm(BaseForm):
     class Meta:
