@@ -244,8 +244,7 @@ class MovimientoForm(BaseForm):
                 1. Tiene dificultad para mantenerse sentado y para controlar la cabeza y el tronco en cualquier posición.
                 Tiene dificultad para controlar cualquier movimiento voluntario. 
                 Necesita una silla con adaptaciones especiales para estar confortablemente sentado y para sus desplazamientos. 
-                Para trasladarlo, tiene que ser cogido en brazos por otra 
-                persona o usar grúa.
+                Para trasladarlo, tiene que ser cogido en brazos por otra persona o usar grúa.
 
                 2. Puede mantenerse sentado con algún soporte en pelvis o en tronco, pero no estar de pie, ni caminar sin gran apoyo.
                 Siempre usa silla de ruedas en el exterior. Puede desplazarse de manera autónoma en una silla de ruedas eléctrica.

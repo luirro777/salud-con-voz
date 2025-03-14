@@ -114,7 +114,7 @@ def vista_formulario(request):
         {'form': TutorForm, 'attr': "tutor", 'nombre': "Padre, madre o cuidador", 'subtitulo': 'Información general sobre la persona que responde'},
         {'form': PacienteForm, 'attr': "paciente", 'nombre': "Paciente", 'subtitulo': 'Datos generales de niño/a o adolescente'},
         {'form': MovimientoForm, 'attr': "movimiento", 'nombre': "Movilidad", 'subtitulo': 'Datos generales sobre la movilidad del niño/a o adolescente'},
-        {'form': SentimientosForm, 'attr': "sentimientos", 'nombre': "Sus sentimientos", 'subtitulo': ""},
+        {'form': SentimientosForm, 'attr': "sentimientos", 'nombre': "Calidad de vida del niño/a o adolescente con parálisis cerebral", 'subtitulo': ""},
         {'form': RelacionesForm, 'attr': "relaciones", 'nombre': "Relaciones con los demás", 'subtitulo': ''},
         {'form': FamiliaForm, 'attr': "familia", 'nombre': "Familia", 'subtitulo': ''},
         {'form': ParticipacionForm, 'attr': "participacion", 'nombre': "Participacion", 'subtitulo': ''},

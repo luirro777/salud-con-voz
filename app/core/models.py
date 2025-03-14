@@ -275,6 +275,15 @@ CHOICES_FINALES = (
 	('Siempre', 'Siempre')
 )
 
+CHOICES_FINALES_2 = (
+	('No tiene problemas en ese aspecto', 'No tiene problemas en ese aspecto'),
+	('Nunca' , 'Nunca'),
+	('Casi Nunca', 'Casi Nunca'),
+	('Algunas Veces', 'Algunas Veces'),
+	('Casi Siempre', 'Casi Siempre'),
+	('Siempre', 'Siempre')
+)
+
 CHOICES_SI_NO = {
 		"No":"No" , 
 		"Si":"Si"
@@ -327,16 +336,16 @@ class SaludUltimaSemana(models.Model):
 	inteligencia = models.CharField(max_length=100, choices=CHOICES_FINALES, verbose_name="¿Su hijo/a siente que las personas piensan que es menos inteligente de lo que realmente es?")
 	edificios = models.CharField(max_length=100, choices=CHOICES_FINALES, verbose_name="¿Su hijo/a tiene problemas para entrar y salir de los edificios?")
 	piernas = models.CharField(max_length=100, choices=CHOICES_FINALES, verbose_name="Aunque su hijo/a no pueda mover las piernas muy bien ¿puede hacer la mayoría de las cosas?")
-	caminar = models.CharField(max_length=100, choices=CHOICES_SI_NO, verbose_name="¿Su hijo/a tiene problemas para caminar sin ayuda?")
-	caminar_2 = models.CharField(max_length=100, choices=CHOICES_FINALES, verbose_name="¿A su hijo/a le molesta no poder caminar sin ayuda?")
-	bañarse = models.CharField(max_length=100, choices=CHOICES_SI_NO, verbose_name="¿Su hijo/a tiene problemas para vestirse o bañarse?")
-	bañarse_2 = models.CharField(max_length=100, choices=CHOICES_FINALES, verbose_name="¿A su hijo/a le molesta que lo/a tenga que vestir y bañar otra persona?")
-	ir_baño = models.CharField(max_length=100, choices=CHOICES_SI_NO, verbose_name="¿Su hijo/a tiene problemas para ir al baño solo/a?")
-	ir_baño_2 = models.CharField(max_length=100, choices=CHOICES_FINALES, verbose_name="¿A su hijo/a le molesta que lo/a tengan que ayudar para ir al baño?")
-	comunicarse = models.CharField(max_length=100, choices=CHOICES_SI_NO, verbose_name="¿Su hijo/a tiene problemas para comunicarse?")
-	comunicarse_2 = models.CharField(max_length=100, choices=CHOICES_FINALES, verbose_name="¿Su hijo/a se puede comunicar tan bien como quiere?")
-	hablar = models.CharField(max_length=100, choices=CHOICES_SI_NO, verbose_name="¿Su hijo/a tiene problemas para hablar?")
-	hablar_2 = models.CharField(max_length=100, choices=CHOICES_FINALES, verbose_name="¿A su hijo/a le molesta no poder hablar tan bien como los demás chicos/as?")
+	#caminar = models.CharField(max_length=100, choices=CHOICES_SI_NO, verbose_name="¿Su hijo/a tiene problemas para caminar sin ayuda?")
+	caminar_2 = models.CharField(max_length=100, choices=CHOICES_FINALES_2, verbose_name="¿A su hijo/a le molesta no poder caminar sin ayuda?")
+	#bañarse = models.CharField(max_length=100, choices=CHOICES_SI_NO, verbose_name="¿Su hijo/a tiene problemas para vestirse o bañarse?")
+	bañarse_2 = models.CharField(max_length=100, choices=CHOICES_FINALES_2, verbose_name="¿A su hijo/a le molesta que lo/a tenga que vestir y bañar otra persona?")
+	#ir_baño = models.CharField(max_length=100, choices=CHOICES_SI_NO, verbose_name="¿Su hijo/a tiene problemas para ir al baño solo/a?")
+	ir_baño_2 = models.CharField(max_length=100, choices=CHOICES_FINALES_2, verbose_name="¿A su hijo/a le molesta que lo/a tengan que ayudar para ir al baño?")
+	#comunicarse = models.CharField(max_length=100, choices=CHOICES_SI_NO, verbose_name="¿Su hijo/a tiene problemas para comunicarse?")
+	comunicarse_2 = models.CharField(max_length=100, choices=CHOICES_FINALES_2, verbose_name="¿Su hijo/a se puede comunicar tan bien como quiere?")
+	#hablar = models.CharField(max_length=100, choices=CHOICES_SI_NO, verbose_name="¿Su hijo/a tiene problemas para hablar?")
+	hablar_2 = models.CharField(max_length=100, choices=CHOICES_FINALES_2, verbose_name="¿A su hijo/a le molesta no poder hablar tan bien como los demás chicos/as?")
 
 class SaludUltimaSemana2(models.Model):
 	fisicamente = models.CharField(max_length=100, choices=CHOICES_INTENSIDAD, verbose_name="¿El chico/a se sintió bien y físicamente en forma?")

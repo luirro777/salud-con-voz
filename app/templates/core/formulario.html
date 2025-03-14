@@ -11,7 +11,23 @@
                 {% include 'core/tyc.html' %}
             {% elif seccion.numero == 16 %}
                 {% include 'core/resultados.html' %}
-            {% endif %}      
+            {% elif seccion.numero == 5 %}
+            <h5>
+                Queremos preguntarle sobre cómo piensa que su hijo/a SE SIENTE respecto a algunos aspectos de su vida, 
+                como su familia, amigos, salud y escuela. El cuestionario mide cómo se siente su hijo/a, no lo que puede hacer. 
+                
+            </h5>
+            <h5>
+                Cuando lea las preguntas, piense que no hay respuestas correctas e incorrectas, sino que es importante
+                que responda lo que es más adecuado a su caso.
+            </h5>
+            <h5>
+                En cada pregunta, seleccione el número que mejor exprese cómo piensa usted que SE SIENTE
+                su hijo/a. Puede escoger cualquier número del 1 (Muy desconforme) al 9 (Muy conforme).
+            </h5>
+            <br><br>
+            {% endif %}
+                  
             
             {% if form %}                
                 <form method="post">{% csrf_token %}
