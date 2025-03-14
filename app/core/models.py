@@ -9,8 +9,8 @@ CHOICES_NIVEL_EDUCATIVO = (
 	("3. Primaria completa", "3. Primaria completa"),
 	("4. Secundaria incompleta (comenzó, pero no terminó la secundaria)", "4. Secundaria incompleta (comenzó, pero no terminó la secundaria)"),
 	("5. Secundaria completa", "5. Secundaria completa"),
-	("6. Terciario o universitario incompleto (los comenzó, pero no los terminó)a", "6. Terciario o universitario incompleto (los comenzó, pero no los terminó)a"),
-	("7. Terciario completa", "7. Terciario completa"),
+	("6. Terciario o universitario incompleto (los comenzó, pero no los terminó)a", "6. Terciario o universitario incompleto (los comenzó, pero no los terminó)"),
+	("7. Terciario completo", "7. Terciario completa"),
 	("8. Universitario de grado completo o posgrado completo", "8. Universitario de grado completo o posgrado completo")
 )
 
