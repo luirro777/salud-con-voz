@@ -16,9 +16,10 @@
     <h4 class="mt-5">Puntajes de calidad de vida relacionada con la salud</h4>
     <canvas id="myChart" height="100"></canvas>
     <script>
+       
         // Obtener el contexto del canvas donde se dibujará el gráfico
         var ctx = document.getElementById('myChart').getContext('2d');
-        
+
         // Crear un nuevo gráfico
         var myChart = new Chart(ctx, {
             type: 'bar',
@@ -40,7 +41,7 @@
                     legend: {
                         display: false
                     }
-            }                
+                }
             }
         });
     </script>
@@ -82,14 +83,52 @@
 
 
 <script>
+    
     function imprimirDiv() {
-        var resultados = document.getElementById('resultados').innerHTML;
-        var ventanaImpresion = window.open('', '', 'height=500,width=800');
-        ventanaImpresion.document.write('<html><head><title>Imprimir</title>');
-        ventanaImpresion.document.write('</head><body >');
-        ventanaImpresion.document.write(resultados);
-        ventanaImpresion.document.write('</body></html>');
-        ventanaImpresion.document.close();
-        ventanaImpresion.print();
+    // 1. Obtener el contenedor original de los resultados
+    var contenedor = document.getElementById('resultados');
+    if (!contenedor) {
+        console.error("No se encontró el contenedor con id 'resultados'");
+        return;
     }
+    
+    // 2. Clonar el contenedor para no afectar el original
+    var clonContenedor = contenedor.cloneNode(true);
+
+    // 3. Obtener el canvas original (con el gráfico dibujado)
+    var canvasOriginal = document.getElementById('myChart');
+    if (canvasOriginal) {
+        // Convertir el canvas original a imagen
+        var dataURL = canvasOriginal.toDataURL();
+        var imagen = document.createElement('img');
+        imagen.src = dataURL;
+        // 4. En el clon, buscar el canvas y reemplazarlo por la imagen
+        var canvasClon = clonContenedor.querySelector('#myChart');
+        if (canvasClon) {
+            canvasClon.parentNode.replaceChild(imagen, canvasClon);
+        } else {
+            console.warn("No se encontró el canvas en el clon del contenedor.");
+        }
+    } else {
+        console.warn("No se encontró el canvas original con id 'myChart'.");
+    }
+    
+    // 5. Abrir una nueva ventana para imprimir y escribir el contenido clonado
+    var ventanaImpresion = window.open('', '', 'height=600,width=800');
+    ventanaImpresion.document.write('<html><head><title>Imprimir</title>');
+    // Aquí podrías incluir estilos adicionales si lo necesitas
+    ventanaImpresion.document.write('</head><body>');
+    ventanaImpresion.document.write(clonContenedor.innerHTML);
+    ventanaImpresion.document.write('</body></html>');
+    ventanaImpresion.document.close();
+
+    // Esperar a que la imagen en la nueva ventana se cargue antes de imprimir
+    ventanaImpresion.onload = function() {
+        ventanaImpresion.focus();
+        ventanaImpresion.print();
+        ventanaImpresion.close();
+    };
+}
+
+
 </script>

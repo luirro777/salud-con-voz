@@ -174,7 +174,7 @@ def vista_formulario(request):
                 form = current_form(request.user)
 
     # Si es la última sección, mostrar los resultados
-    if numero_seccion == 15:
+    if numero_seccion == 16:
         labels = list(cpqol.resultados.keys())
         values = list(cpqol.resultados.values())
 
