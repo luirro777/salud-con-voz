@@ -132,7 +132,10 @@ class SolicitudConfirmView(TemplateView):
 
             form_data.pop('captcha', None)  # Elimina 'captcha' si existe
             solicitud = Solicitud.objects.create(**form_data)
-
+            '''
+            
+            
+            
             # Enviar correo electrónico con los datos del formulario
             subject = 'Nueva solicitud recibida'
             # Renderizamos un template HTML para el contenido del email
@@ -149,7 +152,7 @@ class SolicitudConfirmView(TemplateView):
                 html_message=html_message,  # Envía el mensaje HTML si el cliente lo soporta
                 fail_silently=False,
             )
-
+            '''
             # Clear the session data
             request.session.pop('form_data', None)
         
