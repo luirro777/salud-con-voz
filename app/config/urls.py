@@ -25,6 +25,7 @@ urlpatterns = [
     #####################################################
     path("cpqol/", include("core.urls")),
     path("pcatia/", include("pcatia.urls")),
+    path("formularios/", include("formularios.urls")),
     path('captcha/', include('captcha.urls')),
     path("cpqol/quizes/", home, name="home"),
     path("", SaludConVozView.as_view(), name="principal"),

@@ -1,27 +1,29 @@
 {% extends "base_login.html" %}
 
 {% block content %}
-  <h2>Listado de Solicitudes PCATIA</h2>
+  <h2>Listado de Solicitudes (Otros cuestionarios)</h2>
   <table class="table table-striped">
     <thead>
       <tr>        
         <th>Responsable Principal</th>
         <th>Email Principal</th>
         <th>Institución Principal</th>
+        <th>Cuestionario</th>
         <th>Acciones</th>
       </tr>
     </thead>
     <tbody>
-      {% for solicitud in pcatia %}
+      {% for solicitud in formularios%}
         <tr>         
           <td>{{ solicitud.nombres_principal }} {{ solicitud.apellidos_principal }}</td>
           <td>{{ solicitud.email_principal }}</td>
           <td>{{ solicitud.institucion_principal }}</td>
+          <td>{{ solicitud.tipo_cuestionario }}</td>
           <td>
-            <a href="{% url 'pcatia:solicitud_detail' solicitud.id %}">
+            <a href="{% url 'formularios:solicitud_detail' solicitud.id %}">
               <button>Ver</button>
             </a>            
-            <a href="{% url 'pcatia:solicitud_delete' solicitud.id %}">
+            <a href="{% url 'formularios:solicitud_delete' solicitud.id %}">
               <button>Borrar</button>
             </a>
           </td>

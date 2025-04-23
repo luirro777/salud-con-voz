@@ -1,0 +1,48 @@
+{% extends "_base.html" %} 
+{% block contenido %}
+<div class="d-flex align-items-center justify-content-center min-vh-100 text-left">
+    <div class="card mx-auto" style="width: 75%;">
+        <div class="card-body">
+            <!-- Encabezado con los logos -->
+            {% include 'logos.html' %}
+            <!-- Título principal -->
+            <h2 class="mb-4">Solicitud de cuestionarios de CALIDAD DE VIDA RELACIONADA CON LA SALUD o de SALUD DE ESCOLARES
+            </h2>
+            <!-- Información sobre la colaboración y condiciones -->
+    <!-- Contenido del texto -->
+             
+            <div class="text-start">
+                <p class="mb-4">
+                    El equipo de Salud con voz trabaja desde 2004 en el desarrollo, diseño o adaptación de cuestionarios para evaluar la salud autopercibida, la calidad de vida relacionada con la salud y otras características o vivencias de la población infantil, adolescente y joven de Argentina.
+                </p>
+                <p class="mb-4">
+                    <i>Salud con voz</i> pone estas herramientas a disposición de equipos de salud, gabinetes técnicos escolares o profesionales que hacen trabajos académicos de posgrado para que puedan utilizarlos. Esta producción ha sido desarrollada en instituciones públicas como la Universidad Nacional de Córdoba y CONICET, lo que facilita su disponibilidad sin pago de arancel alguno. Sin embargo, se requiere que en la implementación de los cuestionarios se asumen los siguientes compromisos, necesarios para la preservación de su fiabilidad y validez:
+                </p>                
+                <ul class="list-unstyled mb-4">
+                    <li>1. No alterar el contenido de las escalas de cada dimensión, es decir, el número de ítems de cada apartado, la redacción de las preguntas ni las opciones de respuestas, ya que la validez interna, consistencia y equivalencia internacional de los datos requiere del uso de los cuestionarios tal como se ofrecen.</li>
+                    <li>2. En caso de notar alguna cuestión que conlleve la necesidad de introducir alguna modificación a los cuestionarios, se recomienda enfáticamente consultar con autores de los instrumentos;</li>                   
+                </ul>
+                <p class="mb-4">
+                    Asimismo, solicitamos enfáticamente respetar principios éticos de la investigación con personas y de buenas prácticas científicas, así como fomentar la colaboración solidaria entre grupos de trabajo de todo el país, para lo cual, solicitamos: 
+                </p>
+                <ul class="list-unstyled mb-4">
+                    <li>
+                        Solicitar aval de Comités de Ética de la Investigación en Salud cuando estos instrumentos sean utilizados para evaluar intervenciones, así como en otras ocasiones que consideren necesario.  
+                    </li>
+                    <li>
+                        Respetar y mencionar los créditos de autoría de los instrumentos, así como otros principios de buenas prácticas científicas.
+                    </li>
+                    <li>
+                        Publicar y divulgar resultados de los estudios lo más ampliamente posible, así como mantener informado a nuestro equipo para que podamos contribuir a la construcción de conocimiento sobre la salud de nuestra población. 
+                    </li>
+                </ul>
+                <p class="mb-4">
+                    A continuación se ingresa al formulario para solicitar algunos de esos cuestionarios.  
+                </p>
+                <a href="{% url 'formularios:crear_solicitud' %}" class="btn btn-warning">Ir al formulario</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h2>Generación de Documento</h2>
+  <p>El documento ha sido generado exitosamente. Puedes descargarlo en el siguiente enlace:</p>
+  
+  <a href="{% url 'descargar_documento' file_name=file_name %}">
+    <button class="btn btn-primary">Descargar Documento</button>
+  </a>
+
+  <p><strong>Título del Estudio:</strong> {{ solicitud.titulo_estudio }}</p>
+  <p><strong>Responsable Principal:</strong> {{ solicitud.nombres_principal }} {{ solicitud.apellidos_principal }}</p>
+  <p><strong>Email Principal:</strong> {{ solicitud.email_principal }}</p>
+  <p><strong>Fecha de Solicitud:</strong> {{ solicitud.fecha_solicitud|date:"d-m-Y" }}</p>
+{% endblock %}
