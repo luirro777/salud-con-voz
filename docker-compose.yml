@@ -3,17 +3,18 @@ services:
     build:
       context: .
     container_name: django_web
-    command: gunicorn config.wsgi:application --bind 0.0.0.0:8001
-    #command: python manage.py runserver 0.0.0.0:8001
+    command: gunicorn config.wsgi:application --bind 0.0.0.0:8000
+    #command: python manage.py runserver 0.0.0.0:8000 --insecure
     volumes:
       - ./app:/app  
       - ./staticfiles:/app/staticfiles  
       - ./media:/app/media  
     env_file: ./app/.env
     ports:
-      - "127.0.0.1:8001:8001"  
+      - "80:8000"  
     depends_on:
       - db
+    restart: unless-stopped
 
   db:
     image: postgres:15
@@ -26,6 +27,7 @@ services:
       POSTGRES_HOST_AUTH_METHOD: trust
     volumes:
       - postgres_data:/var/lib/postgresql/data 
+    restart: unless-stopped
 
 volumes:
   postgres_data: 
