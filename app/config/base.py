@@ -19,6 +19,7 @@ INSTALLED_APPS = [
     'crispy_bootstrap4',
     'captcha',
     'pcatia',
+    'formularios',
 ]
 
 MIDDLEWARE = [
