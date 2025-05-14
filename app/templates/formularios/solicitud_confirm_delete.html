@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block content %}
+{% block contenido %}
   <h2>¿Estás seguro de que deseas borrar la solicitud "{{ object }}"?</h2>
   <form method="post">
     {% csrf_token %}
