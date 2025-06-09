@@ -14,7 +14,131 @@ CHOICES_NIVEL_EDUCATIVO = (
 	("8. Universitario de grado completo o posgrado completo", "8. Universitario de grado completo o posgrado completo")
 )
 
+CHOICES_PROFESION = [
+    ("medico_familia", "Médico/a de familia/general"),
+    ("medico_fisiatra", "Médico/a fisiatra"),
+    ("medico_especialista", "Médico/a especialista ¿cuál?"),
+    ("fonoaudiologo", "Fonoaudiólogo/a"),
+    ("kinesiologo", "Kinesiólogo/a"),
+    ("terapista_ocupacional", "Terapista Ocupacional"),
+    ("nutricionista", "Nutricionista"),
+    ("psicologo", "Psicólogo/a"),
+    ("trabajador_social", "Trabajador/a social"),
+    ("docente_inclusion", "Docente de inclusión"),
+    ("acompanante_terapeutico", "Acompañante terapéutica/o"),
+    ("otra", "Otra ¿cuál?"),
+]
 
+CHOICES_TIPO_CENTRO = [
+    ("centro_privado", "Centro o clínica privada"),
+    ("centro_publico", "Hospital u otro tipo de centro público"),
+    ("consultorio_particular", "Consultorio particular"),
+    ("otro", "Otro ¿Cuál?"),
+]
+
+CHOICES_PERSONA_OCUPA = [
+    ("madre", "Madre"),
+    ("padre", "Padre"),
+    ("tutor_legal", "Tutor/a legal"),
+    ("pareja_madre_padre", "Pareja de la madre o el padre"),
+    ("abuelo_abuela", "Abuela/o"),
+    ("hermano_hermana", "Hermana/o"),
+    ("otro_familiar", "Otro familiar ¿Cuál?"),
+    ("otra_persona_no_familiar", "Otra persona, no familiar ¿Cuál?"),
+]
+
+CHOICES_GENERO = [
+    ("femenino", "Femenino"),
+    ("masculino", "Masculino"),
+    ("no_binario", "No binario"),
+    ("otro", "Otro ¿cuál?"),
+]
+
+CHOICES_NIVEL = [
+    ("nivel_i", "Nivel I"),
+    ("nivel_ii", "Nivel II"),
+    ("nivel_iii", "Nivel III"),
+    ("nivel_iv", "Nivel IV"),
+    ("nivel_v", "Nivel V"),
+]
+
+'''
+Para profesionales
+'''
+class Profesional(models.Model):
+	profesion = models.CharField(
+    	max_length=30,
+    	choices=CHOICES_PROFESION,
+    	verbose_name="Por favor, marque la profesión que mejor le describa"
+	)
+	provincia_atencion = models.CharField(
+		verbose_name="Por favor, consigne la provincia en la que atiende al niño, niña, adolescente o jóven",
+		max_length=50
+	)
+	ciudad_atencion = models.CharField(
+		verbose_name="Ciudad o localidad donde atiende al NNAJ"
+	)
+	tipo_centro = models.CharField(
+		max_length=50,
+		choices=CHOICES_TIPO_CENTRO,
+		verbose_name="Por favor, indique el tipo de centro o servicio de salud en el que trabaja:"
+	)
+	centro_salud = models.CharField(
+		max_length=50,
+		verbose_name="Por favor, consigne el nombre del centro o servicio de salud en el que trabaja (si es consultorio particular escriba 'consultorio particular'):"
+	)
+	
+class Contexto(models.Model):
+	persona_ocupa = models.CharField(
+    	max_length=30,
+    	choices=CHOICES_PERSONA_OCUPA,
+    	verbose_name="¿Quién es la persona que se ocupa principalmente del cuidado del niño, niña adolescente o jóven?"
+	)
+	max_estudios = models.CharField(
+		max_length=30,
+		choices=CHOICES_NIVEL_EDUCATIVO,
+		verbose_name="¿Cuál es el nivel máximo de estudios finalizado por la madre o cuidador/a del niño/a, adolescente o jóven?"
+	)
+	edad = models.PositiveIntegerField(
+		validators=[
+			MaxValueValidator(18, "La edad no puede superar los 18 años")
+		]
+		verbose_name="Edad del niño, niña, adolescente o jóven:"
+	)
+	genero = models.CharField(
+		max_length=30,
+		choices= CHOICES_GENERO,
+		verbose_name="Género del niño, niña, adolescente o jóven"
+	)
+
+class DatosClinicos(models.Model):
+	gmfcs = models.CharField(
+		max_length=30,
+		choices=CHOICES_NIVEL,
+		verbose_name="Sistema de la Clasificación de la Función Motora Gruesa (GMFCS)"
+	)
+	macs = models.CharField(
+		max_length=30,
+		choices=CHOICES_NIVEL,
+		verbose_name="Sistema de Clasificación de la Habilidad Manual (MACS)"
+	)
+	cfcs = models.CharField(
+		max_length=30,
+		choices=CHOICES_NIVEL,
+		verbose_name="Sistema de Clasificación de Comunicación Funcional (CFCS)"
+	)
+	edacs = models.CharField(
+		max_length=30,
+		choices=CHOICES_NIVEL,
+		verbose_name="Sistema de Clasificación para la capacidad de Comer y Beber (EDACS)"
+	)
+
+class Finalizacion(models.Model):
+	correo = models.EmailField(, max_length=254)
+
+'''
+Para familiares
+'''
 class Tutor(models.Model):
 	
 	edad = models.IntegerField(verbose_name="Edad: [De la persona que responde]")
@@ -434,3 +558,19 @@ class Cpqol(models.Model):
 			'Dolor': self.dolor.promedio(),
 			'Acceso a Servicios': self.servicios.promedio()
 		}
+	
+class CpqolProfesional(models.Model):
+	creacion = models.DateTimeField('creacion',auto_now_add=True)
+	user=models.ForeignKey(User, blank=True, null=True, on_delete=models.PROTECT)
+	codigo=models.CharField(max_length=100, blank=True, null=True)
+	profesional = models.ForeignKey(Profesional, on_delete=models.PROTECT)
+	contexto = models.ForeignKey(Contexto, on_delete=models.PROTECT)
+	datos_clinicos = models.ForeignKey(DatosClinicos, on_delete=models.PROTECT)
+	
+	
+	
+
+	class Meta:
+		verbose_name_plural = "Lista De Formularios (Profesionales)"
+
+	
