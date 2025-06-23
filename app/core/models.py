@@ -102,7 +102,7 @@ class Contexto(models.Model):
 	edad = models.PositiveIntegerField(
 		validators=[
 			MaxValueValidator(18, "La edad no puede superar los 18 años")
-		]
+		],
 		verbose_name="Edad del niño, niña, adolescente o jóven:"
 	)
 	genero = models.CharField(
@@ -134,7 +134,7 @@ class DatosClinicos(models.Model):
 	)
 
 class Finalizacion(models.Model):
-	correo = models.EmailField(, max_length=254)
+	correo = models.EmailField("Por favor, escriba su dirección de correo electrónico", max_length=254)
 
 '''
 Para familiares

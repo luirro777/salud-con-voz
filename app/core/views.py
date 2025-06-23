@@ -8,6 +8,7 @@ from .forms import *
 
 # Create your views here.
 
+"""
 @login_required
 def vista_formulario(request):
     # Obtenemos el grupo del usuario
@@ -92,6 +93,115 @@ def vista_formulario(request):
     if numero_seccion == 16:
         labels = list(cpqol.resultados.keys())
         values = list(cpqol.resultados.values())
+
+    return render(request, "core/formulario.html", locals())
+
+
+"""
+@login_required
+def vista_formulario(request):
+    # Obtenemos el grupo del usuario
+    grupo = request.user.groups.first().name if request.user.groups.all() else "profesional"
+    if grupo == "profesional": 
+        try:
+            cpqol = CpqolProfesional.objects.get(user=request.user, codigo=request.GET['codigo'])
+        except:
+            cpqol = None
+    else:
+        try:
+            cpqol = Cpqol.objects.get(user=request.user, codigo=request.GET['codigo'])
+        except:
+            cpqol = None
+
+    # Obtenemos el número de sección desde la URL
+    numero_seccion = int(request.GET.get('seccion', 0))    
+
+    # Definimos las secciones del formulario
+    secciones = [
+        {'form': TerminosYCondicionesForm, 'nombre': "Términos y condiciones", 'subtitulo': ""},
+        {'form': CodigoForm, 'nombre': "Código de participante", 'subtitulo': "Generación de código de identificación"},
+    ]
+
+    if grupo == "profesional": 
+        secciones.append(
+            {'form': ProfesionalForm, 'attr': "profesional", 'nombre': "Caracterización del profesional y el lugar de atención", 'subtitulo': "En esta sección deberá responder preguntas referidas a su profesión y el lugar en el cual atiende al NNAJ"},
+            {'form': ContextoForm, 'attr': "contexto", "nombre": "Datos generales del NNAJ y su contexto", 'subititulo': "La siguiente sección contiene algunas preguntas sobre el NNAJ y su contexto"},
+            {'form': DatosClinicosForm, 'attr': "datosClinicos", 'nombre': "Datos clínicos del NNAJ", 'subtitulo': "En la siguiente sección le preguntaremos por algunos datos clínicos relacionados a la salud del NNAJ, en particular relacionados a escalas que miden distintas funciones. Si por razón de incumbencia desconociera estos datos, por favor,intente ponerse en contacto con otro profesional que pudiera facilitarlos"},
+            {'form': FinalizacionForm, 'attr': "Finalizacion", 'nombre': "Finalizar cuestionario", 'subtitulo': "Agradecemos que se haya tomado el tiempo de completar estos cuestionarios que nos ayudan a conocer la calidad de vida de las infancias y juventudes con parálisis cerebral; si quisiera que nos comuniquemos con Ud. para continuar colaborando y conocer más sobre nuestro trabajo, por favor, escriba su dirección de correo electrónico"},
+        )
+    else:
+        secciones.append(
+            {'form': TutorForm, 'attr': "tutor", 'nombre': "Padre, madre o cuidador", 'subtitulo': 'Información general sobre la persona que responde'},
+            {'form': PacienteForm, 'attr': "paciente", 'nombre': "Paciente", 'subtitulo': 'Datos generales de niño/a o adolescente'},
+            {'form': MovimientoForm, 'attr': "movimiento", 'nombre': "Movilidad", 'subtitulo': 'Datos generales sobre la movilidad del niño/a o adolescente'},
+            {'form': SentimientosForm, 'attr': "sentimientos", 'nombre': "Calidad de vida del niño/a o adolescente con parálisis cerebral", 'subtitulo': ""},
+            {'form': RelacionesForm, 'attr': "relaciones", 'nombre': "Relaciones con los demás", 'subtitulo': ''},
+            {'form': FamiliaForm, 'attr': "familia", 'nombre': "Familia", 'subtitulo': ''},
+            {'form': ParticipacionForm, 'attr': "participacion", 'nombre': "Participacion", 'subtitulo': ''},
+            {'form': EscuelaForm, 'attr': "escuela", 'nombre': "Escuela o Colegio", 'subtitulo': ''},
+            {'form': SaludForm, 'attr': "salud", 'nombre': "Salud", 'subtitulo': ''},
+            {'form': DolorForm, 'attr': "dolor", 'nombre': "Dolor y molestias", 'subtitulo': ''},
+            {'form': ServiciosForm, 'attr': "servicios", 'nombre': "Acceso a servicios", 'subtitulo': ''},
+            {'form': SaludUltimaSemanaForm, 'attr': "salud_ultima_semana", 'nombre': "Más preguntas sobre la salud del niño/a o adolescente", 'subtitulo': 'Las siguientes preguntas son similares a algunas que ya respondió; pero ahora, por favor, piense en la última semana.'},
+            {'form': SaludUltimaSemana2Form, 'attr': "salud_ultima_semana_2", 'nombre': "Sobre la salud del chico o chica", 'subtitulo': 'Las preguntas a continuación corresponden a un cuestionario de salud que se aplica a cualquier niño/a o adolescente en cualquier situación (con o sin problemas de salud), por lo que pueden resultar difíciles de responder. Por favor, responda según lo mejor que usted conozca, asegurándose de que sus respuestas reflejen la perspectiva de su hijo/a. Trate de recordar las experiencias del chico/a durante la última semana.'},
+            {'form': HogarForm, 'attr': "hogar", 'nombre': "Características del hogar", 'subtitulo': 'Esta es la última parte de la encuesta y le solicitamos que responda acerca de algunas características del hogar donde vive la chica o el chico. Estos datos son muy importantes para analizar a qué hogares hemos podido llegar con este estudio, para ofrecer información sobre la población argentina con parálisis cerebral (recuerde que estos datos nunca se analizan ni informan individualmente).'},
+            {'form': None, 'nombre': "Informe de resultados", 'subtitulo': 'Calidad de vida relacionada con la salud en niñas, niños, adolescentes y jóvenes con parálisis cerebral'},
+        )
+       
+    
+    total_secciones = len(secciones) - 1
+
+    # Obtenemos la sección actual
+    seccion = secciones[numero_seccion]
+    seccion['numero'] = numero_seccion
+    seccion['siguiente'] = numero_seccion + 1
+    if numero_seccion > 1:
+        seccion['anterior'] = numero_seccion - 1
+    seccion['grupo'] = grupo
+
+    current_form = seccion['form']
+
+    if request.method == 'POST':
+        # Procesar el formulario enviado        
+        form = current_form(request.user, request.POST)
+        if form.is_valid():
+            if numero_seccion == 0:
+                return HttpResponseRedirect(reverse('cpqol') + f'?seccion={numero_seccion + 1}')
+            elif numero_seccion == 1:
+                cpqol = form.save()
+            else:
+                instance = form.save(cpqol, seccion['attr'].lower())
+
+            # Guardar la edad en la sesión si es el PacienteForm (sección 3)
+            if grupo == "familiar" & numero_seccion == 3:
+                print(f"Guardando en sesión: {instance.edad}")
+                request.session['edad_paciente'] = instance.edad                
+
+            return HttpResponseRedirect(reverse('cpqol') + f'?seccion={numero_seccion + 1}&codigo={cpqol.codigo}')
+    else:
+        # Mostrar el formulario
+        if not numero_seccion == total_secciones:
+            if numero_seccion > 1:
+                instance = getattr(cpqol, seccion['attr'].lower(), None)
+                if grupo == "familiar" & numero_seccion == 4:  # MovimientoForm es la sección 4
+                    print(f"Recuperando de sesión: {request.session.get('edad_paciente')}")
+                    edad = request.session.get('edad_paciente')
+                    try:
+                        edad = int(edad)
+                    except (ValueError, TypeError):
+                        edad = None  # O asignar un valor por defecto                    
+                    form = current_form(edad=edad, instance=instance)
+                else:
+                    form = current_form(instance=instance)
+            else:
+                form = current_form(request.user)
+
+    # Si es la última sección, mostrar los resultados
+    if grupo == "familiar" & numero_seccion == 16:
+        labels = list(cpqol.resultados.keys())
+        values = list(cpqol.resultados.values())
+    #elif grupo == "profesional" & numero_seccion == 4:
+
 
     return render(request, "core/formulario.html", locals())
 

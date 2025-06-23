@@ -55,7 +55,13 @@
                         {% if cpqol.confirmado %}
                             <a href="{% url 'cpqol' %}?seccion={{seccion.siguiente}}&codigo={{cpqol.codigo}}" class="btn btn-primary">Siguiente</a>
                         {% else %}
-                            <button type="submit" class="btn btn-primary">{% if seccion.numero == 11 %}Enviar{% else %}Siguiente{% endif %}</button>
+                            <button type="submit" class="btn btn-primary">                                
+                                {% if seccion.grupo == "familiar" & seccion.numero == 15 %}
+                                Enviar                                    
+                               {% elif seccion.grupo == "familiar" & seccion.numero == 3 %}
+                               <a href="{% url 'home' %}"></a>
+                               Siguiente
+                               {% endif %}</button>
                         {% endif %}
                     </div>
                 </form>

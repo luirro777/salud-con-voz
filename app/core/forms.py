@@ -82,8 +82,68 @@ class BaseForm(forms.ModelForm):
         setattr(cpqol, atributo, instance)
         cpqol.save()
         return instance
+########################################################    
+# Para encuesta de profesionales
+class ProfesionalForm(BaseForm):
+    class Meta:
+        model = Profesional
+        fields = ['profesion', 'provincia_atencion', 'ciudad_atencion', 'tipo_centro', 'centro_salud']
+        widgets = {
+            'profesion': forms.Select(),
+            'provincia_atencion': forms.TextInput(attrs={'placeholder': 'Provincia donde atiende', 'class': 'form-control h5'}),
+            'ciudad_atencion': forms.TextInput(attrs={'placeholder': 'Ciudad o localidad', 'class': 'form-control h5'}),
+            'tipo_centro': forms.Select(attrs={'class': 'form-control h5'}),
+            'centro_salud': forms.TextInput(attrs={'placeholder': 'Nombre del centro o servicio', 'class': 'form-control h5'}),
+        }
+
+    def __init__(self, user=None, *args, **kwargs):
+        super().__init__(user=user, *args, **kwargs)
 
 
+class ContextoForm(BaseForm):
+    class Meta:
+        model = Contexto
+        fields = ['persona_ocupa', 'max_estudios', 'edad', 'genero']
+        widgets = {
+            'persona_ocupa': forms.Select(attrs={'class': 'form-control h5'}),
+            'max_estudios': forms.Select(attrs={'class': 'form-control h5'}),
+            'edad': forms.NumberInput(attrs={'min': 0, 'max': 18, 'class': 'form-control h5'}),
+            'genero': forms.Select(attrs={'class': 'form-control h5'}),
+        }
+
+    def __init__(self, user=None, *args, **kwargs):
+        super().__init__(user=user, *args, **kwargs)
+
+
+class DatosClinicosForm(BaseForm):
+    class Meta:
+        model = DatosClinicos
+        fields = ['gmfcs', 'macs', 'cfcs', 'edacs']
+        widgets = {
+            'gmfcs': forms.Select(attrs={'class': 'form-control h5'}),
+            'macs': forms.Select(attrs={'class': 'form-control h5'}),
+            'cfcs': forms.Select(attrs={'class': 'form-control h5'}),
+            'edacs': forms.Select(attrs={'class': 'form-control h5'}),
+        }
+
+    def __init__(self, user=None, *args, **kwargs):
+        super().__init__(user=user, *args, **kwargs)
+
+
+class FinalizacionForm(BaseForm):
+    class Meta:
+        model = Finalizacion
+        fields = ['correo']
+        widgets = {
+            'correo': forms.EmailInput(attrs={'placeholder': 'ejemplo@correo.com', 'class': 'form-control h5'}),
+        }
+
+    def __init__(self, user=None, *args, **kwargs):
+        super().__init__(user=user, *args, **kwargs)
+
+
+################################################
+# Para encuesta de cuidadores
 class TutorForm(BaseForm):
     class Meta:
         model = Tutor
