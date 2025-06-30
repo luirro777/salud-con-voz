@@ -67,35 +67,35 @@ Para profesionales
 '''
 class Profesional(models.Model):
 	profesion = models.CharField(
-    	max_length=30,
+    	max_length=100,
     	choices=CHOICES_PROFESION,
     	verbose_name="Por favor, marque la profesión que mejor le describa"
 	)
 	provincia_atencion = models.CharField(
 		verbose_name="Por favor, consigne la provincia en la que atiende al niño, niña, adolescente o jóven",
-		max_length=50
+		max_length=100
 	)
 	ciudad_atencion = models.CharField(
 		verbose_name="Ciudad o localidad donde atiende al NNAJ"
 	)
 	tipo_centro = models.CharField(
-		max_length=50,
+		max_length=100,
 		choices=CHOICES_TIPO_CENTRO,
 		verbose_name="Por favor, indique el tipo de centro o servicio de salud en el que trabaja:"
 	)
 	centro_salud = models.CharField(
-		max_length=50,
+		max_length=100,
 		verbose_name="Por favor, consigne el nombre del centro o servicio de salud en el que trabaja (si es consultorio particular escriba 'consultorio particular'):"
 	)
 	
 class Contexto(models.Model):
 	persona_ocupa = models.CharField(
-    	max_length=30,
+    	max_length=100,
     	choices=CHOICES_PERSONA_OCUPA,
     	verbose_name="¿Quién es la persona que se ocupa principalmente del cuidado del niño, niña adolescente o jóven?"
 	)
 	max_estudios = models.CharField(
-		max_length=30,
+		max_length=100,
 		choices=CHOICES_NIVEL_EDUCATIVO,
 		verbose_name="¿Cuál es el nivel máximo de estudios finalizado por la madre o cuidador/a del niño/a, adolescente o jóven?"
 	)
@@ -106,29 +106,29 @@ class Contexto(models.Model):
 		verbose_name="Edad del niño, niña, adolescente o jóven:"
 	)
 	genero = models.CharField(
-		max_length=30,
+		max_length=100,
 		choices= CHOICES_GENERO,
 		verbose_name="Género del niño, niña, adolescente o jóven"
 	)
 
 class DatosClinicos(models.Model):
 	gmfcs = models.CharField(
-		max_length=30,
+		max_length=100,
 		choices=CHOICES_NIVEL,
 		verbose_name="Sistema de la Clasificación de la Función Motora Gruesa (GMFCS)"
 	)
 	macs = models.CharField(
-		max_length=30,
+		max_length=100,
 		choices=CHOICES_NIVEL,
 		verbose_name="Sistema de Clasificación de la Habilidad Manual (MACS)"
 	)
 	cfcs = models.CharField(
-		max_length=30,
+		max_length=100,
 		choices=CHOICES_NIVEL,
 		verbose_name="Sistema de Clasificación de Comunicación Funcional (CFCS)"
 	)
 	edacs = models.CharField(
-		max_length=30,
+		max_length=100,
 		choices=CHOICES_NIVEL,
 		verbose_name="Sistema de Clasificación para la capacidad de Comer y Beber (EDACS)"
 	)
