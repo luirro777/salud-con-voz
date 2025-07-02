@@ -11,7 +11,7 @@
                 {% include 'core/tyc.html' %}
             {% elif seccion.numero == 16 %}
                 {% include 'core/resultados.html' %}
-            {% elif seccion.numero == 5 %}
+            {% elif seccion.numero == 5 and seccion.grupo == "familiar"%}
             <h5>
                 Queremos preguntarle sobre cómo piensa que su hijo/a SE SIENTE respecto a algunos aspectos de su vida, 
                 como su familia, amigos, salud y escuela. El cuestionario mide cómo se siente su hijo/a, no lo que puede hacer. 
@@ -26,6 +26,9 @@
                 su hijo/a. Puede escoger cualquier número del 1 (Muy desconforme) al 9 (Muy conforme).
             </h5>
             <br><br>
+
+            {% elif seccion.grupo == "profesional" and seccion.numero == 4 %}
+            {% include 'gracias.html' %}
             {% endif %}
                   
             
@@ -56,10 +59,9 @@
                             <a href="{% url 'cpqol' %}?seccion={{seccion.siguiente}}&codigo={{cpqol.codigo}}" class="btn btn-primary">Siguiente</a>
                         {% else %}
                             <button type="submit" class="btn btn-primary">                                
-                                {% if seccion.grupo == "familiar" & seccion.numero == 15 %}
+                                {% if seccion.grupo == "familiar" and seccion.numero == 15 or seccion.grupo == "familiar" and seccion.numero == 3 %}
                                 Enviar                                    
-                               {% elif seccion.grupo == "familiar" & seccion.numero == 3 %}
-                               <a href="{% url 'home' %}"></a>
+                               {% else %}
                                Siguiente
                                {% endif %}</button>
                         {% endif %}

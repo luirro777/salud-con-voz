@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Cpqol
+from .models import Cpqol, CpqolProfesional
 from import_export import resources
 from import_export.admin import ImportExportModelAdmin
 # Register your models here.
@@ -84,9 +84,45 @@ class CpqolResource(resources.ModelResource):
 
         export_order = '-creacion'
 
+class CpqolProfesionalResource(resources.ModelResource):
+    class Meta:
+        model = CpqolProfesional  # o 'core.Cpqol'
+        # Campos a importar/exportar, siguiendo la convención de doble guión bajo para relaciones
+        fields = (
+            'creacion',
+            'user__username',
+            'codigo',
+
+            # Sección Profesional
+            'profesional__profesion',
+            'profesional__provincia_atencion',
+            'profesional__ciudad_atencion',
+            'profesional__tipo_centro',
+            'profesional__centro_salud',
+
+            # Sección Contexto
+            'contexto__persona_ocupa',
+            'contexto__max_estudios',
+            'contexto__edad',
+            'contexto__genero',
+
+            # Sección Datos Clínicos
+            'datos_clinicos__macs',
+            'datos_clinicos__cfcs',
+            'datos_clinicos__edacs',
+        )
+        # Controla el orden de las columnas al exportar
+        export_order = fields
+
 class CpqolAdmin(ImportExportModelAdmin):
 	list_display = ['codigo', 'user', ]
 	list_filter = ['user']
 	resource_classes = [CpqolResource]
+     
+class CpqolProfesionalAdmin(ImportExportModelAdmin):
+	list_display = ['codigo', 'user', ]
+	list_filter = ['user']
+	resource_classes = [CpqolProfesionalResource]
 
 admin.site.register(Cpqol, CpqolAdmin)
+admin.site.register(CpqolProfesional, CpqolProfesionalAdmin)

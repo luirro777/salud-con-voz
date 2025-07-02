@@ -96,8 +96,7 @@ class ProfesionalForm(BaseForm):
             'centro_salud': forms.TextInput(attrs={'placeholder': 'Nombre del centro o servicio', 'class': 'form-control h5'}),
         }
 
-    def __init__(self, user=None, *args, **kwargs):
-        super().__init__(user=user, *args, **kwargs)
+    
 
 
 class ContextoForm(BaseForm):
@@ -111,8 +110,7 @@ class ContextoForm(BaseForm):
             'genero': forms.Select(attrs={'class': 'form-control h5'}),
         }
 
-    def __init__(self, user=None, *args, **kwargs):
-        super().__init__(user=user, *args, **kwargs)
+    
 
 
 class DatosClinicosForm(BaseForm):
@@ -126,8 +124,7 @@ class DatosClinicosForm(BaseForm):
             'edacs': forms.Select(attrs={'class': 'form-control h5'}),
         }
 
-    def __init__(self, user=None, *args, **kwargs):
-        super().__init__(user=user, *args, **kwargs)
+    
 
 
 class FinalizacionForm(BaseForm):
@@ -138,8 +135,7 @@ class FinalizacionForm(BaseForm):
             'correo': forms.EmailInput(attrs={'placeholder': 'ejemplo@correo.com', 'class': 'form-control h5'}),
         }
 
-    def __init__(self, user=None, *args, **kwargs):
-        super().__init__(user=user, *args, **kwargs)
+    
 
 
 ################################################

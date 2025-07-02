@@ -2,6 +2,8 @@
 
 <!-- templates/logos.html -->
 <div class="d-flex justify-content-center mb-4">
-    <img src="{% static 'img/logo-ciecs.png' %}" height="80" alt="Logo CIECS" class="me-3">
-    <img src="{% static 'img/logo-scv.png' %}" height="80" alt="Logo Salud con Voz">
+    <a href="{% url 'principal' %}" class="d-flex align-items-center">
+        <img src="{% static 'img/logo-ciecs.png' %}" height="80" alt="Logo CIECS" class="me-3">
+        <img src="{% static 'img/logo-scv.png' %}" height="80" alt="Logo Salud con Voz">
+    </a>
 </div>

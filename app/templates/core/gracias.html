@@ -1,0 +1,17 @@
+{% extends '_base.html' %}
+{% load static %}
+
+{% block contenido %}
+    
+<div class="container px-1">
+    <h1 class="mt-5 mb-3">GRACIAS POR COMPLETAR LA ENCUESTA </h1>
+
+    <div class="text-center">
+
+        <button class="btn my-5 btn-outline-dark" onclick="imprimirDiv()"><i class="bi-printer"></i> Imprimir</button>
+        <a href="{% url 'home' %}" class="btn my-5 btn-secondary">Volver al inicio</a>
+    </div>
+</div>
+
+{% endblock contenido %}
+    

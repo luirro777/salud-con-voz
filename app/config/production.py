@@ -3,7 +3,7 @@ import json
 import os
 from decouple import config
 
-DEBUG = False
+DEBUG = True
 
 
 ALLOWED_HOSTS = [config('DJANGO_DOMAIN'),'localhost']
