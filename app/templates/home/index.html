@@ -23,7 +23,7 @@
                             <td>{{cuestionario.codigo}}</td>
                             <td>{{cuestionario.creacion|date:"d/m/Y"}}</td>
                             <td class="text-center">
-                                <a href="/cpqol/?seccion={{cuestionario.current_seccion}}&codigo={{cuestionario.codigo}}">
+                                <a href="/cpqol/?seccion={{cuestionario.current_seccion |default:1}}&codigo={{cuestionario.codigo}}">
                                 {% if cuestionario.confirmado %}
                                     <span class="badge bg-success">COMPLETADO</span>
                                 {% else %}

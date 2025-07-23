@@ -3,12 +3,17 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.views.generic import TemplateView
 
-from core.models import Cpqol
+from core.models import Cpqol, CpqolProfesional
 
 @login_required
 def home(request):
+    grupo = request.user.groups.first().name if request.user.groups.all() else "profesional" # Asumo que "profesional" es el default si no hay grupo explícito
 
-    cuestionarios = Cpqol.objects.filter(user=request.user)
+    cuestionarios = None
+    if grupo == "profesional":
+        cuestionarios = CpqolProfesional.objects.filter(user=request.user)
+    else: # Podrías tener más grupos aquí o un default para 'familiar'
+        cuestionarios = Cpqol.objects.filter(user=request.user)
 
     contexto = {
         'cuestionarios': cuestionarios
