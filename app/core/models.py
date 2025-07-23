@@ -563,12 +563,10 @@ class CpqolProfesional(models.Model):
 	creacion = models.DateTimeField('creacion',auto_now_add=True)
 	user=models.ForeignKey(User, blank=True, null=True, on_delete=models.PROTECT)
 	codigo=models.CharField(max_length=100, blank=True, null=True)
-	profesional = models.ForeignKey(Profesional, on_delete=models.PROTECT)
-	contexto = models.ForeignKey(Contexto, on_delete=models.PROTECT)
-	datos_clinicos = models.ForeignKey(DatosClinicos, on_delete=models.PROTECT)
-	
-	
-	
+	profesional = models.ForeignKey(Profesional, blank=True, null=True, on_delete=models.PROTECT)
+	contexto = models.ForeignKey(Contexto, blank=True, null=True, on_delete=models.PROTECT)
+	datos_clinicos = models.ForeignKey(DatosClinicos, blank=True, null=True, on_delete=models.PROTECT)
+	correo = models.ForeignKey(Finalizacion, blank=True, null=True, on_delete=models.PROTECT)	
 
 	class Meta:
 		verbose_name_plural = "Lista De Formularios (Profesionales)"

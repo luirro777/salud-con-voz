@@ -27,7 +27,7 @@
             </h5>
             <br><br>
 
-            {% elif seccion.grupo == "profesional" and seccion.numero == 4 %}
+            {% elif seccion.grupo == "profesional" and seccion.numero == 6 %}
             {% include 'gracias.html' %}
             {% endif %}
                   
@@ -59,10 +59,12 @@
                             <a href="{% url 'cpqol' %}?seccion={{seccion.siguiente}}&codigo={{cpqol.codigo}}" class="btn btn-primary">Siguiente</a>
                         {% else %}
                             <button type="submit" class="btn btn-primary">                                
-                                {% if seccion.grupo == "familiar" and seccion.numero == 15 or seccion.grupo == "familiar" and seccion.numero == 3 %}
-                                Enviar                                    
-                               {% else %}
-                               Siguiente
+                                {% if seccion.grupo == "familiar" and seccion.numero == 15  %}
+                                    Enviar                                    
+                                {% elif seccion.grupo == "profesional" and seccion.numero == 5 %}
+                                    Finalizar
+                                {% else %}
+                                    Siguiente                              
                                {% endif %}</button>
                         {% endif %}
                     </div>

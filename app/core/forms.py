@@ -26,9 +26,14 @@ class CodigoForm(forms.Form):
     dni = forms.CharField(label="Ingrese los últimos 3 números del DNI del paciente", min_length=3, max_length=3, widget=forms.TextInput(attrs={'class': 'form-control'}))
     nombre = forms.CharField(label="Ingrese la inicial del primer nombre del paciente", min_length=1, max_length=1, widget=forms.TextInput(attrs={'class': 'form-control'}))
     apellido = forms.CharField(label="Ingrese la inicial del primer apellido del paciente", min_length=1, max_length=1, widget=forms.TextInput(attrs={'class': 'form-control'}))
-
+    '''
     def __init__(self, user=None, *args, **kwargs):
         self.user = user
+        super().__init__(*args, **kwargs)
+    '''
+    def __init__(self, user=None, grupo=None, *args, **kwargs):
+        self.user = user
+        self.grupo = grupo
         super().__init__(*args, **kwargs)
 
     def clean(self):
@@ -39,6 +44,8 @@ class CodigoForm(forms.Form):
         apellido = cleaned_data.get('apellido').upper()
         #codigo = f'{self.user.username}-{mes_ano}{dni}{nombre}{apellido}'
         codigo = f'{mes_ano}{dni}{nombre}{apellido}'
+
+        '''
         try:
             _ = Cpqol.objects.get(
                 user=self.user,
@@ -46,6 +53,20 @@ class CodigoForm(forms.Form):
             )
             self.add_error('dni', "Ya posee un CPQOL con esta combinación")
         except:
+            pass
+        '''
+        if self.grupo == "profesional":
+            ModelToUse = CpqolProfesional
+        else:
+            ModelToUse = Cpqol
+
+        try:
+            _ = ModelToUse.objects.get(
+                user=self.user,
+                codigo=codigo
+            )
+            self.add_error('dni', "Ya posee un CPQOL con esta combinación")
+        except ModelToUse.DoesNotExist:
             pass
             
         return cleaned_data
@@ -59,10 +80,17 @@ class CodigoForm(forms.Form):
         nombre = self.cleaned_data.get('nombre').upper()
         apellido = self.cleaned_data.get('apellido').upper()
         codigo = f'{mes_ano}{dni}{nombre}{apellido}'
-        cpqol_instance = Cpqol.objects.create(
-            user=self.user,
-            codigo=codigo
-        )
+
+        if self.grupo == "profesional":
+            cpqol_instance = CpqolProfesional.objects.create(
+                user=self.user,
+                codigo=codigo
+            )
+        else:
+            cpqol_instance = Cpqol.objects.create(
+                user=self.user,
+                codigo=codigo
+            )
         return cpqol_instance
 
     def help_text(self):
