@@ -134,7 +134,12 @@ class DatosClinicos(models.Model):
 	)
 
 class Finalizacion(models.Model):
-	correo = models.EmailField("Por favor, escriba su dirección de correo electrónico", max_length=254)
+	 correo = models.EmailField(
+        max_length=254,
+        blank=True, 
+        null=True, 
+        default='correo@ejemplo.com' # Valor por defecto para la base de datos
+    )
 
 '''
 Para familiares
@@ -539,7 +544,7 @@ class Cpqol(models.Model):
 		if not self.dolor: return 10 
 		if not self.servicios: return 11
 		if not self.salud_ultima_semana: return 12
-		if not self.salud_ultima_semana2: return 13
+		if not self.salud_ultima_semana_2: return 13
 		return 0
 	
 	@property
@@ -571,4 +576,15 @@ class CpqolProfesional(models.Model):
 	class Meta:
 		verbose_name_plural = "Lista De Formularios (Profesionales)"
 
+	@property
+	def confirmado(self):
+		return self.datos_clinicos != None
+
+	@property
+	def current_seccion(self):
+		if not self.profesional: return 2
+		if not self.contexto: return 3
+		if not self.datos_clinicos: return 4
+		if not self.correo: return 5
+		return 0
 	

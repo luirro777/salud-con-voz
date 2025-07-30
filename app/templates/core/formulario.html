@@ -55,18 +55,17 @@
         
                     <div class="d-flex justify-content-between my-5">
                         {% if seccion.anterior %}<a href="{% url 'cpqol' %}?seccion={{seccion.anterior}}&codigo={{cpqol.codigo}}" class="btn btn-secondary">Anterior</a>{% else %}<div></div>{% endif %}
-                        {% if cpqol.confirmado %}
-                            <a href="{% url 'cpqol' %}?seccion={{seccion.siguiente}}&codigo={{cpqol.codigo}}" class="btn btn-primary">Siguiente</a>
-                        {% else %}
-                            <button type="submit" class="btn btn-primary">                                
-                                {% if seccion.grupo == "familiar" and seccion.numero == 15  %}
-                                    Enviar                                    
-                                {% elif seccion.grupo == "profesional" and seccion.numero == 5 %}
-                                    Finalizar
-                                {% else %}
-                                    Siguiente                              
-                               {% endif %}</button>
-                        {% endif %}
+                    
+                        {# Este botón siempre debe ser de tipo 'submit' para enviar el formulario #}
+                        <button type="submit" class="btn btn-primary">                                
+                            {% if seccion.grupo == "familiar" and seccion.numero == 15  %}
+                                Enviar                                    
+                            {% elif seccion.grupo == "profesional" and seccion.numero == 5 %}
+                                Finalizar
+                            {% else %}
+                                Siguiente                              
+                            {% endif %}
+                        </button>
                     </div>
                 </form>
             {% endif %}

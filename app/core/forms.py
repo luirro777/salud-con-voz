@@ -160,7 +160,7 @@ class FinalizacionForm(BaseForm):
         model = Finalizacion
         fields = ['correo']
         widgets = {
-            'correo': forms.EmailInput(attrs={'placeholder': 'ejemplo@correo.com', 'class': 'form-control h5'}),
+            'correo': forms.EmailInput(attrs={'placeholder': 'correo@ejemplo.com', 'class': 'form-control h5'}),
         }
 
     

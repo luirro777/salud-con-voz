@@ -12,7 +12,7 @@ def home(request):
     cuestionarios = None
     if grupo == "profesional":
         cuestionarios = CpqolProfesional.objects.filter(user=request.user)
-    else: # Podrías tener más grupos aquí o un default para 'familiar'
+    else: 
         cuestionarios = Cpqol.objects.filter(user=request.user)
 
     contexto = {
