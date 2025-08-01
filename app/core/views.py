@@ -192,7 +192,7 @@ def vista_formulario(request):
             {'form': ProfesionalForm, 'attr': "profesional", 'nombre': "Caracterización del profesional y el lugar de atención", 'subtitulo': "En esta sección deberá responder preguntas referidas a su profesión y el lugar en el cual atiende al NNAJ"},
             {'form': ContextoForm, 'attr': "contexto", "nombre": "Datos generales del NNAJ y su contexto", 'subtitulo': "La siguiente sección contiene algunas preguntas sobre el NNAJ y su contexto"},
             {'form': DatosClinicosForm, 'attr': "datos_clinicos", 'nombre': "Datos clínicos del NNAJ", 'subtitulo': "En la siguiente sección le preguntaremos por algunos datos clínicos relacionados a la salud del NNAJ, en particular relacionados a escalas que miden distintas funciones. Si por razón de incumbencia desconociera estos datos, por favor,intente ponerse en contacto con otro profesional que pudiera facilitarlos"},
-            {'form': FinalizacionForm, 'attr': "finalizacion", 'nombre': "Finalizar cuestionario", 'subtitulo': "Agradecemos que se haya tomado el tiempo de completar estos cuestionarios que nos ayudan a conocer la calidad de vida de las infancias y juventudes con parálisis cerebral; si quisiera que nos comuniquemos con Ud. para continuar colaborando y conocer más sobre nuestro trabajo, por favor, escriba su dirección de correo electrónico"},
+            {'form': FinalizacionForm, 'attr': "correo", 'nombre': "Finalizar cuestionario", 'subtitulo': "Agradecemos que se haya tomado el tiempo de completar estos cuestionarios que nos ayudan a conocer la calidad de vida de las infancias y juventudes con parálisis cerebral; si quisiera que nos comuniquemos con Ud. para continuar colaborando y conocer más sobre nuestro trabajo, por favor, escriba su dirección de correo electrónico"},
         ])
     else:
         secciones.extend([
@@ -266,8 +266,15 @@ def vista_formulario(request):
                     except (ValueError, TypeError):
                         edad = None
                     form = current_form(edad=edad, instance=instance)
-                else:
-                    form = current_form(instance=instance)                    
+                else:                     
+                    if instance:                        
+                        form = current_form(instance=instance)
+                    else:                        
+                        form = current_form()
+                    #form = current_form(instance=instance)
+                    if(numero_seccion == 5 and grupo == "profesional"):
+                        print(f"DEBUG: Atributos del campo 'correo' antes de renderizar: {form.fields['correo'].widget.attrs}")
+                        print(f"DEBUG: Propiedad 'disabled' del campo 'correo': {form.fields['correo'].disabled}")                    
             else:
                 # Formulario para la sección 0 o 1
                 if numero_seccion == 1: # CodigoForm
@@ -276,7 +283,7 @@ def vista_formulario(request):
                     form = current_form(request.user)
             
 
-    # Si es la última sección, mostrar los resultados
+    # Si es la última sección (para familiares), mostrar los resultados
     if grupo == "familiar" and numero_seccion == 16:
         if cpqol and hasattr(cpqol, 'resultados'):
             try:
