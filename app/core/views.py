@@ -166,7 +166,7 @@ def vista_formulario(request):
     # **Lógica para obtener la instancia principal de CPQOL/CPQOLProfesional**
     # Cargar cpqol si hay un código en la URL, para cualquier sección excepto la 0.
     # La sección 0 es donde se inicia un NUEVO cuestionario, sin código todavía.
-    if codigo_from_url and numero_seccion > 0: # <-- ¡MODIFICACIÓN CLAVE AQUÍ!
+    if codigo_from_url and numero_seccion > 0: 
         try:
             if grupo == "profesional":
                 cpqol = CpqolProfesional.objects.get(user=request.user, codigo=codigo_from_url)
@@ -174,14 +174,11 @@ def vista_formulario(request):
                 cpqol = Cpqol.objects.get(user=request.user, codigo=codigo_from_url)
         except (Cpqol.DoesNotExist, CpqolProfesional.DoesNotExist):
             # Si el código no corresponde a un CPQOL/CPQOLProfesional existente para este usuario,
-            # redirigir a la sección de código para que el usuario pueda ingresar uno o crear uno nuevo.
-            print(f"Error: No se encontró instancia de CPQOL para usuario {request.user} y código {codigo_from_url}. Redirigiendo a sección 1.")
+            # redirigir a la sección de código para que el usuario pueda ingresar uno o crear uno nuevo.           
             return redirect(reverse('cpqol') + '?seccion=1') # Redirige a la sección de código
-
-
-    print(f"Instancia de cpqol (o CpqolProfesional): {cpqol}")
-
-    # Definimos las secciones del formulario 
+   
+    # Definimos las secciones del formulario
+    # TyC y código es común a todos los grupos 
     secciones = [
         {'form': TerminosYCondicionesForm, 'nombre': "Términos y condiciones", 'subtitulo': ""},
         {'form': CodigoForm, 'nombre': "Código de participante", 'subtitulo': "Generación de código de identificación"},
@@ -214,6 +211,7 @@ def vista_formulario(request):
         ])
 
     total_secciones = len(secciones) - 1
+    print(f"Total de secciones: {total_secciones}")
 
     seccion = secciones[numero_seccion]
     seccion['numero'] = numero_seccion
@@ -226,77 +224,104 @@ def vista_formulario(request):
 
     if request.method == 'POST': # POST request
         # Instancia el formulario con los datos POST
-        if numero_seccion == 0: # TerminosYCondicionesForm
+        if numero_seccion == 0:
             form = current_form(request.user, data=request.POST)
-        elif numero_seccion == 1: # CodigoForm
+        elif numero_seccion == 1:
             form = current_form(request.user, grupo=grupo, data=request.POST)
         else:
-            # Para secciones > 1, necesitamos la instancia cpqol al inicializar el formulario.            
             form = current_form(instance=getattr(cpqol, seccion['attr'].lower(), None), data=request.POST)
         
         # Logica una vez verificado el formulario
-        if form.is_valid():
-            if numero_seccion == 0: # Términos y condiciones
+        if form.is_valid(): # Secciones de TyC y código
+            if numero_seccion == 0:
                 return HttpResponseRedirect(reverse('cpqol') + f'?seccion={numero_seccion + 1}')
-            elif numero_seccion == 1: # Código (crea el CPQOL/CPQOLProfesional)
-                cpqol = form.save() # Aquí se crea y se asigna a 'cpqol'
-            elif grupo == "profesional" and numero_seccion == 5:
-                instance = form.save(cpqol, seccion['attr'].lower())                
-                return redirect(reverse('home'))
-            else: # Resto de secciones, guardan en la instancia existente                
+            elif numero_seccion == 1:
+                cpqol = form.save()
+            
+            # lógica de finalización
+            elif (grupo == "profesional" and numero_seccion == 5) or (grupo == "familiar" and numero_seccion == 15):
+    
+                # 1. Guarda el formulario de finalización y la instancia principal del cuestionario
+                instance = form.save(cpqol, seccion['attr'].lower())
+                cpqol.completado = True
+                cpqol.save()
+
+                # 2. Maneja la redirección según el grupo
+                if grupo == "profesional":
+                    return redirect(reverse('home'))
+                
+                else:  # grupo == "familiar"
+                    # Redirige a la siguiente sección, que es la de resultados (sección 16)
+                    return HttpResponseRedirect(reverse('cpqol') + f'?seccion={numero_seccion + 1}&codigo={cpqol.codigo}')
+            
+            # Lógica para el resto de secciones intermedias
+            else:
                 instance = form.save(cpqol, seccion['attr'].lower())
             
-            # Guardar la edad en la sesión si es el PacienteForm            
-            if grupo == "familiar" and seccion.get('attr') == "paciente":                
+            # Lógica para guardar la edad en la sesión (se ejecuta después de guardar la instancia)
+            if grupo == "familiar" and seccion.get('attr') == "paciente":
                 request.session['edad_paciente'] = instance.edad
-
+            
             return HttpResponseRedirect(reverse('cpqol') + f'?seccion={numero_seccion + 1}&codigo={cpqol.codigo}')
-
+        
+        # Si el formulario no es válido, se mostrarán los errores.        
+    
     else: # GET request
-        print(f"el total de secciones es: {total_secciones}")
-        if not numero_seccion == 16:
-            if numero_seccion > 1:
-                # Al inicializar el formulario en GET, recupera la instancia asociada si existe
-                instance = getattr(cpqol, seccion['attr'].lower(), None)
-                if grupo == "familiar" and seccion['attr'] == "movimiento": # MovimientoForm
-                    print(f"Recuperando de sesión: {request.session.get('edad_paciente')}")
-                    edad = request.session.get('edad_paciente')
+        # Secciones de TyC y codigo
+        if numero_seccion == 0:
+            form = current_form(request.user)
+        elif numero_seccion == 1:
+            form = current_form(request.user, grupo=grupo)
+        # Sección de resultados
+        elif grupo == "familiar" and numero_seccion == 16:
+            # Aquí va toda la lógica para obtener los resultados
+            if cpqol and hasattr(cpqol, 'resultados'):
+                try:
+                    resultados_data = cpqol.resultados 
+                    labels = list(resultados_data.keys())
+                    values = list(resultados_data.values())
+                except AttributeError as e:                
+                    labels = []
+                    values = []
+            else:
+                labels = []
+                values = []
+            # No hay formulario para renderizar en esta sección
+            form = None 
+        # Para todas las otras secciones
+        elif numero_seccion > 1 and cpqol:
+            instance = getattr(cpqol, seccion['attr'].lower(), None)
+            # Para familiares
+            if grupo == "familiar":
+                if seccion['attr'] == "movimiento": 
+                    edad = request.session.get('edad_paciente')# Guardar edad en sesión
                     try:
                         edad = int(edad)
                     except (ValueError, TypeError):
                         edad = None
                     form = current_form(edad=edad, instance=instance)
-                else:                     
-                    if instance:                        
-                        form = current_form(instance=instance)
-                    else:                        
-                        form = current_form()
-                    #form = current_form(instance=instance)
-                    if(numero_seccion == 5 and grupo == "profesional"):
-                        print(f"DEBUG: Atributos del campo 'correo' antes de renderizar: {form.fields['correo'].widget.attrs}")
-                        print(f"DEBUG: Propiedad 'disabled' del campo 'correo': {form.fields['correo'].disabled}")                    
-            else:
-                # Formulario para la sección 0 o 1
-                if numero_seccion == 1: # CodigoForm
-                    form = current_form(request.user, grupo=grupo)
-                else: # TerminosYCondicionesForm (seccion 0)
-                    form = current_form(request.user)
-            
-
-    # Si es la última sección (para familiares), mostrar los resultados
-    if grupo == "familiar" and numero_seccion == 16:
-        if cpqol and hasattr(cpqol, 'resultados'):
-            try:
-                resultados_data = cpqol.resultados 
-                labels = list(resultados_data.keys())
-                values = list(resultados_data.values())
-            except AttributeError as e:                
-                labels = []
-                values = []            
-        else:
-            labels = []
-            values = []            
-    
+                elif numero_seccion == 16: # Resultados
+                    if cpqol and hasattr(cpqol, 'resultados'):
+                        try:
+                            resultados_data = cpqol.resultados 
+                            labels = list(resultados_data.keys())
+                            values = list(resultados_data.values())
+                        except AttributeError:
+                            labels = []
+                            values = []
+                    else:
+                        labels = []
+                        values = []
+                    # No hay formulario para renderizar en esta sección
+                    form = None
+                else: # Resto de las secciones
+                    form = current_form(instance=instance)
+            # Para profesionales
+            elif grupo == "profesional":
+                form = current_form(instance=instance)
+        else: # Manejo de secciones 0 y 1 si no hay un cpqol
+            form = current_form(request.user, grupo=grupo) if numero_seccion == 1 else current_form(request.user)
+        
     return render(request, "core/formulario.html", locals())
 
 def exportar_excel(request):

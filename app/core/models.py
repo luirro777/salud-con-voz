@@ -524,6 +524,7 @@ class Cpqol(models.Model):
 	salud_ultima_semana=models.ForeignKey(SaludUltimaSemana, blank=True, null=True, on_delete=models.PROTECT)
 	salud_ultima_semana_2=models.ForeignKey(SaludUltimaSemana2, blank=True, null=True, on_delete=models.PROTECT)
 	hogar=models.ForeignKey(Hogar, blank=True, null=True, on_delete=models.PROTECT)
+	completado = models.BooleanField("Completado",default=False)
 	
 	
 
@@ -549,7 +550,7 @@ class Cpqol(models.Model):
 	
 	@property
 	def confirmado(self):
-		return self.hogar != None
+		return self.completado
 
 	@property
 	def resultados(self):
@@ -571,14 +572,15 @@ class CpqolProfesional(models.Model):
 	profesional = models.ForeignKey(Profesional, blank=True, null=True, on_delete=models.PROTECT)
 	contexto = models.ForeignKey(Contexto, blank=True, null=True, on_delete=models.PROTECT)
 	datos_clinicos = models.ForeignKey(DatosClinicos, blank=True, null=True, on_delete=models.PROTECT)
-	correo = models.ForeignKey(Finalizacion, blank=True, null=True, on_delete=models.PROTECT)	
+	correo = models.ForeignKey(Finalizacion, blank=True, null=True, on_delete=models.PROTECT)
+	completado = models.BooleanField("Completado",default=False)	
 
 	class Meta:
 		verbose_name_plural = "Lista De Formularios (Profesionales)"
 
 	@property
 	def confirmado(self):
-		return self.datos_clinicos != None
+		return self.completado
 
 	@property
 	def current_seccion(self):
