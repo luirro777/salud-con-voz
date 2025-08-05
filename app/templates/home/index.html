@@ -6,13 +6,15 @@
 
             <h1 class="mt-5">Cuestionarios cargados</h1>
             <div class="text-end">
-                <a href="{% url 'cpqol' %}?seccion=0" class="btn btn-outline-primary ">Nuevo cuestionario</a>
+                {% if grupo != "coordinacion" %}
+                    <a href="{% url 'cpqol' %}?seccion=0&codigo=new" class="btn btn-primary mb-3">Nuevo cuestionario</a>
+                {% endif %}                
                 <a href="{% url 'exportar_excel' %}" class="btn btn-outline-success"><i class="bi-filetype-xlsx"></i></a>
             </div>
             <table class="table table-striped mt-5">
                 <thead>
                     <tr>
-                        <th>Código de participante</th>
+                        <th>Tipo y código de participante</th>
                         <th>Fecha</th>
                         <th></th>
                     </tr>
@@ -20,15 +22,26 @@
                 <tbody>
                     {% for cuestionario in cuestionarios %}
                         <tr>
-                            <td>{{cuestionario.codigo}}</td>
+                            <td>
+                                {% if cuestionario.tipo == 'profesional' %}
+                                    <span class="badge bg-primary">P</span>
+                                {% else %}
+                                    <span class="badge bg-secondary">F</span>
+                                {% endif %}
+                                {{cuestionario.codigo}}
+                            </td>
                             <td>{{cuestionario.creacion|date:"d/m/Y"}}</td>
                             <td class="text-center">
                                 {% if cuestionario.confirmado %}
                                     <span class="badge bg-success">COMPLETADO</span>
                                 {% else %}
-                                    <a href="/cpqol/?seccion={{cuestionario.current_seccion |default:2}}&codigo={{cuestionario.codigo}}">
-                                        <i class="bi-pencil"></i>
-                                    </a>
+                                    {% if grupo == "coordinacion" %}
+                                        <span class="badge bg-danger">INCOMPLETO</span>
+                                    {% else %}
+                                        <a href="/cpqol/?seccion={{ cuestionario.current_seccion|default:2 }}&codigo={{ cuestionario.codigo }}">
+                                            <i class="bi-pencil"></i>
+                                        </a>
+                                    {% endif %}
                                 {% endif %}
                             </td>
                         </tr>
