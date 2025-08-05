@@ -187,6 +187,13 @@ class TutorForm(BaseForm):
 
 
 class PacienteForm(BaseForm):
+    cobertura = forms.MultipleChoiceField(
+        choices=Paciente.CHOICES_COBERTURA.items(),
+        widget=forms.CheckboxSelectMultiple,
+        required=False, # Si no es un campo obligatorio
+        label="¿Qué tipo de cobertura de salud tiene su hijo/a actualmente?"
+    )
+    
     class Meta:
         model = Paciente
         fields = '__all__'
@@ -225,9 +232,12 @@ class MovimientoForm(BaseForm):
             try:
                 edad = int(edad)
             except (ValueError, TypeError):
-                raise ValueError(f"El valor de edad es inválido: {edad}")
+                raise ValueError(f"El valor de edad es inválido: {edad}")            
+           
+            opciones = []
+            help_text = ""
 
-            if 4 <= edad <= 6:
+            if 0 <= edad <= 6:
                 opciones = [
                     (1, "Tiene dificultad para mantenerse sentado y para controlar la cabeza y el tronco en la mayoría de las posiciones."),
                     (2, "Puede mantenerse sentado, pero no es capaz de mantenerse de pie o caminar sin gran ayuda y supervisión de un adulto."),
@@ -258,8 +268,10 @@ class MovimientoForm(BaseForm):
                 opciones = []
                 help_text = "Por favor, seleccione la opción que mejor describa la capacidad de su hijo/a para moverse."
 
-            self.fields['movimiento'].choices = opciones
+            self.fields['movimiento'].choices = [('', '-------------')] + opciones
             self.fields['movimiento'].help_text = help_text
+            self.fields['movimiento'].required = True  
+        
 
 
 

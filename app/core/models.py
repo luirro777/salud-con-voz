@@ -10,7 +10,7 @@ CHOICES_NIVEL_EDUCATIVO = (
 	("4. Secundaria incompleta (comenzó, pero no terminó la secundaria)", "4. Secundaria incompleta (comenzó, pero no terminó la secundaria)"),
 	("5. Secundaria completa", "5. Secundaria completa"),
 	("6. Terciario o universitario incompleto (los comenzó, pero no los terminó)a", "6. Terciario o universitario incompleto (los comenzó, pero no los terminó)"),
-	("7. Terciario completo", "7. Terciario completa"),
+	("7. Terciario completo", "7. Terciario completo"),
 	("8. Universitario de grado completo o posgrado completo", "8. Universitario de grado completo o posgrado completo")
 )
 
@@ -227,16 +227,17 @@ class Paciente(models.Model):
 	provincia = models.CharField(max_length=100, choices=CHOICES_PROVINCIA, verbose_name="Lugar de residencia: [Provincia]")
 	ciudad = models.CharField(max_length=100, verbose_name="Lugar de residencia: [Ciudad]")
 	CHOICES_COBERTURA = {
-		"sistema-publico": "Utiliza el sistema público exclusivamente.",
-		"programa-estatal": "Programas o planes estatales de salud",
+		"sistema_publico": "Utiliza el sistema público exclusivamente.",
+		"programa_estatal": "Programas o planes estatales de salud",
 		"pami": "PAMI",
-		"obra-social": "Obra social (por ejemplo: APROSS, OSECAC, UOM, OSPACA, OSPECOM, UOCRA, UPCN, etc.)",
-		"prepaga-obra-social": "Prepaga a través de obra social (por ejemplo: GEA, MEDIFE, OSDE, SIPSSA, OMINT, SWISS MEDICAL, etc.)",
-		"prepaga-voluntaria": "Prepaga por contratación voluntaria (por ejemplo: GEA, MEDIFE, OSDE, SIPSSA, OMINT, SWISS MEDICAL, etc.)",
-		"emergencia-medica": "Emergencia médica (por ejemplo: URG, EMI, etc.)",
+		"obra_social": "Obra social (por ejemplo: APROSS, OSECAC, UOM, OSPACA, OSPECOM, UOCRA, UPCN, etc.)",
+		"prepaga_obra_social": "Prepaga a través de obra social (por ejemplo: GEA, MEDIFE, OSDE, SIPSSA, OMINT, SWISS MEDICAL, etc.)",
+		"prepaga_voluntaria": "Prepaga por contratación voluntaria (por ejemplo: GEA, MEDIFE, OSDE, SIPSSA, OMINT, SWISS MEDICAL, etc.)",
+		"emergencia_medica": "Emergencia médica (por ejemplo: URG, EMI, etc.)",
 		"nsnr": "No sé / No respondo."
 	}
-	cobertura = models.CharField(max_length=100, choices=CHOICES_COBERTURA, verbose_name="¿Qué tipo de cobertura de salud tiene su hijo/a actualmente?")
+	#cobertura = models.CharField(max_length=100, choices=CHOICES_COBERTURA, verbose_name="¿Qué tipo de cobertura de salud tiene su hijo/a actualmente?")
+	cobertura = models.JSONField(verbose_name="¿Qué tipo de cobertura de salud tiene su hijo/a actualmente?", blank=True, null=True)
 	cobertura_cual = models.CharField(max_length=100, blank=True, null=True, verbose_name="¿Cuál?")
 	CHOICES_CUD = {
 		"no": "No",
@@ -309,14 +310,38 @@ class Calculadora:
 				suma += self.MAPPER[getattr(self, field_name)]
 		
 		return suma/len(fields)	
+	
+class CalculadoraInversa:
+
+	MAPPER = {
+		1: 100,
+		2: 87.5,
+		3: 75,
+		4: 62.5,
+		5: 50,
+		6: 37.5,
+		7: 25,
+		8: 12.5,
+		9: 0
+	}
+
+	def promedio(self):
+		suma = 0
+		fields = self._meta.get_fields()
+		for field in fields:
+			if isinstance(field, models.IntegerField):
+				field_name = field.name
+				suma += self.MAPPER[getattr(self, field_name)]
+		
+		return suma/len(fields)	
 
 class Movimiento(models.Model, Calculadora):
     movimiento = models.IntegerField(
     validators=[MinValueValidator(1), MaxValueValidator(5)],    
-    verbose_name="Por favor lea las 5 posibles situaciones descritas antes de contestar. Seleccione sólo una opción, marcando el casillero. Elija la que mejor describa de manera general, la capacidad de su hijo/a para moverse.",
-    default=1,  
-    null=True,     
-    blank=True, 
+    verbose_name="Por favor lea las 5 posibles situaciones descritas antes de contestar. Seleccione sólo una opción, marcando el casillero. Elija la que mejor describa de manera general, la capacidad de su hijo/a para moverse.",     
+    default=1, # Se mantiene el default para la base de datos, aunque el form lo sobrescriba
+    null=False,     
+    blank=False, 
 	)
 	
 
@@ -377,7 +402,7 @@ class Salud(models.Model, Calculadora):
 	beber = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS, verbose_name="¿Cómo piensa que su hijo/a se siente con respecto a su capacidad para beber sin ayuda?")
 	ir_al_banio = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS, verbose_name="¿Cómo piensa que su hijo/a se siente con respecto a su capacidad para ir al baño sin ayuda?")
 
-class Dolor(models.Model, Calculadora):
+class Dolor(models.Model, CalculadoraInversa):
 	salud_gral = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS, verbose_name="¿Cómo piensa que su hijo/a se siente con respecto a su salud en general?")
 	suenio= models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS, verbose_name="¿Cómo piensa que su hijo/a se siente con respecto a cómo duerme?") 
 	cuanto_dolor = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_DOLOR, verbose_name="¿Cuánto dolor siente su hijo/a?")  
@@ -426,8 +451,15 @@ CHOICES_INTENSIDAD = {
 	('Muchísimo','Muchísimo')
 }
 '''
-
 CHOICES_INTENSIDAD = [
+    ('Siempre', 'Siempre'),
+    ('Casi siempre', 'Casi siempre'),
+	('Algunas veces', 'Algunas veces'),	
+	('Casi nunca', 'Casi nunca'),
+	('Nunca', 'Nunca')
+]
+
+CHOICES_INTENSIDAD_2 = [
     ('Muchísimo', 'Muchísimo'),
     ('Mucho', 'Mucho'),
     ('Moderadamente', 'Moderadamente'),
@@ -477,7 +509,7 @@ class SaludUltimaSemana(models.Model):
 	hablar_2 = models.CharField(max_length=100, choices=CHOICES_FINALES_2, verbose_name="¿A su hijo/a le molesta no poder hablar tan bien como los demás chicos/as?")
 
 class SaludUltimaSemana2(models.Model):
-	fisicamente = models.CharField(max_length=100, choices=CHOICES_INTENSIDAD, verbose_name="¿El chico/a se sintió bien y físicamente en forma?")
+	fisicamente = models.CharField(max_length=100, choices=CHOICES_INTENSIDAD_2, verbose_name="¿El chico/a se sintió bien y físicamente en forma?")
 	energia= models.CharField(max_length=100, choices=CHOICES_INTENSIDAD, verbose_name="¿El chico/a se sintió lleno/a de energía?") 
 	tristeza = models.CharField(max_length=100, choices=CHOICES_INTENSIDAD, verbose_name="¿El chico/a se sintió triste?")  
 	soledad = models.CharField(max_length=100, choices=CHOICES_INTENSIDAD, verbose_name="¿El chico/a se sintió solo/a?")
@@ -485,7 +517,7 @@ class SaludUltimaSemana2(models.Model):
 	cosas_queria = models.CharField(max_length=100, choices=CHOICES_INTENSIDAD, verbose_name="¿El chico/a hizo las cosas que quería hacer en su tiempo libre?")
 	justicia = models.CharField(max_length=100, choices=CHOICES_INTENSIDAD, verbose_name="¿Los padres del chico/a fueron justos con él/ella?")
 	diversion = models.CharField(max_length=100, choices=CHOICES_INTENSIDAD, verbose_name="¿El chico/a se divirtió con sus amigos/as?")
-	colegio = models.CharField(max_length=100, choices=CHOICES_INTENSIDAD, verbose_name="¿Al chico/a le fue bien en la escuela o en el colegio?")
+	colegio = models.CharField(max_length=100, choices=CHOICES_INTENSIDAD_2, verbose_name="¿Al chico/a le fue bien en la escuela o en el colegio?")
 	atencion = models.CharField(max_length=100, choices=CHOICES_INTENSIDAD, verbose_name="¿El chico/a pudo prestar atención en clase?")
 
 class Hogar(models.Model):
