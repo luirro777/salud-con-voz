@@ -133,6 +133,8 @@ class DatosClinicos(models.Model):
 		verbose_name="Sistema de Clasificación para la capacidad de Comer y Beber (EDACS)"
 	)
 
+
+# Este es compartido por profesionales y familiares
 class Finalizacion(models.Model):
 	 correo = models.EmailField(
         max_length=254,
@@ -556,6 +558,7 @@ class Cpqol(models.Model):
 	salud_ultima_semana=models.ForeignKey(SaludUltimaSemana, blank=True, null=True, on_delete=models.PROTECT)
 	salud_ultima_semana_2=models.ForeignKey(SaludUltimaSemana2, blank=True, null=True, on_delete=models.PROTECT)
 	hogar=models.ForeignKey(Hogar, blank=True, null=True, on_delete=models.PROTECT)
+	correo = models.ForeignKey(Finalizacion, blank=True, null=True, on_delete=models.PROTECT)
 	completado = models.BooleanField("Completado",default=False)
 	
 	

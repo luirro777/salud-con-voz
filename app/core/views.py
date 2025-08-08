@@ -207,6 +207,7 @@ def vista_formulario(request):
             {'form': SaludUltimaSemanaForm, 'attr': "salud_ultima_semana", 'nombre': "Más preguntas sobre la salud del niño/a o adolescente", 'subtitulo': 'Las siguientes preguntas son similares a algunas que ya respondió; pero ahora, por favor, piense en la última semana.'},
             {'form': SaludUltimaSemana2Form, 'attr': "salud_ultima_semana_2", 'nombre': "Sobre la salud del chico o chica", 'subtitulo': 'Las preguntas a continuación corresponden a un cuestionario de salud que se aplica a cualquier niño/a o adolescente en cualquier situación (con o sin problemas de salud), por lo que pueden resultar difíciles de responder. Por favor, responda según lo mejor que usted conozca, asegurándose de que sus respuestas reflejen la perspectiva de su hijo/a. Trate de recordar las experiencias del chico/a durante la última semana.'},
             {'form': HogarForm, 'attr': "hogar", 'nombre': "Características del hogar", 'subtitulo': 'Esta es la última parte de la encuesta y le solicitamos que responda acerca de algunas características del hogar donde vive la chica o el chico. Estos datos son muy importantes para analizar a qué hogares hemos podido llegar con este estudio, para ofrecer información sobre la población argentina con parálisis cerebral (recuerde que estos datos nunca se analizan ni informan individualmente).'},
+            {'form': FinalizacionForm, 'attr': "correo", 'nombre': "Finalizar cuestionario", 'subtitulo': "Agradecemos que se haya tomado el tiempo de completar estos cuestionarios que nos ayudan a conocer la calidad de vida de las infancias y juventudes con parálisis cerebral; si quisiera que nos comuniquemos con Ud. para continuar colaborando y conocer más sobre nuestro trabajo, por favor, escriba su dirección de correo electrónico"},
             {'form': None, 'nombre': "Informe de resultados", 'subtitulo': 'Calidad de vida relacionada con la salud en niñas, niños, adolescentes y jóvenes con parálisis cerebral'},
         ])
 
@@ -239,7 +240,7 @@ def vista_formulario(request):
                 cpqol = form.save()
             
             # lógica de finalización
-            elif (grupo == "profesional" and numero_seccion == 5) or (grupo == "familiar" and numero_seccion == 15):
+            elif (grupo == "profesional" and numero_seccion == 5) or (grupo == "familiar" and numero_seccion == 16):
     
                 # 1. Guarda el formulario de finalización y la instancia principal del cuestionario
                 instance = form.save(cpqol, seccion['attr'].lower())
@@ -273,7 +274,7 @@ def vista_formulario(request):
         elif numero_seccion == 1:
             form = current_form(request.user, grupo=grupo)
         # Sección de resultados
-        elif grupo == "familiar" and numero_seccion == 16:
+        elif grupo == "familiar" and numero_seccion == 17:
             # Aquí va toda la lógica para obtener los resultados
             if cpqol and hasattr(cpqol, 'resultados'):
                 try:
@@ -300,7 +301,7 @@ def vista_formulario(request):
                     except (ValueError, TypeError):
                         edad = None
                     form = current_form(edad=edad, instance=instance)
-                elif numero_seccion == 16: # Resultados
+                elif numero_seccion == 17: # Resultados
                     if cpqol and hasattr(cpqol, 'resultados'):
                         try:
                             resultados_data = cpqol.resultados 
