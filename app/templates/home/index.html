@@ -8,8 +8,9 @@
             <div class="text-end">
                 {% if grupo != "coordinacion" %}
                     <a href="{% url 'cpqol' %}?seccion=0&codigo=new" class="btn btn-primary mb-3">Nuevo cuestionario</a>
-                {% endif %}                
-                <a href="{% url 'exportar_excel' %}" class="btn btn-outline-success"><i class="bi-filetype-xlsx"></i></a>
+                {% else %}                
+                    <a href="{% url 'exportar_excel' %}" class="btn btn-outline-success"><i class="bi-filetype-xlsx"></i></a>
+                {% endif %}
             </div>
             <table class="table table-striped mt-5">
                 <thead>
@@ -32,8 +33,10 @@
                             </td>
                             <td>{{cuestionario.creacion|date:"d/m/Y"}}</td>
                             <td class="text-center">
-                                {% if cuestionario.confirmado %}
-                                    <span class="badge bg-success">COMPLETADO</span>
+                                {% if cuestionario.confirmado and grupo == "familiar" %}
+                                    <a href="/cpqol/?seccion=17&codigo={{ cuestionario.codigo }}" class="text-decoration-none">
+                                        <span class="badge bg-success">COMPLETADO</span>
+                                    </a>
                                 {% else %}
                                     {% if grupo == "coordinacion" %}
                                         <span class="badge bg-danger">INCOMPLETO</span>

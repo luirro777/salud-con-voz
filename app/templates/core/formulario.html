@@ -9,7 +9,7 @@
         <div class="col-md-8 offset-md-2">      
             {% if seccion.numero == 0 %}
                 {% include 'core/tyc.html' %}
-            {% elif seccion.numero == 16 %}
+            {% elif seccion.numero == 17 %}
                 {% include 'core/resultados.html' %}
             {% elif seccion.numero == 5 and seccion.grupo == "familiar"%}
             <h5>
@@ -58,7 +58,7 @@
                     
                         {# Este botón siempre debe ser de tipo 'submit' para enviar el formulario #}
                         <button type="submit" class="btn btn-primary">                                
-                            {% if seccion.grupo == "familiar" and seccion.numero == 15  %}
+                            {% if seccion.grupo == "familiar" and seccion.numero == 16  %}
                                 Enviar                                    
                             {% elif seccion.grupo == "profesional" and seccion.numero == 5 %}
                                 Finalizar
@@ -76,25 +76,21 @@
 <script>
     document.addEventListener('DOMContentLoaded', function() {        
 
-    // Mostrar Relacion Otro
-    const selectRelacion = document.getElementById('id_relacion');
-    const divRelacionOtro = document.getElementById('div_relacion_otro');
+        // --- Declaración de variables ---
+        const selectRelacion = document.getElementById('id_relacion');
+        const divRelacionOtro = document.getElementById('div_relacion_otro');
 
-    // Mostrar Quien cuida otro
-    const selectQuienCuida = document.getElementById('id_quien_cuida');
-    const divQuienCuidaOtro = document.getElementById('div_quien_cuida_otro');
+        const selectQuienCuida = document.getElementById('id_quien_cuida');
+        const divQuienCuidaOtro = document.getElementById('div_quien_cuida_otro');
 
-    // Mostrar Genero otro
-    const selectGenero = document.getElementById('id_genero');
-    const divGeneroOtro = document.getElementById('div_genero_otro');
+        const selectGenero = document.getElementById('id_genero');
+        const divGeneroOtro = document.getElementById('div_genero_otro');
+        
+        const checkboxesCobertura = document.querySelectorAll('input[name="cobertura"]');
+        const divCoberturaCual = document.getElementById('div_cobertura_cual');
 
-    // Mostrar Que cobertura otro.
-    const coberturaSelect = document.getElementById("id_cobertura");      
-    const coberturaCualContainer = document.getElementById("div_cobertura_cual");  
-    //coberturaCualContainer.style.display = "none";
-
-    // Función para ajustar la visibilidad del campo "¿Cuál?" en relacion_otro
-    if (selectRelacion) {
+        // --- Funciones de visibilidad ---
+        
         function toggleRelacionOtro() {
             if (selectRelacion.value === 'otro-familiar' || selectRelacion.value === 'otro-no-familiar') {
                 divRelacionOtro.style.display = 'block';
@@ -102,35 +98,15 @@
                 divRelacionOtro.style.display = 'none';
             }
         }
-    
-        // Comprueba el valor inicial
-        toggleRelacionOtro();
-    
-        // Añade el evento para manejar cambios
-        selectRelacion.addEventListener('change', toggleRelacionOtro);
 
-    }
-
-    // Función para ajustar la visibilidad del campo "¿Cuál?" en otra-persona
-    if (selectQuienCuida) {    
-    function toggleQuienCuidaOtro() {
-        if (selectQuienCuida.value === 'con-ayuda' || selectQuienCuida.value === 'otra-persona' || selectQuienCuida.value === 'otra-opcion') {
-            divQuienCuidaOtro.style.display = 'block';
-        } else {
-            divQuienCuidaOtro.style.display = 'none';
+        function toggleQuienCuidaOtro() {
+            if (selectQuienCuida.value === 'con-ayuda' || selectQuienCuida.value === 'otra-persona' || selectQuienCuida.value === 'otra-opcion') {
+                divQuienCuidaOtro.style.display = 'block';
+            } else {
+                divQuienCuidaOtro.style.display = 'none';
+            }
         }
-    }
-
-    // Comprueba el valor inicial
-    toggleQuienCuidaOtro();
-
-    // Añade el evento para manejar cambios
-    selectQuienCuida.addEventListener('change', toggleQuienCuidaOtro);
-    }
-    
-
-    // Función para ajustar la visibilidad del campo "¿Cuál?" en genero_otro
-    if (selectGenero) {
+        
         function toggleGeneroOtro() {
             if (selectGenero.value === 'otro') {
                 divGeneroOtro.style.display = 'block';
@@ -138,34 +114,47 @@
                 divGeneroOtro.style.display = 'none';
             }
         }
-    
-        // Comprueba el valor inicial
-        toggleGeneroOtro();
-    
-        // Añade el evento para manejar cambios
-        selectGenero.addEventListener('change', toggleGeneroOtro);
-    }
 
-    // Función para ajustar la visibilidad del campo "¿Cuál?" en cobertura_otro
-    if(coberturaSelect){
         function toggleCoberturaCual() {
-        // Opciones para las cuales se ocultará el campo cobertura_cual
-            const opcionesOcultar = ["sistema-publico", "pami", "nsnr", ""];
-            console.log(coberturaSelect.value);
-            if (opcionesOcultar.includes(coberturaSelect.value)) {
-                coberturaCualContainer.style.display = "none";
+            const opcionesNoRequeridas = ["sistema-publico", "pami", "nsnr"];
+            let requiereCual = false;
+            
+            checkboxesCobertura.forEach(checkbox => {
+                if (checkbox.checked && !opcionesNoRequeridas.includes(checkbox.value)) {
+                    requiereCual = true;
+                }
+            });
+
+            if (requiereCual) {
+                divCoberturaCual.style.display = "block";
             } else {
-                coberturaCualContainer.style.display = "block";
+                divCoberturaCual.style.display = "none";
             }
         }
-    
-        // Ejecuta la función al cargar la página para tener el estado correcto
-        toggleCoberturaCual();
-        // Agrega el listener para detectar cambios
-        coberturaSelect.addEventListener("change", toggleCoberturaCual);
-    }
-    
 
+        // --- Inicialización y listeners ---
+
+        if (selectRelacion) {
+            toggleRelacionOtro();
+            selectRelacion.addEventListener('change', toggleRelacionOtro);
+        }
+
+        if (selectQuienCuida) {
+            toggleQuienCuidaOtro();
+            selectQuienCuida.addEventListener('change', toggleQuienCuidaOtro);
+        }
+
+        if (selectGenero) {
+            toggleGeneroOtro();
+            selectGenero.addEventListener('change', toggleGeneroOtro);
+        }
+
+        if (checkboxesCobertura.length > 0) {
+            toggleCoberturaCual();
+            checkboxesCobertura.forEach(checkbox => {
+                checkbox.addEventListener("change", toggleCoberturaCual);
+            });
+        }
     });    
 </script>
 
