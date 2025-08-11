@@ -1,5 +1,5 @@
 # help_texts.py
-# Textos de ayuda que son demasiado largos para dejarlos en el forms.py
+# Textos de ayuda que son demasiado largos para dejarlos en el forms.py o en el views.py.
 
 MOVIMIENTO_HELP_TEXT_4_6 = """
 **Ayuda para responder:**
@@ -93,3 +93,30 @@ Cuando lea las preguntas, piense que no hay respuestas correctas e incorrectas, 
 En cada pregunta, marque con un círculo el número que mejor exprese cómo piensa usted que 
 SE SIENTE su hijo/a. Puede escoger cualquier número del 1 (Muy desconforme) al 9 (Muy conforme).
 """
+
+# Un diccionario para almacenar todos los subtítulos de las secciones.
+
+SUBTITULOS = {
+    'terminos_y_condiciones': "",
+    'codigo_participante': "Generación de código de identificación",
+    'profesional_caracterizacion': "En esta sección deberá responder preguntas referidas a su profesión y el lugar en el cual atiende al NNAJ",
+    'profesional_contexto': "La siguiente sección contiene algunas preguntas sobre el NNAJ y su contexto",
+    'profesional_datos_clinicos': "En la siguiente sección le preguntaremos por algunos datos clínicos relacionados a la salud del NNAJ, en particular relacionados a escalas que miden distintas funciones. Si por razón de incumbencia desconociera estos datos, por favor,intente ponerse en contacto con otro profesional que pudiera facilitarlos",
+    'profesional_finalizacion': "Agradecemos que se haya tomado el tiempo de completar estos cuestionarios que nos ayudan a conocer la calidad de vida de las infancias y juventudes con parálisis cerebral; si quisiera que nos comuniquemos con Ud. para continuar colaborando y conocer más sobre nuestro trabajo, por favor, escriba su dirección de correo electrónico. En otro caso, simplemente oprima 'Finalizar'",
+    'familiar_tutor': 'Información general sobre la persona que responde',
+    'familiar_paciente': 'Datos generales de niño/a o adolescente',
+    'familiar_movilidad': 'Datos generales sobre la movilidad del niño/a o adolescente',
+    'familiar_sentimientos': "",
+    'familiar_relaciones': '',
+    'familiar_familia': '',
+    'familiar_participacion': '',
+    'familiar_escuela': '',
+    'familiar_salud': '',
+    'familiar_dolor': '',
+    'familiar_servicios': '',
+    'familiar_salud_ultima_semana': 'Las siguientes preguntas son similares a algunas que ya respondió; pero ahora, por favor, piense en la última semana.',
+    'familiar_salud_ultima_semana_2': 'Las preguntas a continuación corresponden a un cuestionario de salud que se aplica a cualquier niño/a o adolescente en cualquier situación (con o sin problemas de salud), por lo que pueden resultar difíciles de responder. Por favor, responda según lo mejor que usted conozca, asegurándose de que sus respuestas reflejen la perspectiva de su hijo/a. Trate de recordar las experiencias del chico/a durante la última semana.',
+    'familiar_hogar': 'Esta es la última parte de la encuesta y le solicitamos que responda acerca de algunas características del hogar donde vive la chica o el chico. Estos datos son muy importantes para analizar a qué hogares hemos podido llegar con este estudio, para ofrecer información sobre la población argentina con parálisis cerebral (recuerde que estos datos nunca se analizan ni informan individualmente).',
+    'familiar_finalizacion': "Agradecemos que se haya tomado el tiempo de completar estos cuestionarios que nos ayudan a conocer la calidad de vida de las infancias y juventudes con parálisis cerebral; si quisiera que nos comuniquemos con Ud. para continuar colaborando y conocer más sobre nuestro trabajo, por favor, escriba su dirección de correo electrónico. En otro caso, simplemente oprima 'Finalizar'",
+    'resultados': 'Calidad de vida relacionada con la salud en niñas, niños, adolescentes y jóvenes con parálisis cerebral',
+}
