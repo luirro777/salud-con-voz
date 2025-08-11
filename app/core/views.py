@@ -183,7 +183,7 @@ def vista_formulario(request):
 
 def exportar_excel(request):
     modelo_resource = CpqolResource()
-    dataset = modelo_resource.export(Cpqol.objects.filter(user=request.user))
+    dataset = modelo_resource.export(Cpqol.objects.all())
     response = HttpResponse(dataset.export('xlsx'), content_type='application/vnd.ms-excel')
     response['Content-Disposition'] = 'attachment; filename="resultados.xlsx"'
     return response
