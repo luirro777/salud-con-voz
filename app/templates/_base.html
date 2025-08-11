@@ -27,6 +27,13 @@
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                             <!-- <li><a class="dropdown-item" href="#">Bases de datos</a></li> -->
                             <li><a class="dropdown-item" href="#">Perfil</a></li>
+                            
+                            {% if cpqol %}
+                                <li><hr class="dropdown-divider"></li>
+                                <li><form action="{% url 'home' %}" method="get">{% csrf_token %}<button type="submit" class="dropdown-item">Cuestionarios</button></form></li>
+                            {% endif %}
+                                
+                            
                             <li><hr class="dropdown-divider"></li>
                             <li><form action="{% url 'logout' %}" method="post">{% csrf_token %}<button type="submit" class="dropdown-item">Cerrar sesión</button></form></li>
                         </ul>
