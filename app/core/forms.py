@@ -1,5 +1,6 @@
 from typing import Any
 from django import forms
+from django.core.exceptions import ValidationError
 from .help_texts import (
     MOVIMIENTO_HELP_TEXT_4_6,
     MOVIMIENTO_HELP_TEXT_7_11,
@@ -26,11 +27,7 @@ class CodigoForm(forms.Form):
     dni = forms.CharField(label="Ingrese los últimos 3 números del DNI del paciente", min_length=3, max_length=3, widget=forms.TextInput(attrs={'class': 'form-control'}))
     nombre = forms.CharField(label="Ingrese la inicial del primer nombre del paciente", min_length=1, max_length=1, widget=forms.TextInput(attrs={'class': 'form-control'}))
     apellido = forms.CharField(label="Ingrese la inicial del primer apellido del paciente", min_length=1, max_length=1, widget=forms.TextInput(attrs={'class': 'form-control'}))
-    '''
-    def __init__(self, user=None, *args, **kwargs):
-        self.user = user
-        super().__init__(*args, **kwargs)
-    '''
+    
     def __init__(self, user=None, grupo=None, *args, **kwargs):
         self.user = user
         self.grupo = grupo
@@ -41,20 +38,9 @@ class CodigoForm(forms.Form):
         mes_ano = cleaned_data.get('mes_ano')
         dni = cleaned_data.get('dni')
         nombre = cleaned_data.get('nombre').upper()
-        apellido = cleaned_data.get('apellido').upper()
-        #codigo = f'{self.user.username}-{mes_ano}{dni}{nombre}{apellido}'
+        apellido = cleaned_data.get('apellido').upper()        
         codigo = f'{mes_ano}{dni}{nombre}{apellido}'
-
-        '''
-        try:
-            _ = Cpqol.objects.get(
-                user=self.user,
-                codigo=codigo
-            )
-            self.add_error('dni', "Ya posee un CPQOL con esta combinación")
-        except:
-            pass
-        '''
+        
         if self.grupo == "profesional":
             ModelToUse = CpqolProfesional
         else:
@@ -112,12 +98,24 @@ class BaseForm(forms.ModelForm):
         return instance
 ########################################################    
 # Para encuesta de profesionales
+# En tu forms.py
 class ProfesionalForm(BaseForm):
     class Meta:
         model = Profesional
-        fields = ['profesion', 'provincia_atencion', 'ciudad_atencion', 'tipo_centro', 'centro_salud']
+        fields = [
+            'profesion', 
+            'especialidad', 
+            'profesion_otra', 
+            'provincia_atencion', 
+            'ciudad_atencion', 
+            'tipo_centro',
+            'tipo_centro_otro', 
+            'centro_salud'
+        ]
         widgets = {
-            'profesion': forms.Select(),
+            'profesion': forms.Select(attrs={'class': 'form-control h5'}),
+            'especialidad': forms.TextInput(attrs={'placeholder': 'Especialidad', 'class': 'form-control h5'}),
+            'profesion_otra': forms.TextInput(attrs={'placeholder': 'Especifique la profesión', 'class': 'form-control h5'}),
             'provincia_atencion': forms.TextInput(attrs={'placeholder': 'Provincia donde atiende', 'class': 'form-control h5'}),
             'ciudad_atencion': forms.TextInput(attrs={'placeholder': 'Ciudad o localidad', 'class': 'form-control h5'}),
             'tipo_centro': forms.Select(attrs={'class': 'form-control h5'}),
@@ -154,8 +152,17 @@ class DatosClinicosForm(BaseForm):
 
     
 
-
+# Este paso es tanto para profesionales, como para familiares
 class FinalizacionForm(BaseForm):
+    # campo extra para la confirmación del correo.    
+    correo_confirmacion = forms.EmailField(
+        max_length=254,
+        required=False,
+        initial='correo@ejemplo.com',
+        widget=forms.EmailInput(attrs={'placeholder': 'Confirme su correo', 'class': 'form-control h5'}),
+        label="Confirme su correo electrónico"
+    )
+
     class Meta:
         model = Finalizacion
         fields = ['correo']
@@ -163,7 +170,15 @@ class FinalizacionForm(BaseForm):
             'correo': forms.EmailInput(attrs={'placeholder': 'correo@ejemplo.com', 'class': 'form-control h5'}),
         }
 
-    
+    # Validación
+    def clean(self):        
+        cleaned_data = super().clean()        
+        correo = cleaned_data.get('correo')
+        correo_confirmacion = cleaned_data.get('correo_confirmacion')        
+        if correo and correo_confirmacion and correo != correo_confirmacion:
+            raise ValidationError("Los correos electrónicos no coinciden.")
+        
+        return cleaned_data
 
 
 ################################################

@@ -26,11 +26,9 @@
                 su hijo/a. Puede escoger cualquier número del 1 (Muy desconforme) al 9 (Muy conforme).
             </h5>
             <br><br>
-
-            {% elif seccion.grupo == "profesional" and seccion.numero == 6 %}
-            {% include 'gracias.html' %}
             {% endif %}
-                  
+
+            
             
             {% if form %}                
                 <form method="post">{% csrf_token %}
@@ -77,6 +75,7 @@
     document.addEventListener('DOMContentLoaded', function() {        
 
         // --- Declaración de variables ---
+        // -- Para familiares
         const selectRelacion = document.getElementById('id_relacion');
         const divRelacionOtro = document.getElementById('div_relacion_otro');
 
@@ -89,8 +88,15 @@
         const checkboxesCobertura = document.querySelectorAll('input[name="cobertura"]');
         const divCoberturaCual = document.getElementById('div_cobertura_cual');
 
-        // --- Funciones de visibilidad ---
-        
+        // -- Para profesionales
+        const selectProfesion = document.getElementById('id_profesion');
+        const especialidadContainer = document.getElementById('div_especialidad');
+        const profesionOtraContainer = document.getElementById('div_profesion_otra');
+
+        const selectTipoCentro = document.getElementById('id_tipo_centro');
+        const divTipoCentroOtro = document.getElementById('div_tipo_centro_otro');
+
+        // --- Funciones de visibilidad ---      
         function toggleRelacionOtro() {
             if (selectRelacion.value === 'otro-familiar' || selectRelacion.value === 'otro-no-familiar') {
                 divRelacionOtro.style.display = 'block';
@@ -132,6 +138,27 @@
             }
         }
 
+        function toggleEspecialidadProfesion() {
+            const selectedValue = selectProfesion.value;            
+           
+            especialidadContainer.style.display = 'none';
+            profesionOtraContainer.style.display = 'none';
+            
+            if (selectedValue === 'medico_especialista') {
+                especialidadContainer.style.display = 'block';
+            } else if (selectedValue === 'otra') {
+                profesionOtraContainer.style.display = 'block';
+            }
+        }
+
+        function toggleTipoCentroOtro() {
+            if (selectTipoCentro.value === 'otro') {
+                divTipoCentroOtro.style.display = 'block';
+            } else {
+                divTipoCentroOtro.style.display = 'none';
+            }
+        }
+
         // --- Inicialización y listeners ---
 
         if (selectRelacion) {
@@ -154,6 +181,16 @@
             checkboxesCobertura.forEach(checkbox => {
                 checkbox.addEventListener("change", toggleCoberturaCual);
             });
+        }
+
+        if (selectProfesion) {
+            toggleEspecialidadProfesion();
+            selectProfesion.addEventListener('change', toggleEspecialidadProfesion);
+        }
+
+        if (selectTipoCentro) {
+            toggleTipoCentroOtro();
+            selectTipoCentro.addEventListener('change', toggleTipoCentroOtro);
         }
     });    
 </script>

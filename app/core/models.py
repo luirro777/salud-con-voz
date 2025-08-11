@@ -17,7 +17,7 @@ CHOICES_NIVEL_EDUCATIVO = (
 CHOICES_PROFESION = [
     ("medico_familia", "Médico/a de familia/general"),
     ("medico_fisiatra", "Médico/a fisiatra"),
-    ("medico_especialista", "Médico/a especialista ¿cuál?"),
+    ("medico_especialista", "Médico/a especialista"),
     ("fonoaudiologo", "Fonoaudiólogo/a"),
     ("kinesiologo", "Kinesiólogo/a"),
     ("terapista_ocupacional", "Terapista Ocupacional"),
@@ -26,7 +26,7 @@ CHOICES_PROFESION = [
     ("trabajador_social", "Trabajador/a social"),
     ("docente_inclusion", "Docente de inclusión"),
     ("acompanante_terapeutico", "Acompañante terapéutica/o"),
-    ("otra", "Otra ¿cuál?"),
+    ("otra", "Otra"),
 ]
 
 CHOICES_TIPO_CENTRO = [
@@ -87,6 +87,27 @@ class Profesional(models.Model):
 		max_length=100,
 		verbose_name="Por favor, consigne el nombre del centro o servicio de salud en el que trabaja (si es consultorio particular escriba 'consultorio particular'):"
 	)
+	# Especialidad (en caso de haber seleccionado medico especialista)
+	especialidad = models.CharField(
+		max_length=255,
+		verbose_name="Qué especialidad?",
+		blank=True,
+		null=True
+	)	
+	# En caso de haber seleccionado "otra"
+	profesion_otra = models.CharField(
+		max_length=255,
+		verbose_name="Cuál?",
+		blank=True,
+		null=True
+	)
+	# En caso de seleccionar "otro" en tipo de centro
+	tipo_centro_otro = models.CharField(
+		max_length=255,
+		verbose_name="Cuál?",
+		blank=True,
+		null=True
+	)
 	
 class Contexto(models.Model):
 	persona_ocupa = models.CharField(
@@ -136,7 +157,7 @@ class DatosClinicos(models.Model):
 
 # Este es compartido por profesionales y familiares
 class Finalizacion(models.Model):
-	 correo = models.EmailField(
+	correo = models.EmailField(
         max_length=254,
         blank=True, 
         null=True, 

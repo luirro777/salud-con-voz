@@ -33,15 +33,19 @@
                             </td>
                             <td>{{cuestionario.creacion|date:"d/m/Y"}}</td>
                             <td class="text-center">
-                                {% if cuestionario.confirmado and grupo == "familiar" %}
+                                {% if cuestionario.confirmado %}
+                                    {% if grupo == "familiar" %}
                                     <a href="/cpqol/?seccion=17&codigo={{ cuestionario.codigo }}" class="text-decoration-none">
                                         <span class="badge bg-success">COMPLETADO</span>
                                     </a>
+                                    {% elif grupo == "profesional" %}
+                                        <span class="badge bg-success">COMPLETADO</span>
+                                    {% endif %}
                                 {% else %}
                                     {% if grupo == "coordinacion" %}
-                                        <span class="badge bg-danger">INCOMPLETO</span>
+                                        <span class="badge bg-danger">INCOMPLETO</span>                                    
                                     {% else %}
-                                        <a href="/cpqol/?seccion={{ cuestionario.current_seccion|default:2 }}&codigo={{ cuestionario.codigo }}">
+                                        <a href="/cpqol/?seccion={{ cuestionario.current_seccion }}&codigo={{ cuestionario.codigo }}">
                                             <i class="bi-pencil"></i>
                                         </a>
                                     {% endif %}
