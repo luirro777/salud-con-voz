@@ -15,8 +15,8 @@ def home(request):
     elif grupo == "familiar": 
         cuestionarios = Cpqol.objects.filter(user=request.user)
     elif grupo == "coordinacion":
-        cuestionarios_prof = CpqolProfesional.objects.all()
-        cuestionarios_fam = Cpqol.objects.all()        
+        cuestionarios_prof = list(CpqolProfesional.objects.all())
+        cuestionarios_fam = list(Cpqol.objects.all())        
         for c in cuestionarios_prof:
             c.tipo = 'profesional'
         for c in cuestionarios_fam:

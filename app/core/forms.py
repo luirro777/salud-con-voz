@@ -38,13 +38,19 @@ class CodigoForm(forms.Form):
         mes_ano = cleaned_data.get('mes_ano')
         dni = cleaned_data.get('dni')
         nombre = cleaned_data.get('nombre').upper()
-        apellido = cleaned_data.get('apellido').upper()        
-        codigo = f'{mes_ano}{dni}{nombre}{apellido}'
+        apellido = cleaned_data.get('apellido').upper() 
         
+        sufijo = ''
         if self.grupo == "profesional":
+            sufijo = 'P'
             ModelToUse = CpqolProfesional
-        else:
+        else: 
+            sufijo = 'F'
             ModelToUse = Cpqol
+            
+        codigo = f'{mes_ano}{dni}{nombre}{apellido}{sufijo}'
+        cleaned_data["sufijo"] = sufijo 
+        cleaned_data['codigo'] = codigo     
 
         try:
             _ = ModelToUse.objects.get(
@@ -65,7 +71,8 @@ class CodigoForm(forms.Form):
         dni = self.cleaned_data.get('dni')
         nombre = self.cleaned_data.get('nombre').upper()
         apellido = self.cleaned_data.get('apellido').upper()
-        codigo = f'{mes_ano}{dni}{nombre}{apellido}'
+        sufijo = self.cleaned_data.get('sufijo')
+        codigo = f'{mes_ano}{dni}{nombre}{apellido}{sufijo}'
 
         if self.grupo == "profesional":
             cpqol_instance = CpqolProfesional.objects.create(
