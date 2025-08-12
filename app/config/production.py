@@ -26,3 +26,5 @@ SECRET_KEY = config('DJANGO_SECRET_KEY')
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles/')
 
+trusted_origins_str = os.environ.get('CSRF_TRUSTED_ORIGINS', '')
+CSRF_TRUSTED_ORIGINS = trusted_origins_str.split(',') if trusted_origins_str else []
