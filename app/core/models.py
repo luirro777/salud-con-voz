@@ -323,6 +323,22 @@ class Calculadora:
 			8: 87.5,
 			9: 100
 		}
+	
+	def promedio(self):
+		suma = 0
+		count = 0
+		fields = self._meta.get_fields()
+		for field in fields:
+			if isinstance(field, models.IntegerField) and not field.primary_key and not field.auto_created:
+				value = getattr(self, field.name)
+				if value is not None and value in self.MAPPER:
+					suma += self.MAPPER[value]
+					count += 1
+		if count == 0:
+			return 0
+		return suma / count
+'''
+
 
 	def promedio(self):
 		suma = 0
@@ -333,6 +349,7 @@ class Calculadora:
 				suma += self.MAPPER[getattr(self, field_name)]
 		
 		return suma/len(fields)	
+'''
 	
 class CalculadoraInversa:
 
@@ -350,6 +367,22 @@ class CalculadoraInversa:
 
 	def promedio(self):
 		suma = 0
+		count = 0
+		fields = self._meta.get_fields()
+		for field in fields:
+			if isinstance(field, models.IntegerField) and not field.primary_key and not field.auto_created:
+				value = getattr(self, field.name)
+				if value is not None and value in self.MAPPER:
+					suma += self.MAPPER[value]
+					count += 1
+		if count == 0:
+			return 0
+		return suma / count
+'''
+
+
+	def promedio(self):
+		suma = 0
 		fields = self._meta.get_fields()
 		for field in fields:
 			if isinstance(field, models.IntegerField):
@@ -357,6 +390,7 @@ class CalculadoraInversa:
 				suma += self.MAPPER[getattr(self, field_name)]
 		
 		return suma/len(fields)	
+'''
 
 class Movimiento(models.Model, Calculadora):
     movimiento = models.IntegerField(
