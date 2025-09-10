@@ -87,6 +87,10 @@ def vista_formulario(request):
             form = current_form(request.user, grupo=grupo, data=request.POST)
         else:
             form = current_form(instance=getattr(cpqol, seccion['attr'].lower(), None), data=request.POST)
+
+        if grupo == "familiar" and seccion['attr'] == "movimiento":
+                edad = request.session.get('edad_paciente')
+                form = current_form(edad=edad, data=request.POST)        
         
         # Logica una vez verificado el formulario
         if form.is_valid(): # Secciones de TyC y código
@@ -121,7 +125,9 @@ def vista_formulario(request):
             
             return HttpResponseRedirect(reverse('cpqol') + f'?seccion={numero_seccion + 1}&codigo={cpqol.codigo}')
         
-        # Si el formulario no es válido, se mostrarán los errores.        
+        # Si el formulario no es válido, se mostrarán los errores.
+        
+            
     
     else: # GET request
         # Secciones de TyC y codigo

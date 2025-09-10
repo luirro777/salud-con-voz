@@ -2,65 +2,15 @@ from django.db import models
 from django.contrib.auth.models import User
 
 from django.core.validators import MinValueValidator, MaxValueValidator
-
-CHOICES_NIVEL_EDUCATIVO = (
-	("1. No fue a la escuela", "1. No fue a la escuela"),
-	("2. Primaria incompleta (comenzó, pero no terminó la escuela primaria)", "2. Primaria incompleta (comenzó, pero no terminó la escuela primaria)"),
-	("3. Primaria completa", "3. Primaria completa"),
-	("4. Secundaria incompleta (comenzó, pero no terminó la secundaria)", "4. Secundaria incompleta (comenzó, pero no terminó la secundaria)"),
-	("5. Secundaria completa", "5. Secundaria completa"),
-	("6. Terciario o universitario incompleto (los comenzó, pero no los terminó)a", "6. Terciario o universitario incompleto (los comenzó, pero no los terminó)"),
-	("7. Terciario completo", "7. Terciario completo"),
-	("8. Universitario de grado completo o posgrado completo", "8. Universitario de grado completo o posgrado completo")
+from .choices import (
+    CHOICES_NIVEL_EDUCATIVO, CHOICES_PROFESION, CHOICES_TIPO_CENTRO,
+    CHOICES_PERSONA_OCUPA, CHOICES_GENERO, CHOICES_NIVEL,
+    CHOICES_SENTIMIENTOS, CHOICES_DOLOR, CHOICES_MOLESTIA,
+    CHOICES_FINALES, CHOICES_FINALES_2, CHOICES_SI_NO,
+    CHOICES_INTENSIDAD, CHOICES_INTENSIDAD_2, CHOICES_0_2,
+    CHOICES_0_3, CHOICES_SI_NO_NOSE, CHOICES_PRINCIPAL_SOSTEN
 )
 
-CHOICES_PROFESION = [
-    ("medico_familia", "Médico/a de familia/general"),
-    ("medico_fisiatra", "Médico/a fisiatra"),
-    ("medico_especialista", "Médico/a especialista"),
-    ("fonoaudiologo", "Fonoaudiólogo/a"),
-    ("kinesiologo", "Kinesiólogo/a"),
-    ("terapista_ocupacional", "Terapista Ocupacional"),
-    ("nutricionista", "Nutricionista"),
-    ("psicologo", "Psicólogo/a"),
-    ("trabajador_social", "Trabajador/a social"),
-    ("docente_inclusion", "Docente de inclusión"),
-    ("acompanante_terapeutico", "Acompañante terapéutica/o"),
-    ("otra", "Otra"),
-]
-
-CHOICES_TIPO_CENTRO = [
-    ("centro_privado", "Centro o clínica privada"),
-    ("centro_publico", "Hospital u otro tipo de centro público"),
-    ("consultorio_particular", "Consultorio particular"),
-    ("otro", "Otro ¿Cuál?"),
-]
-
-CHOICES_PERSONA_OCUPA = [
-    ("madre", "Madre"),
-    ("padre", "Padre"),
-    ("tutor_legal", "Tutor/a legal"),
-    ("pareja_madre_padre", "Pareja de la madre o el padre"),
-    ("abuelo_abuela", "Abuela/o"),
-    ("hermano_hermana", "Hermana/o"),
-    ("otro_familiar", "Otro familiar ¿Cuál?"),
-    ("otra_persona_no_familiar", "Otra persona, no familiar ¿Cuál?"),
-]
-
-CHOICES_GENERO = [
-    ("femenino", "Femenino"),
-    ("masculino", "Masculino"),
-    ("no_binario", "No binario"),
-    ("otro", "Otro ¿cuál?"),
-]
-
-CHOICES_NIVEL = [
-    ("nivel_i", "Nivel I"),
-    ("nivel_ii", "Nivel II"),
-    ("nivel_iii", "Nivel III"),
-    ("nivel_iv", "Nivel IV"),
-    ("nivel_v", "Nivel V"),
-]
 
 '''
 Para profesionales
@@ -164,6 +114,9 @@ class Finalizacion(models.Model):
         default='correo@ejemplo.com' # Valor por defecto para la base de datos
     )
 
+	def __str__(self):
+		return f"Finalización: {self.correo if self.correo else 'No proporcionado'}"
+
 '''
 Para familiares
 '''
@@ -206,7 +159,10 @@ class Tutor(models.Model):
 		'otro': 'Otro',
 	}
 	genero = models.CharField(max_length=20, choices=CHOICES_GENERO, verbose_name="Género [de la persona que responde]")
-	genero_otro = models.CharField(max_length=20, verbose_name="¿Cuál?", blank=True, null=True)	
+	genero_otro = models.CharField(max_length=20, verbose_name="¿Cuál?", blank=True, null=True)
+
+	def __str__(self):
+		return f"Tutor: {self.relacion} - Edad: {self.edad}"	
 
 
 class Paciente(models.Model):
@@ -261,138 +217,19 @@ class Paciente(models.Model):
 	}
 	#cobertura = models.CharField(max_length=100, choices=CHOICES_COBERTURA, verbose_name="¿Qué tipo de cobertura de salud tiene su hijo/a actualmente?")
 	cobertura = models.JSONField(verbose_name="¿Qué tipo de cobertura de salud tiene su hijo/a actualmente?", blank=True, null=True)
-	cobertura_cual = models.CharField(max_length=100, blank=True, null=True, verbose_name="¿Cuál?")
+	cobertura_cual = models.CharField(max_length=100, blank=True, null=True, verbose_name="¿Cuál? (Responder solo en caso de haber seleccionado 'obra social', 'prepaga a través de obra social' o 'prepaga por contratación voluntaria')", default="---")
 	CHOICES_CUD = {
 		"no": "No",
 		"si": "Si",
 		"nsnr": "No sé / No respondo",
 	}
-	certificado_discapacidad = models.CharField(max_length=100, choices=CHOICES_CUD, verbose_name="¿Su hijo tiene Certificado Único de Discapacidad (CUD)?")	
+	certificado_discapacidad = models.CharField(max_length=100, choices=CHOICES_CUD, verbose_name="¿Su hijo tiene Certificado Único de Discapacidad (CUD)?")
+
+	def __str__(self):
+		return f"Paciente: {self.edad} años - Género: {self.genero} - Provincia: {self.provincia}"
 	
-	
 
-
-
-CHOICES_SENTIMIENTOS = {
-	1:'1 - Muy Desconforme',
-	2:'2',
-	3:'3',
-	4:'4',
-	5:'5',
-	6:'6',
-	7:'7',
-	8:'8',
-	9:'9 - Muy Conforme',
-	}
-
-CHOICES_DOLOR = {
-	1:'1 - Nada de dolor',
-	2:'2',
-	3:'3',
-	4:'4',
-	5:'5',
-	6:'6',
-	7:'7',
-	8:'8',
-	9:'9 - Mucho dolor',
-	}
-
-CHOICES_MOLESTIA = {
-	1:'1 - Nada molesto',
-	2:'2',
-	3:'3',
-	4:'4',
-	5:'5',
-	6:'6',
-	7:'7',
-	8:'8',
-	9:'9 - Muy molesto',
-	}
-
-
-class Calculadora:
-
-	MAPPER = {
-			1: 0,
-			2: 12.5,
-			3: 25,
-			4: 37.5,
-			5: 50,
-			6: 62.5,
-			7: 75,
-			8: 87.5,
-			9: 100
-		}
-	
-	def promedio(self):
-		suma = 0
-		count = 0
-		fields = self._meta.get_fields()
-		for field in fields:
-			if isinstance(field, models.IntegerField) and not field.primary_key and not field.auto_created:
-				value = getattr(self, field.name)
-				if value is not None and value in self.MAPPER:
-					suma += self.MAPPER[value]
-					count += 1
-		if count == 0:
-			return 0
-		return suma / count
-'''
-
-
-	def promedio(self):
-		suma = 0
-		fields = self._meta.get_fields()
-		for field in fields:
-			if isinstance(field, models.IntegerField):
-				field_name = field.name
-				suma += self.MAPPER[getattr(self, field_name)]
-		
-		return suma/len(fields)	
-'''
-	
-class CalculadoraInversa:
-
-	MAPPER = {
-		1: 100,
-		2: 87.5,
-		3: 75,
-		4: 62.5,
-		5: 50,
-		6: 37.5,
-		7: 25,
-		8: 12.5,
-		9: 0
-	}
-
-	def promedio(self):
-		suma = 0
-		count = 0
-		fields = self._meta.get_fields()
-		for field in fields:
-			if isinstance(field, models.IntegerField) and not field.primary_key and not field.auto_created:
-				value = getattr(self, field.name)
-				if value is not None and value in self.MAPPER:
-					suma += self.MAPPER[value]
-					count += 1
-		if count == 0:
-			return 0
-		return suma / count
-'''
-
-
-	def promedio(self):
-		suma = 0
-		fields = self._meta.get_fields()
-		for field in fields:
-			if isinstance(field, models.IntegerField):
-				field_name = field.name
-				suma += self.MAPPER[getattr(self, field_name)]
-		
-		return suma/len(fields)	
-'''
-
-class Movimiento(models.Model, Calculadora):
+class Movimiento(models.Model):
     movimiento = models.IntegerField(
     validators=[MinValueValidator(1), MaxValueValidator(5)],    
     verbose_name="Por favor lea las 5 posibles situaciones descritas antes de contestar. Seleccione sólo una opción, marcando el casillero. Elija la que mejor describa de manera general, la capacidad de su hijo/a para moverse.",     
@@ -400,20 +237,25 @@ class Movimiento(models.Model, Calculadora):
     null=False,     
     blank=False, 
 	)
-	
+    promedio = models.FloatField(blank=True, null=True, default=0.0)
 
-class Sentimientos(models.Model, Calculadora):
+    def __str__(self):
+        return f"Movimiento: {self.promedio}"	
+
+class Sentimientos(models.Model):
 	
 	hacer_cosas = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS, verbose_name="¿Cómo piensa que su hijo/a se siente con respecto a su capacidad para hacer las cosas que quiere hacer?") 
 	uno_mismo = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS, verbose_name="¿Cómo piensa que su hijo/a se siente con respecto a él/ella mismo/a?")
 	motivacion = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS, verbose_name="¿Cómo piensa que su hijo/a se siente con respecto a su motivación?")
 	oportunidades = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS, verbose_name="¿Cómo piensa que su hijo/a se siente con respecto a sus oportunidades en la vida?")
 	aspecto_fisico = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS, verbose_name="¿Cómo piensa que su hijo/a se siente con respecto a su aspecto físico?")
-
+	promedio = models.FloatField(blank=True, null=True, default=0.0)    
+    
+	def __str__(self):
+		return f"Sentimientos: {self.promedio}"     
 	
-	
 
-class Relaciones(models.Model, Calculadora):
+class Relaciones(models.Model):
 	con_gente = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS, verbose_name="¿Cómo piensa que su hijo/a se siente con respecto a cómo se lleva con la gente en general?") 
 	otros_chichos = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS, verbose_name="¿Cómo piensa que su hijo/a se siente con respecto a cómo se lleva con otros chicos fuera de la escuela o el colegio (que no son sus amigos de la escuela/colegio)?")
 	con_adultos = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS, verbose_name="¿Cómo piensa que su hijo/a se siente con respecto a cómo se lleva con los adultos?")
@@ -426,19 +268,31 @@ class Relaciones(models.Model, Calculadora):
 	comunicacion_extranios = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS, verbose_name="¿Cómo piensa que su hijo/a se siente con respecto a la forma en que se comunica con la gente que NO conoce bien?")
 	comunicacion_otros_con_el = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS, verbose_name="¿Cómo piensa que su hijo/a se siente con respecto a la forma en que otra gente se comunica con su hijo/a?")
 	comunicacion_tecnologia = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS, verbose_name="¿Cómo piensa que su hijo/a se siente con respecto a la forma en que se comunica con la gente utilizando tecnología? (por ejemplo, mensajes de texto, internet)?")
+	promedio = models.FloatField(default=0.0)
 
-class Familia(models.Model, Calculadora):
+	def __str__(self):
+		return f"Relaciones: {self.promedio}"
+
+class Familia(models.Model):
 	apoyo_flia = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS, verbose_name="¿Cómo piensa que su hijo/a se siente con respecto a el apoyo que tiene de su familia?")
 	viaje_flia = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS, verbose_name="¿Cómo piensa que su hijo/a se siente con respecto a salir de viaje con la familia?") 
 	aceptacion_flia = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS, verbose_name="¿Cómo piensa que su hijo/a se siente con respecto a cómo es aceptado/a por su familia?")
+	promedio = models.FloatField(blank=True, null=True, default=0.0)
 
-class Participacion(models.Model, Calculadora):
+	def __str__(self):
+		return f"Familia: {self.promedio}"
+
+class Participacion(models.Model):
 	recreativas = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS, verbose_name="¿Cómo piensa que su hijo/a se siente con respecto a su capacidad para participar en actividades recreativas y de tiempo libre?")
 	deportivas = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS, verbose_name="¿Cómo piensa que su hijo/a se siente con respecto a su habilidad para participar en actividades deportivas? (Esta pregunta refiere a cómo se siente su hijo/a acerca de su habilidad para hacer deporte, no si puede hacerlo o no)") 
 	eventos_sociales = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS, verbose_name="¿Cómo piensa que su hijo/a se siente con respecto a su capacidad para participar en eventos sociales fuera de la escuela o colegio?")  
 	en_su_comunidad = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS, verbose_name="¿Cómo piensa que su hijo/a se siente con respecto a su capacidad para participar en su comunidad?")
+	promedio = models.FloatField(blank=True, null=True, default=0.0)
 
-class Escuela(models.Model, Calculadora):
+	def __str__(self):
+		return f"Participacion: {self.promedio}"
+
+class Escuela(models.Model):
 	otros_chicos_escuela = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS, verbose_name="¿Cómo piensa que su hijo/a se siente con respecto a cómo se lleva con otros chicos en la escuela o colegio?")
 	como_lo_integran= models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS, verbose_name="¿Cómo piensa que su hijo/a se siente con respecto a cómo otros alumnos lo/la integran en la escuela o colegio?") 
 	profesores = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS, verbose_name="¿Cómo piensa que su hijo/a se siente con respecto a cómo se lleva con sus maestros, profesores y/o asistentes?")  
@@ -446,8 +300,12 @@ class Escuela(models.Model, Calculadora):
 	otros_docentes = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS, verbose_name="¿Cómo piensa que su hijo/a se siente con respecto a cómo es aceptado/a por el personal y los docentes de su escuela o colegio?")
 	mismo_trato = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS, verbose_name="¿Cómo piensa que su hijo/a se siente con respecto a ser tratado/a de la misma manera que los demás en la escuela o colegio?")
 	participacion_colegio = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS, verbose_name="¿Cómo piensa que su hijo/a se siente con respecto a su capacidad para participar en la escuela o colegio?")
+	promedio = models.FloatField(blank=True, null=True, default=0.0)
 
-class Salud(models.Model, Calculadora):
+	def __str__(self):
+		return f"Escuela: {self.promedio}"
+
+class Salud(models.Model):
 	hacer_cosas_solo = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS, verbose_name="¿Cómo piensa que su hijo/a se siente con respecto a hacer cosas solo/a, sin compañía?")
 	movilidad= models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS, verbose_name="¿Cómo piensa que su hijo/a se siente con respecto a su forma de trasladarse de un lado a otro? (es decir, su movilidad)?") 
 	independencia = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS, verbose_name="¿Cómo piensa que su hijo/a se siente con respecto a poder hacer cosas solo/a sin depender de otros?")  
@@ -458,8 +316,12 @@ class Salud(models.Model, Calculadora):
 	vestirse = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS, verbose_name="¿Cómo piensa que su hijo/a se siente con respecto a su capacidad para vestirse sólo/a?")
 	beber = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS, verbose_name="¿Cómo piensa que su hijo/a se siente con respecto a su capacidad para beber sin ayuda?")
 	ir_al_banio = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS, verbose_name="¿Cómo piensa que su hijo/a se siente con respecto a su capacidad para ir al baño sin ayuda?")
+	promedio = models.FloatField(blank=True, null=True, default=0.0)
 
-class Dolor(models.Model, CalculadoraInversa):
+	def __str__(self):
+		return f"Salud: {self.promedio}"
+
+class Dolor(models.Model):
 	salud_gral = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS, verbose_name="¿Cómo piensa que su hijo/a se siente con respecto a su salud en general?")
 	suenio= models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS, verbose_name="¿Cómo piensa que su hijo/a se siente con respecto a cómo duerme?") 
 	cuanto_dolor = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_DOLOR, verbose_name="¿Cuánto dolor siente su hijo/a?")  
@@ -468,83 +330,22 @@ class Dolor(models.Model, CalculadoraInversa):
 	como_afecta = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_MOLESTIA, verbose_name="¿Cómo se siente su hijo/a con respecto a la forma en que los dolores le afectan en su vida?")
 	impedimentos = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_MOLESTIA, verbose_name="¿Cómo se siente su hijo/a con respecto a la forma en que el dolor le impide ser él/ella mismo/a?")
 	no_disfrutar_dia = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_MOLESTIA, verbose_name="¿Cómo se siente su hijo/a con respecto a como el dolor no le permite pasarlo bien todos los días?")
+	promedio = models.FloatField(blank=True, null=True, default=0.0)
 
-class Servicios(models.Model, Calculadora):
+	def __str__(self):
+		return f"Dolor: {self.promedio}"
+
+class Servicios(models.Model):
 	acceso_tratamiento = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS, verbose_name="¿Cómo se siente USTED con respecto a el acceso de su hijo/a al tratamiento?")
 	acceso_terapia= models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS, verbose_name="¿Cómo se siente USTED con respecto a el acceso de su hijo/a a terapia (por ejemplo: fisioterapia, fonoaudiología, terapia ocupacional)?") 
 	acceso_atencion_medica= models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS, verbose_name="¿Cómo se siente USTED con respecto a el acceso a atención médica o quirúrgica especializada?") 
 	acceso_pediatria= models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS, verbose_name="¿Cómo se siente USTED con respecto a el acceso a atención de pediatría o medicina general?") 
 	acceso_ayuda_aprendizaje= models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)], choices=CHOICES_SENTIMIENTOS, verbose_name="¿Cómo se siente USTED con respecto a el acceso a ayuda adicional de aprendizaje dentro de la escuela o colegio?") 
+	promedio = models.FloatField(blank=True, null=True, default=0.0)
 
+	def __str__(self):
+		return f"Servicios: {self.promedio}"
 
-
-CHOICES_FINALES = (
-	('Nunca' , 'Nunca'),
-	('Casi Nunca', 'Casi Nunca'),
-	('Algunas Veces', 'Algunas Veces'),
-	('Casi Siempre', 'Casi Siempre'),
-	('Siempre', 'Siempre')
-)
-
-CHOICES_FINALES_2 = (
-	('No tiene problemas en ese aspecto', 'No tiene problemas en ese aspecto'),
-	('Nunca' , 'Nunca'),
-	('Casi Nunca', 'Casi Nunca'),
-	('Algunas Veces', 'Algunas Veces'),
-	('Casi Siempre', 'Casi Siempre'),
-	('Siempre', 'Siempre')
-)
-
-CHOICES_SI_NO = {
-		"No":"No" , 
-		"Si":"Si"
-	}
-'''
-CHOICES_INTENSIDAD = { 
-	('Nada', 'Nada'),
-	('Un poco', 'Un poco'),
-	('Moderadamente','Moderadamente'),
-	('Mucho','Mucho'),
-	('Muchísimo','Muchísimo')
-}
-'''
-CHOICES_INTENSIDAD = [
-    ('Siempre', 'Siempre'),
-    ('Casi siempre', 'Casi siempre'),
-	('Algunas veces', 'Algunas veces'),	
-	('Casi nunca', 'Casi nunca'),
-	('Nunca', 'Nunca')
-]
-
-CHOICES_INTENSIDAD_2 = [
-    ('Muchísimo', 'Muchísimo'),
-    ('Mucho', 'Mucho'),
-    ('Moderadamente', 'Moderadamente'),
-    ('Un poco', 'Un poco'),
-    ('Nada', 'Nada')
-]
-CHOICES_0_2 = (
-	("No", "No"),
-	("Si, uno", "Si, uno"),
-	("Si, dos o más", "Si, dos o más")
-)
-CHOICES_0_3 = (
-	("Ninguna", "Ninguna"),
-	("Una", "Una"),
-	("Dos", "Dos"),
-	("Tres o más", "Tres o más")
-)
-CHOICES_SI_NO_NOSE = (
-	("No" , "No" ),
-	("Si" , "Si" ),
-	("No lo sé", "No lo sé")
-)
-CHOICES_PRINCIPAL_SOSTEN = (
-	("1. La madre del chico o chica", "1. La madre del chico o chica"),
-	("2. El padre del chico o chica", "2. El padre del chico o chica"),
-	("3. Un abuelo o abuela del chico o chica", "3. Un abuelo o abuela del chico o chica"),
-	("4. Otra persona", "4. Otra persona"),
-)
 
 class SaludUltimaSemana(models.Model):
 	frustra = models.CharField(max_length=100, choices=CHOICES_FINALES, verbose_name="¿Su hijo/a se frustra por no poder seguir el ritmo de otros chicos/as?")
@@ -589,10 +390,6 @@ class Hogar(models.Model):
 	sosten_economico = models.CharField(max_length=100, choices=CHOICES_PRINCIPAL_SOSTEN, verbose_name="¿Quién es el principal sostén económico del hogar donde vive el chico o chica?")
 	otros=  models.CharField(max_length=100, blank=True, null=True, verbose_name="Si respondió: otra persona, por favor indique ¿Quién?")
 	nivel_estudio_2 = models.CharField(max_length=100, choices=CHOICES_NIVEL_EDUCATIVO, verbose_name="¿Cuál es el máximo nivel de estudios que alcanzó esta persona (principal sostén económico del hogar)?")
-
-
-
-
 
 
 class Cpqol(models.Model):
@@ -645,14 +442,14 @@ class Cpqol(models.Model):
 	@property
 	def resultados(self):
 		return {
-			'Bienestar emocional': self.sentimientos.promedio(),
-			'Bienestar y aceptación social': self.relaciones.promedio(),
-			'Relaciones en la familia': self.familia.promedio(),
-			'Participación': self.participacion.promedio(),
-			'Entorno escolar': self.escuela.promedio(),
-			'Autonomía': self.salud.promedio(),
-			'Dolor': self.dolor.promedio(),
-			'Acceso a Servicios': self.servicios.promedio()
+			'Bienestar emocional': self.sentimientos.promedio if self.sentimientos else 0,
+			'Bienestar y aceptación social': self.relaciones.promedio if self.relaciones else 0,
+			'Relaciones en la familia': self.familia.promedio if self.familia else 0,
+			'Participación': self.participacion.promedio if self.participacion else 0,
+			'Entorno escolar': self.escuela.promedio if self.escuela else 0,
+			'Autonomía': self.salud.promedio if self.salud else 0,
+			'Dolor': self.dolor.promedio if self.dolor else 0,
+			'Acceso a Servicios': self.servicios.promedio if self.servicios else 0
 		}
 	
 class CpqolProfesional(models.Model):

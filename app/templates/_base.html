@@ -32,7 +32,12 @@
                             <li><form action="{% url 'home' %}" method="get"><button type="submit" class="dropdown-item">Cuestionarios</button></form></li>
                             
                             <li><hr class="dropdown-divider"></li>
-                            <li><form action="{% url 'logout' %}" method="post">{% csrf_token %}<button type="submit" class="dropdown-item">Cerrar sesión</button></form></li>
+                            <li>
+                                <form action="{% url 'logout' %}" method="post">
+                                    {% csrf_token %}
+                                    <button type="submit" class="dropdown-item">Cerrar sesión</button>
+                                </form>
+                            </li>
                         </ul>
                     </div>
                 </div>

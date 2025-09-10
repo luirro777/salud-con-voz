@@ -94,6 +94,8 @@ class BaseForm(forms.ModelForm):
     def __init__(self, user=None, *args, **kwargs):
         self.user = user        
         super().__init__(*args, **kwargs)
+        if 'promedio' in self.fields:
+            del self.fields['promedio']
         for field_name, field in self.fields.items():
             field.widget.attrs.update({'class': 'form-control h5'})
 
@@ -204,6 +206,14 @@ class TutorForm(BaseForm):
         quien_cuida_otro = cleaned_data.get("quien_cuida_otro")
         if quien_cuida in ['con-ayuda', 'otra-persona', 'otra-opcion'] and not quien_cuida_otro:
             self.add_error("quien_cuida_otro", f"Este campo es obligatorio para la opción seleccionada.")
+        relacion = cleaned_data.get("relacion")
+        relacion_otro = cleaned_data.get("relacion_otro")
+        if relacion in ['otro-familiar', 'otra-persona-no-familiar'] and not relacion_otro:
+            self.add_error("relacion_otro", "Este campo es obligatorio para la opción seleccionada.")
+        genero = cleaned_data.get("genero")
+        genero_otro = cleaned_data.get("genero_otro")
+        if genero == 'otro' and not genero_otro:
+            self.add_error("genero_otro", "Este campo es obligatorio para la opción seleccionada.")
         return cleaned_data
 
 
