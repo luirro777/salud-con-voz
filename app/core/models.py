@@ -418,6 +418,7 @@ class Cpqol(models.Model):
 	class Meta:
 		verbose_name_plural = "Lista De Formularios"
 
+	"""
 	@property
 	def current_seccion(self):
 		if self.hogar: return 14
@@ -434,6 +435,42 @@ class Cpqol(models.Model):
 		if not self.salud_ultima_semana: return 12
 		if not self.salud_ultima_semana_2: return 13
 		return 0
+	"""
+	@property
+	def current_seccion(self):
+		# Verificar las secciones en orden
+		if not self.tutor: 
+			return 2
+		if not self.paciente: 
+			return 3
+		if not self.movimiento: 
+			return 4  # Asumiendo que movimiento es la sección 4
+		if not self.sentimientos: 
+			return 5
+		if not self.relaciones: 
+			return 6
+		if not self.familia: 
+			return 7  # Cambiado a 7 para que coincida con el diagnóstico
+		if not self.participacion: 
+			return 8
+		if not self.escuela: 
+			return 9
+		if not self.salud: 
+			return 10
+		if not self.dolor: 
+			return 11
+		if not self.servicios: 
+			return 12
+		if not self.salud_ultima_semana: 
+			return 13
+		if not self.salud_ultima_semana_2: 
+			return 14
+		if not self.hogar: 
+			return 15
+		if not self.correo: 
+			return 16
+		return 17  # Todas las secciones completadas
+
 	
 	@property
 	def confirmado(self):
@@ -450,6 +487,26 @@ class Cpqol(models.Model):
 			'Autonomía': self.salud.promedio if self.salud else 0,
 			'Dolor': self.dolor.promedio if self.dolor else 0,
 			'Acceso a Servicios': self.servicios.promedio if self.servicios else 0
+		}
+	
+	def estado_secciones(self):
+		"""Método para diagnóstico que muestra el estado de todas las secciones"""
+		return {
+			'tutor': self.tutor is not None,
+			'paciente': self.paciente is not None,
+			'movimiento': self.movimiento is not None,
+			'sentimientos': self.sentimientos is not None,
+			'relaciones': self.relaciones is not None,
+			'familia': self.familia is not None,
+			'participacion': self.participacion is not None,
+			'escuela': self.escuela is not None,
+			'salud': self.salud is not None,
+			'dolor': self.dolor is not None,
+			'servicios': self.servicios is not None,
+			'salud_ultima_semana': self.salud_ultima_semana is not None,
+			'salud_ultima_semana_2': self.salud_ultima_semana_2 is not None,
+			'hogar': self.hogar is not None,
+			'correo': self.correo is not None,
 		}
 	
 class CpqolProfesional(models.Model):
