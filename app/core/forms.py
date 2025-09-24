@@ -195,8 +195,7 @@ class FinalizacionForm(BaseForm):
 class TutorForm(BaseForm):
     class Meta:
         model = Tutor
-        fields = '__all__'
-        exclude = ('estudios_alcanzados',)
+        fields = '__all__'        
         widgets = {
             'estado_salud': forms.RadioSelect,
         }
@@ -222,7 +221,7 @@ class PacienteForm(BaseForm):
     cobertura = forms.MultipleChoiceField(
         choices=Paciente.CHOICES_COBERTURA.items(),
         widget=forms.CheckboxSelectMultiple,
-        required=False, # Si no es un campo obligatorio
+        required=False,
         label="¿Qué tipo de cobertura de salud tiene su hijo/a actualmente?"
     )
     
@@ -234,18 +233,27 @@ class PacienteForm(BaseForm):
                 format='%d/%m/%Y',  
                 attrs={
                     'type': 'date',  
-                    #'class': 'form-control',  
                 }
             ),
         }
+
     def clean(self):
         cleaned_data = super().clean()
         cobertura = cleaned_data.get("cobertura")
         cobertura_cual = cleaned_data.get("cobertura_cual")        
-        if cobertura not in ["sistema-publico", "pami", "nsnr"]:
+        if cobertura and any(opcion in cobertura for opcion in ["obra_social", "prepaga_obra_social", "prepaga_voluntaria"]):
             if not cobertura_cual:
                 self.add_error("cobertura_cual", "Este campo es obligatorio para la opción seleccionada.")
         return cleaned_data
+
+    def save(self, commit=True):
+        # Guardar el campo cobertura como JSON
+        instance = super().save(commit=False)
+        if 'cobertura' in self.cleaned_data:
+            instance.cobertura = self.cleaned_data['cobertura']
+        if commit:
+            instance.save()
+        return instance
 
 
 class MovimientoForm(BaseForm):

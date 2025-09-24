@@ -142,8 +142,7 @@ class Tutor(models.Model):
 		'otra-opcion': '¿Otra opción?',
 	}		
 	quien_cuida = models.CharField(max_length=100, choices=CHOICES_QUIEN_CUIDA, verbose_name="¿Usted es la persona que se ocupa principalmente del cuidado?")
-	quien_cuida_otro = models.CharField(max_length=100, verbose_name="¿Quién/es? Por favor, especifique", blank=True, null=True)
-	estudios_alcanzados = models.CharField(max_length=200, choices=CHOICES_NIVEL_EDUCATIVO, verbose_name="¿Cuál es el nivel máximo de estudios finalizado por la madre del niño/a o adolescente?")
+	quien_cuida_otro = models.CharField(max_length=100, verbose_name="¿Quién/es? Por favor, especifique", blank=True, null=True)	
 	CHOICES_SALUD = {
 		'mala': 'Mala',
 		'regular': 'Regular',
@@ -411,31 +410,12 @@ class Cpqol(models.Model):
 	salud_ultima_semana_2=models.ForeignKey(SaludUltimaSemana2, blank=True, null=True, on_delete=models.PROTECT)
 	hogar=models.ForeignKey(Hogar, blank=True, null=True, on_delete=models.PROTECT)
 	correo = models.ForeignKey(Finalizacion, blank=True, null=True, on_delete=models.PROTECT)
-	completado = models.BooleanField("Completado",default=False)
-	
+	completado = models.BooleanField("Completado",default=False)	
 	
 
 	class Meta:
 		verbose_name_plural = "Lista De Formularios"
-
-	"""
-	@property
-	def current_seccion(self):
-		if self.hogar: return 14
-		if not self.tutor: return 2 
-		if not self.paciente: return 3
-		if not self.sentimientos: return 4
-		if not self.relaciones: return 5
-		if not self.familia: return 6
-		if not self.participacion: return 7
-		if not self.escuela: return 8
-		if not self.salud: return 9
-		if not self.dolor: return 10 
-		if not self.servicios: return 11
-		if not self.salud_ultima_semana: return 12
-		if not self.salud_ultima_semana_2: return 13
-		return 0
-	"""
+	
 	@property
 	def current_seccion(self):
 		# Verificar las secciones en orden
@@ -444,13 +424,13 @@ class Cpqol(models.Model):
 		if not self.paciente: 
 			return 3
 		if not self.movimiento: 
-			return 4  # Asumiendo que movimiento es la sección 4
+			return 4  
 		if not self.sentimientos: 
 			return 5
 		if not self.relaciones: 
 			return 6
 		if not self.familia: 
-			return 7  # Cambiado a 7 para que coincida con el diagnóstico
+			return 7  
 		if not self.participacion: 
 			return 8
 		if not self.escuela: 
@@ -508,6 +488,245 @@ class Cpqol(models.Model):
 			'hogar': self.hogar is not None,
 			'correo': self.correo is not None,
 		}
+	
+	def __str__(self):
+		return f"CPQOL {self.codigo} - {self.user} - {'Completado' if self.completado else 'En progreso'}"
+    
+	def informacion_completa(self):
+		"""Devuelve toda la información del cuestionario en formato de texto"""
+		if not self.pk:
+			return "Cuestionario no guardado aún"
+
+		info = []
+
+		# Información del Tutor
+		if self.tutor:
+			info.append("=== TUTOR ===")
+			info.append(f"Edad: {self.tutor.edad}")
+			info.append(f"Relación: {self.tutor.get_relacion_display()}")
+			if self.tutor.relacion_otro:
+				info.append(f"Relación (otro): {self.tutor.relacion_otro}")
+			info.append(f"¿Quién cuida?: {self.tutor.get_quien_cuida_display()}")
+			if self.tutor.quien_cuida_otro:
+				info.append(f"¿Quién cuida? (otro): {self.tutor.quien_cuida_otro}")
+			info.append(f"Estudios alcanzados: {self.tutor.get_estudios_alcanzados_display()}")
+			info.append(f"Estado de salud: {self.tutor.get_estado_salud_display()}")
+			info.append(f"Género: {self.tutor.get_genero_display()}")
+			if self.tutor.genero_otro:
+				info.append(f"Género (otro): {self.tutor.genero_otro}")
+			info.append("")
+        
+        # Información del Paciente
+		# Información del Paciente (ejemplo corregido)
+		if self.paciente:
+			info.append("=== PACIENTE ===")
+			info.append(f"Edad: {self.paciente.edad if self.paciente.edad else 'No proporcionado'}")
+			info.append(f"Fecha de nacimiento: {self.paciente.fecha_nacimiento if self.paciente.fecha_nacimiento else 'No proporcionado'}")
+			
+			# Género
+			genero_display = self.paciente.get_genero_display() if self.paciente.genero else 'No proporcionado'
+			info.append(f"Género: {genero_display}")
+			if self.paciente.genero_otro:
+				info.append(f"Género (otro): {self.paciente.genero_otro}")
+			
+			# Provincia y ciudad
+			provincia_display = self.paciente.get_provincia_display() if self.paciente.provincia else 'No proporcionado'
+			info.append(f"Provincia: {provincia_display}")
+			info.append(f"Ciudad: {self.paciente.ciudad if self.paciente.ciudad else 'No proporcionado'}")
+        
+        # CORRECCIÓN PARA COBERTURA - Manejar correctamente el JSONField
+		if self.paciente.cobertura:
+			try:
+				# Si cobertura es una lista JSON
+				if isinstance(self.paciente.cobertura, list):
+					cobertura_display = []
+					for item in self.paciente.cobertura:
+						display = Paciente.CHOICES_COBERTURA.get(item, item)
+						cobertura_display.append(display)
+					info.append(f"Cobertura de salud: {', '.join(cobertura_display)}")
+				else:
+					# Si es un string u otro tipo
+					info.append(f"Cobertura de salud: {self.paciente.cobertura}")
+			except (TypeError, AttributeError):
+				info.append("Cobertura de salud: No se pudo leer")
+		else:
+			info.append("Cobertura de salud: No proporcionado")
+        
+        # Cobertura cual
+		if self.paciente.cobertura_cual and self.paciente.cobertura_cual != "---":
+			info.append(f"Cobertura (especifique): {self.paciente.cobertura_cual}")
+
+		# Certificado de discapacidad
+		cud_display = self.paciente.get_certificado_discapacidad_display() if self.paciente.certificado_discapacidad else 'No proporcionado'
+		info.append(f"Certificado de discapacidad: {cud_display}")
+		info.append("")
+        
+        # Información del Movimiento
+		if self.movimiento:
+			info.append("=== MOVIMIENTO ===")
+			info.append(f"Movimiento: {self.movimiento.movimiento}")
+			info.append(f"Promedio: {self.movimiento.promedio}")
+			info.append("")
+
+		# Información de Sentimientos
+		if self.sentimientos:
+			info.append("=== SENTIMIENTOS ===")
+			info.append(f"Hacer cosas: {self.sentimientos.hacer_cosas}")
+			info.append(f"Uno mismo: {self.sentimientos.uno_mismo}")
+			info.append(f"Motivación: {self.sentimientos.motivacion}")
+			info.append(f"Oportunidades: {self.sentimientos.oportunidades}")
+			info.append(f"Aspecto físico: {self.sentimientos.aspecto_fisico}")
+			info.append(f"Promedio: {self.sentimientos.promedio}")
+			info.append("")
+
+		# Información de Relaciones
+		if self.relaciones:
+			info.append("=== RELACIONES ===")
+			info.append(f"Con gente: {self.relaciones.con_gente}")
+			info.append(f"Otros chicos: {self.relaciones.otros_chichos}")
+			info.append(f"Con adultos: {self.relaciones.con_adultos}")
+			info.append(f"Con amigos: {self.relaciones.con_amigos}")
+			info.append(f"Aceptación otros chicos: {self.relaciones.aceptacion_otros_chicos}")
+			info.append(f"Aceptación adultos: {self.relaciones.aceptacion_adultos}")
+			info.append(f"Aceptación gente: {self.relaciones.aceptacion_gente}")
+			info.append(f"Cosas nuevas: {self.relaciones.cosas_nuevas}")
+			info.append(f"Comunicación conocidos: {self.relaciones.comunicacion_conocidos}")
+			info.append(f"Comunicación extraños: {self.relaciones.comunicacion_extranios}")
+			info.append(f"Comunicación otros con él: {self.relaciones.comunicacion_otros_con_el}")
+			info.append(f"Comunicación tecnología: {self.relaciones.comunicacion_tecnologia}")
+			info.append(f"Promedio: {self.relaciones.promedio}")
+			info.append("")
+
+		# Información de Familia
+		if self.familia:
+			info.append("=== FAMILIA ===")
+			info.append(f"Apoyo familia: {self.familia.apoyo_flia}")
+			info.append(f"Viaje familia: {self.familia.viaje_flia}")
+			info.append(f"Aceptación familia: {self.familia.aceptacion_flia}")
+			info.append(f"Promedio: {self.familia.promedio}")
+			info.append("")
+
+		# Información de Participación
+		if self.participacion:
+			info.append("=== PARTICIPACIÓN ===")
+			info.append(f"Recreativas: {self.participacion.recreativas}")
+			info.append(f"Deportivas: {self.participacion.deportivas}")
+			info.append(f"Eventos sociales: {self.participacion.eventos_sociales}")
+			info.append(f"En su comunidad: {self.participacion.en_su_comunidad}")
+			info.append(f"Promedio: {self.participacion.promedio}")
+			info.append("")
+
+		# Información de Escuela
+		if self.escuela:
+			info.append("=== ESCUELA ===")
+			info.append(f"Otros chicos escuela: {self.escuela.otros_chicos_escuela}")
+			info.append(f"Cómo lo integran: {self.escuela.como_lo_integran}")
+			info.append(f"Profesores: {self.escuela.profesores}")
+			info.append(f"Otros alumnos: {self.escuela.otros_alumnos}")
+			info.append(f"Otros docentes: {self.escuela.otros_docentes}")
+			info.append(f"Mismo trato: {self.escuela.mismo_trato}")
+			info.append(f"Participación colegio: {self.escuela.participacion_colegio}")
+			info.append(f"Promedio: {self.escuela.promedio}")
+			info.append("")
+
+		# Información de Salud
+		if self.salud:
+			info.append("=== SALUD ===")
+			info.append(f"Hacer cosas solo: {self.salud.hacer_cosas_solo}")
+			info.append(f"Movilidad: {self.salud.movilidad}")
+			info.append(f"Independencia: {self.salud.independencia}")
+			info.append(f"Moverse dentro barrio: {self.salud.moverse_dentro_barrio}")
+			info.append(f"Transporte: {self.salud.transporte}")
+			info.append(f"Brazos y manos: {self.salud.brazos_y_manos}")
+			info.append(f"Piernas: {self.salud.piernas}")
+			info.append(f"Vestirse: {self.salud.vestirse}")
+			info.append(f"Beber: {self.salud.beber}")
+			info.append(f"Ir al baño: {self.salud.ir_al_banio}")
+			info.append(f"Promedio: {self.salud.promedio}")
+			info.append("")
+
+		# Información de Dolor
+		if self.dolor:
+			info.append("=== DOLOR ===")
+			info.append(f"Salud general: {self.dolor.salud_gral}")
+			info.append(f"Sueño: {self.dolor.suenio}")
+			info.append(f"Cuánto dolor: {self.dolor.cuanto_dolor}")
+			info.append(f"Nivel dolor: {self.dolor.nivel_dolor}")
+			info.append(f"Nivel incomodidad: {self.dolor.nivel_incomodidad}")
+			info.append(f"Cómo afecta: {self.dolor.como_afecta}")
+			info.append(f"Impedimentos: {self.dolor.impedimentos}")
+			info.append(f"No disfrutar día: {self.dolor.no_disfrutar_dia}")
+			info.append(f"Promedio: {self.dolor.promedio}")
+			info.append("")
+
+		# Información de Servicios
+		if self.servicios:
+			info.append("=== SERVICIOS ===")
+			info.append(f"Acceso tratamiento: {self.servicios.acceso_tratamiento}")
+			info.append(f"Acceso terapia: {self.servicios.acceso_terapia}")
+			info.append(f"Acceso atención médica: {self.servicios.acceso_atencion_medica}")
+			info.append(f"Acceso pediatría: {self.servicios.acceso_pediatria}")
+			info.append(f"Acceso ayuda aprendizaje: {self.servicios.acceso_ayuda_aprendizaje}")
+			info.append(f"Promedio: {self.servicios.promedio}")
+			info.append("")
+
+		# Información de SaludUltimaSemana
+		if self.salud_ultima_semana:
+			info.append("=== SALUD ÚLTIMA SEMANA ===")
+			info.append(f"Frustra: {self.salud_ultima_semana.frustra}")
+			info.append(f"Correr: {self.salud_ultima_semana.correr}")
+			info.append(f"Nadar: {self.salud_ultima_semana.nadar}")
+			info.append(f"Vestirse: {self.salud_ultima_semana.vestirse}")
+			info.append(f"Inteligencia: {self.salud_ultima_semana.inteligencia}")
+			info.append(f"Edificios: {self.salud_ultima_semana.edificios}")
+			info.append(f"Piernas: {self.salud_ultima_semana.piernas}")
+			info.append(f"Caminar 2: {self.salud_ultima_semana.caminar_2}")
+			info.append(f"Bañarse 2: {self.salud_ultima_semana.bañarse_2}")
+			info.append(f"Ir baño 2: {self.salud_ultima_semana.ir_baño_2}")
+			info.append(f"Comunicarse 2: {self.salud_ultima_semana.comunicarse_2}")
+			info.append(f"Hablar 2: {self.salud_ultima_semana.hablar_2}")
+			info.append("")
+
+		# Información de SaludUltimaSemana2
+		if self.salud_ultima_semana_2:
+			info.append("=== SALUD ÚLTIMA SEMANA 2 ===")
+			info.append(f"Físicamente: {self.salud_ultima_semana_2.fisicamente}")
+			info.append(f"Energía: {self.salud_ultima_semana_2.energia}")
+			info.append(f"Tristeza: {self.salud_ultima_semana_2.tristeza}")
+			info.append(f"Soledad: {self.salud_ultima_semana_2.soledad}")
+			info.append(f"Tiempo libre: {self.salud_ultima_semana_2.tiempo_libre}")
+			info.append(f"Cosas quería: {self.salud_ultima_semana_2.cosas_queria}")
+			info.append(f"Justicia: {self.salud_ultima_semana_2.justicia}")
+			info.append(f"Diversión: {self.salud_ultima_semana_2.diversion}")
+			info.append(f"Colegio: {self.salud_ultima_semana_2.colegio}")
+			info.append(f"Atención: {self.salud_ultima_semana_2.atencion}")
+			info.append("")
+
+		# Información de Hogar
+		if self.hogar:
+			info.append("=== HOGAR ===")
+			info.append(f"Dormitorio propio: {self.hogar.dormitorio_propio}")
+			info.append(f"Autos: {self.hogar.autos}")
+			info.append(f"Computadoras: {self.hogar.computadoras}")
+			info.append(f"Duchas: {self.hogar.duchas}")
+			info.append(f"Lavaplatos: {self.hogar.lavaplatos}")
+			info.append(f"Tareas hogar: {self.hogar.tareas_hogar}")
+			info.append(f"Vacaciones: {self.hogar.vacaciones}")
+			info.append(f"Nivel estudio: {self.hogar.nivel_estudio}")
+			info.append(f"Sosten económico: {self.hogar.sosten_economico}")
+			info.append(f"Otros: {self.hogar.otros}")
+			info.append(f"Nivel estudio 2: {self.hogar.nivel_estudio_2}")
+			info.append("")
+
+		# Información de Finalización (correo)
+		if self.correo:
+			info.append("=== FINALIZACIÓN ===")
+			info.append(f"Correo: {self.correo.correo}")
+			info.append("")
+
+		return "\n".join(info)
+    
+	informacion_completa.short_description = "Información Completa del Cuestionario"
 	
 class CpqolProfesional(models.Model):
 	creacion = models.DateTimeField('creacion',auto_now_add=True)

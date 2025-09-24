@@ -1,9 +1,9 @@
-# signals.py
+# signals.py (versión corregida)
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
 from django.db import models
 from .models import (
-    Sentimientos, Relaciones, Familia, Participacion, 
+    Sentimientos, Relaciones, Familia, Participacion,
     Escuela, Salud, Dolor, Servicios, Movimiento
 )
 
@@ -40,27 +40,106 @@ MAPPER_MOVIMIENTO = {
     5: 100
 }
 
+
+def _normalize_val(value):
+    """
+    Normaliza el valor recibido para comparar con las keys del mapper:
+    - intenta convertir strings numéricas a int
+    - si es Decimal o numpy int-like, convertir a int cuando sea seguro
+    - si no se puede normalizar, devuelve None
+    """
+    if value is None:
+        return None
+
+    # already int
+    if isinstance(value, int):
+        return value
+
+    # if it's a Decimal
+    try:
+        from decimal import Decimal
+        if isinstance(value, Decimal):
+            # solo convertir si es entero (ej 1.0 -> 1), sino devolver None
+            try:
+                ival = int(value)
+                if ival == value:
+                    return ival
+                return None
+            except Exception:
+                return None
+    except Exception:
+        pass
+
+    # numpy ints (si las tenés)
+    try:
+        import numbers
+        if isinstance(value, numbers.Integral):
+            return int(value)
+    except Exception:
+        pass
+
+    # strings que contienen un entero
+    if isinstance(value, str):
+        s = value.strip()
+        if s.isdigit():
+            return int(s)
+        # también admitir '-1' etc.
+        try:
+            ival = int(s)
+            return ival
+        except Exception:
+            return None
+
+    # fallback: no normalizable
+    return None
+
+
 def calcular_promedio(instance, mapper):
     """
     Calcula el promedio de los campos IntegerField del modelo
     usando el mapper proporcionado.
+    - itera solo sobre instance._meta.fields (campos concretos)
+    - normaliza cada valor antes de mapear
+    - retorna float redondeado a 2 decimales
     """
-    suma = 0
+    suma = 0.0
     count = 0
-    fields = instance._meta.get_fields()
-    
-    for field in fields:
-        if (isinstance(field, models.IntegerField) and 
-            not field.primary_key and 
-            not field.auto_created):
-            value = getattr(instance, field.name)
-            if value is not None and value in mapper:
-                suma += mapper[value]
-                count += 1
-                
-    return suma / count if count > 0 else 0
 
-# Señales para cada modelo
+    # usar fields concretos del modelo (evita relaciones reversas, etc.)
+    for field in instance._meta.fields:
+        # filtrar IntegerField y sus subclases
+        if not isinstance(field, models.IntegerField):
+            continue
+        # evitar pk/autofields
+        if getattr(field, "primary_key", False) or getattr(field, "auto_created", False):
+            continue
+
+        # obtener valor y normalizar
+        try:
+            raw = getattr(instance, field.name)
+        except Exception:
+            continue
+
+        v = _normalize_val(raw)
+        if v is None:
+            # valor no normalizable o None -> no contamos
+            continue
+
+        mapped = mapper.get(v)
+        if mapped is None:
+            # Valor fuera de mapeo: no contamos. Si querés debuggear,
+            # aquí podés loguear raw/field.name para investigar.
+            # e.g. logger.debug("No mapeado", field.name, raw)
+            continue
+
+        suma += mapped
+        count += 1
+
+    promedio = round(suma / count, 2) if count > 0 else 0.0
+    return promedio
+
+
+# Señales para cada modelo (normales)
 @receiver(pre_save, sender=Sentimientos)
 @receiver(pre_save, sender=Relaciones)
 @receiver(pre_save, sender=Familia)
@@ -71,12 +150,13 @@ def calcular_promedio(instance, mapper):
 def calcular_promedio_normal(sender, instance, **kwargs):
     instance.promedio = calcular_promedio(instance, MAPPER_NORMAL)
 
+
 @receiver(pre_save, sender=Dolor)
 def calcular_promedio_dolor(sender, instance, **kwargs):
     """
     Calcula el promedio para el modelo Dolor usando mapeo específico por campo.
+    Se normaliza cada valor y se cuenta solo si el mapeo existe.
     """
-    # Definir qué campos usan qué mapeo
     mapeo_por_campo = {
         'salud_gral': MAPPER_NORMAL,
         'suenio': MAPPER_NORMAL,
@@ -87,26 +167,35 @@ def calcular_promedio_dolor(sender, instance, **kwargs):
         'impedimentos': MAPPER_INVERSO,
         'no_disfrutar_dia': MAPPER_INVERSO
     }
-    
-    suma = 0
+
+    suma = 0.0
     count = 0
-    
     for campo, mapper in mapeo_por_campo.items():
         try:
-            value = getattr(instance, campo)
-            if value is not None and value in mapper:
-                suma += mapper[value]
-                count += 1
+            raw = getattr(instance, campo)
         except AttributeError:
-            # Si el campo no existe, continuar con el siguiente
+            # campo no existe en el modelo (posible inconsistencia en versiones)
             continue
-    
-    instance.promedio = round(suma / count, 2) if count > 0 else 0
+
+        v = _normalize_val(raw)
+        if v is None:
+            continue
+
+        mapped = mapper.get(v)
+        if mapped is None:
+            continue
+
+        suma += mapped
+        count += 1
+
+    instance.promedio = round(suma / count, 2) if count > 0 else 0.0
 
 
 @receiver(pre_save, sender=Movimiento)
 def calcular_promedio_movimiento(sender, instance, **kwargs):
-    if instance.movimiento in MAPPER_MOVIMIENTO:
-        instance.promedio = MAPPER_MOVIMIENTO[instance.movimiento]
+    # normalizar movimiento si viene como string/decimal
+    v = _normalize_val(getattr(instance, "movimiento", None))
+    if v is not None and v in MAPPER_MOVIMIENTO:
+        instance.promedio = MAPPER_MOVIMIENTO[v]
     else:
-        instance.promedio = 0
+        instance.promedio = 0.0

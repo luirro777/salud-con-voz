@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse
-from .resources import CpqolResource
+from .resources import workbook_for_cpqols, workbook_to_bytesio
 from .help_texts import SUBTITULOS
 
 from .forms import *
@@ -382,8 +382,56 @@ def vista_formulario(request):
 
 
 def exportar_excel(request):
-    modelo_resource = CpqolResource()
-    dataset = modelo_resource.export(Cpqol.objects.all())
-    response = HttpResponse(dataset.export('xlsx'), content_type='application/vnd.ms-excel')
-    response['Content-Disposition'] = 'attachment; filename="resultados.xlsx"'
-    return response
+    """
+    Exporta los cuestionarios:
+    - Cada .xlsx contiene hasta 10 cuestionarios.
+    - Cada hoja = 1 cuestionario, nombre de hoja = codigo (sanitizado).
+    - Si hay un solo archivo (<=10 cue.), se devuelve la descarga directa (.xlsx).
+    - Si hay múltiples archivos (>10 cue.), se devuelve una página HTML con enlaces
+      (data-URI base64) que permiten descargar cada .xlsx por separado (sin zip).
+    """
+    MAX_PER_FILE = 10
+    qs = list(Cpqol.objects.all().order_by('creacion'))
+
+    if not qs:
+        return HttpResponse("No hay cuestionarios para exportar.", status=204)
+
+    # dividir en chunks de MAX_PER_FILE
+    chunks = [qs[i:i+MAX_PER_FILE] for i in range(0, len(qs), MAX_PER_FILE)]
+
+    # Caso: 1 archivo -> devolver xlsx directamente
+    if len(chunks) == 1:
+        wb = workbook_for_cpqols(chunks[0])
+        bio = workbook_to_bytesio(wb)
+        response = HttpResponse(bio.getvalue(), content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+        response['Content-Disposition'] = 'attachment; filename="resultados.xlsx"'
+        return response
+
+    # Caso: varios archivos -> generar varios xlsx en memoria y devolver HTML con enlaces (data URIs)
+    links = []
+    for idx, chunk in enumerate(chunks, start=1):
+        wb = workbook_for_cpqols(chunk)
+        bio = workbook_to_bytesio(wb)
+        b64 = base64.b64encode(bio.read()).decode('ascii')
+        filename = f"resultados_part{idx}.xlsx"
+        href = f"data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,{b64}"
+        links.append({
+            'filename': filename,
+            'href': href,
+            'count': len(chunk),
+        })
+
+    # Construir HTML simple con enlaces de descarga
+    html_parts = ['<html><head><meta charset="utf-8"><title>Descargas - Resultados</title></head><body>']
+    html_parts.append('<h2>Descargas generadas (cada archivo contiene hasta 10 cuestionarios)</h2>')
+    html_parts.append('<ul>')
+    for l in links:
+        html_parts.append(format_html(
+            '<li>{} — {} cuestionarios — <a href="{}" download="{}">Descargar</a></li>',
+            l['filename'], l['count'], l['href'], l['filename']
+        ))
+    html_parts.append('</ul>')
+    html_parts.append('<p>Nota: si el navegador no descarga directamente, haga clic derecho -> "Guardar enlace como..." sobre el enlace de descarga.</p>')
+    html_parts.append('</body></html>')
+
+    return HttpResponse(''.join(html_parts), content_type='text/html; charset=utf-8')
