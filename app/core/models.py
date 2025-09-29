@@ -227,6 +227,27 @@ class Paciente(models.Model):
 	def __str__(self):
 		return f"Paciente: {self.edad} años - Género: {self.genero} - Provincia: {self.provincia}"
 	
+	def get_cobertura_display(self):
+		"""
+		Devuelve una representación legible de las coberturas seleccionadas
+		"""
+		if not self.cobertura:
+			return "No especificado"
+        
+		try:
+			if isinstance(self.cobertura, list):
+				display_values = []
+				for item in self.cobertura:
+					display = self.CHOICES_COBERTURA.get(item, item)
+					display_values.append(display)
+				return ", ".join(display_values)
+			elif isinstance(self.cobertura, str):
+				return self.CHOICES_COBERTURA.get(self.cobertura, self.cobertura)
+			else:
+				return str(self.cobertura)
+		except (AttributeError, TypeError):
+			return str(self.cobertura)
+	
 
 class Movimiento(models.Model):
     movimiento = models.IntegerField(
@@ -236,10 +257,10 @@ class Movimiento(models.Model):
     null=False,     
     blank=False, 
 	)
-    promedio = models.FloatField(blank=True, null=True, default=0.0)
+    
 
     def __str__(self):
-        return f"Movimiento: {self.promedio}"	
+        return f"Movimiento: {self.movimiento}"	
 
 class Sentimientos(models.Model):
 	
@@ -501,15 +522,14 @@ class Cpqol(models.Model):
 
 		# Información del Tutor
 		if self.tutor:
-			info.append("=== TUTOR ===")
+			info.append("Tutor")
 			info.append(f"Edad: {self.tutor.edad}")
 			info.append(f"Relación: {self.tutor.get_relacion_display()}")
 			if self.tutor.relacion_otro:
 				info.append(f"Relación (otro): {self.tutor.relacion_otro}")
 			info.append(f"¿Quién cuida?: {self.tutor.get_quien_cuida_display()}")
 			if self.tutor.quien_cuida_otro:
-				info.append(f"¿Quién cuida? (otro): {self.tutor.quien_cuida_otro}")
-			info.append(f"Estudios alcanzados: {self.tutor.get_estudios_alcanzados_display()}")
+				info.append(f"¿Quién cuida? (otro): {self.tutor.quien_cuida_otro}")			
 			info.append(f"Estado de salud: {self.tutor.get_estado_salud_display()}")
 			info.append(f"Género: {self.tutor.get_genero_display()}")
 			if self.tutor.genero_otro:
@@ -517,60 +537,45 @@ class Cpqol(models.Model):
 			info.append("")
         
         # Información del Paciente
-		# Información del Paciente (ejemplo corregido)
 		if self.paciente:
-			info.append("=== PACIENTE ===")
+			info.append("Paciente")
 			info.append(f"Edad: {self.paciente.edad if self.paciente.edad else 'No proporcionado'}")
 			info.append(f"Fecha de nacimiento: {self.paciente.fecha_nacimiento if self.paciente.fecha_nacimiento else 'No proporcionado'}")
-			
+
 			# Género
 			genero_display = self.paciente.get_genero_display() if self.paciente.genero else 'No proporcionado'
 			info.append(f"Género: {genero_display}")
 			if self.paciente.genero_otro:
 				info.append(f"Género (otro): {self.paciente.genero_otro}")
-			
+
 			# Provincia y ciudad
 			provincia_display = self.paciente.get_provincia_display() if self.paciente.provincia else 'No proporcionado'
 			info.append(f"Provincia: {provincia_display}")
 			info.append(f"Ciudad: {self.paciente.ciudad if self.paciente.ciudad else 'No proporcionado'}")
-        
-        # CORRECCIÓN PARA COBERTURA - Manejar correctamente el JSONField
-		if self.paciente.cobertura:
-			try:
-				# Si cobertura es una lista JSON
-				if isinstance(self.paciente.cobertura, list):
-					cobertura_display = []
-					for item in self.paciente.cobertura:
-						display = Paciente.CHOICES_COBERTURA.get(item, item)
-						cobertura_display.append(display)
-					info.append(f"Cobertura de salud: {', '.join(cobertura_display)}")
-				else:
-					# Si es un string u otro tipo
-					info.append(f"Cobertura de salud: {self.paciente.cobertura}")
-			except (TypeError, AttributeError):
-				info.append("Cobertura de salud: No se pudo leer")
-		else:
-			info.append("Cobertura de salud: No proporcionado")
-        
-        # Cobertura cual
-		if self.paciente.cobertura_cual and self.paciente.cobertura_cual != "---":
-			info.append(f"Cobertura (especifique): {self.paciente.cobertura_cual}")
 
-		# Certificado de discapacidad
-		cud_display = self.paciente.get_certificado_discapacidad_display() if self.paciente.certificado_discapacidad else 'No proporcionado'
-		info.append(f"Certificado de discapacidad: {cud_display}")
-		info.append("")
+			# COBERTURA - USANDO EL NUEVO MÉTODO
+			cobertura_display = self.paciente.get_cobertura_display()
+			info.append(f"Cobertura de salud: {cobertura_display}")
+
+			# Cobertura cual
+			if self.paciente.cobertura_cual and self.paciente.cobertura_cual != "---":
+				info.append(f"Cobertura (especifique): {self.paciente.cobertura_cual}")
+
+			# Certificado de discapacidad
+			cud_display = self.paciente.get_certificado_discapacidad_display() if self.paciente.certificado_discapacidad else 'No proporcionado'
+			info.append(f"Certificado de discapacidad: {cud_display}")
+			info.append("")
+		
         
         # Información del Movimiento
 		if self.movimiento:
-			info.append("=== MOVIMIENTO ===")
-			info.append(f"Movimiento: {self.movimiento.movimiento}")
-			info.append(f"Promedio: {self.movimiento.promedio}")
+			info.append("Sobre la motricidad del niño/a o adolescente")
+			info.append(f"Movimiento: {self.movimiento.movimiento}")			
 			info.append("")
 
 		# Información de Sentimientos
 		if self.sentimientos:
-			info.append("=== SENTIMIENTOS ===")
+			info.append("Sus sentimientos")
 			info.append(f"Hacer cosas: {self.sentimientos.hacer_cosas}")
 			info.append(f"Uno mismo: {self.sentimientos.uno_mismo}")
 			info.append(f"Motivación: {self.sentimientos.motivacion}")
@@ -581,7 +586,7 @@ class Cpqol(models.Model):
 
 		# Información de Relaciones
 		if self.relaciones:
-			info.append("=== RELACIONES ===")
+			info.append("Relaciones con los demás")
 			info.append(f"Con gente: {self.relaciones.con_gente}")
 			info.append(f"Otros chicos: {self.relaciones.otros_chichos}")
 			info.append(f"Con adultos: {self.relaciones.con_adultos}")
@@ -599,7 +604,7 @@ class Cpqol(models.Model):
 
 		# Información de Familia
 		if self.familia:
-			info.append("=== FAMILIA ===")
+			info.append("Familia")
 			info.append(f"Apoyo familia: {self.familia.apoyo_flia}")
 			info.append(f"Viaje familia: {self.familia.viaje_flia}")
 			info.append(f"Aceptación familia: {self.familia.aceptacion_flia}")
@@ -608,7 +613,7 @@ class Cpqol(models.Model):
 
 		# Información de Participación
 		if self.participacion:
-			info.append("=== PARTICIPACIÓN ===")
+			info.append("Participación")
 			info.append(f"Recreativas: {self.participacion.recreativas}")
 			info.append(f"Deportivas: {self.participacion.deportivas}")
 			info.append(f"Eventos sociales: {self.participacion.eventos_sociales}")
@@ -618,7 +623,7 @@ class Cpqol(models.Model):
 
 		# Información de Escuela
 		if self.escuela:
-			info.append("=== ESCUELA ===")
+			info.append("Escuela o colegio")
 			info.append(f"Otros chicos escuela: {self.escuela.otros_chicos_escuela}")
 			info.append(f"Cómo lo integran: {self.escuela.como_lo_integran}")
 			info.append(f"Profesores: {self.escuela.profesores}")
@@ -631,7 +636,7 @@ class Cpqol(models.Model):
 
 		# Información de Salud
 		if self.salud:
-			info.append("=== SALUD ===")
+			info.append("Salud")
 			info.append(f"Hacer cosas solo: {self.salud.hacer_cosas_solo}")
 			info.append(f"Movilidad: {self.salud.movilidad}")
 			info.append(f"Independencia: {self.salud.independencia}")
@@ -647,7 +652,7 @@ class Cpqol(models.Model):
 
 		# Información de Dolor
 		if self.dolor:
-			info.append("=== DOLOR ===")
+			info.append("Dolor y molestias")
 			info.append(f"Salud general: {self.dolor.salud_gral}")
 			info.append(f"Sueño: {self.dolor.suenio}")
 			info.append(f"Cuánto dolor: {self.dolor.cuanto_dolor}")
@@ -661,7 +666,7 @@ class Cpqol(models.Model):
 
 		# Información de Servicios
 		if self.servicios:
-			info.append("=== SERVICIOS ===")
+			info.append("Acceso a servicios")
 			info.append(f"Acceso tratamiento: {self.servicios.acceso_tratamiento}")
 			info.append(f"Acceso terapia: {self.servicios.acceso_terapia}")
 			info.append(f"Acceso atención médica: {self.servicios.acceso_atencion_medica}")
@@ -672,39 +677,39 @@ class Cpqol(models.Model):
 
 		# Información de SaludUltimaSemana
 		if self.salud_ultima_semana:
-			info.append("=== SALUD ÚLTIMA SEMANA ===")
-			info.append(f"Frustra: {self.salud_ultima_semana.frustra}")
-			info.append(f"Correr: {self.salud_ultima_semana.correr}")
-			info.append(f"Nadar: {self.salud_ultima_semana.nadar}")
-			info.append(f"Vestirse: {self.salud_ultima_semana.vestirse}")
-			info.append(f"Inteligencia: {self.salud_ultima_semana.inteligencia}")
-			info.append(f"Edificios: {self.salud_ultima_semana.edificios}")
-			info.append(f"Piernas: {self.salud_ultima_semana.piernas}")
-			info.append(f"Caminar 2: {self.salud_ultima_semana.caminar_2}")
-			info.append(f"Bañarse 2: {self.salud_ultima_semana.bañarse_2}")
-			info.append(f"Ir baño 2: {self.salud_ultima_semana.ir_baño_2}")
-			info.append(f"Comunicarse 2: {self.salud_ultima_semana.comunicarse_2}")
-			info.append(f"Hablar 2: {self.salud_ultima_semana.hablar_2}")
+			info.append("Más preguntas sobre la salud del niño/a o adolescente")
+			info.append(f"¿Su hijo/a se frustra por no poder seguir el ritmo de otros chicos/as?: {self.salud_ultima_semana.frustra}")
+			info.append(f"¿A su hijo/a le gustaría poder correr como los demás chicos/as? {self.salud_ultima_semana.correr}")
+			info.append(f"¿A su hijo/a le gustaría poder nadar como los demás chicos/as?: {self.salud_ultima_semana.nadar}")
+			info.append(f"¿A su hijo/a le molesta tardar mucho en vestirse?: {self.salud_ultima_semana.vestirse}")
+			info.append(f"¿Su hijo/a siente que las personas piensan que es menos inteligente de lo que realmente es?: {self.salud_ultima_semana.inteligencia}")
+			info.append(f"¿Su hijo/a tiene problemas para entrar y salir de los edificios?: {self.salud_ultima_semana.edificios}")
+			info.append(f"Aunque su hijo/a no pueda mover las piernas muy bien ¿puede hacer la mayoría de las cosas?: {self.salud_ultima_semana.piernas}")
+			info.append(f"¿A su hijo/a le molesta no poder caminar sin ayuda?: {self.salud_ultima_semana.caminar_2}")
+			info.append(f"¿A su hijo/a le molesta que lo/a tenga que vestir y bañar otra persona?: {self.salud_ultima_semana.bañarse_2}")
+			info.append(f"¿A su hijo/a le molesta que lo/a tengan que ayudar para ir al baño?: {self.salud_ultima_semana.ir_baño_2}")
+			info.append(f"¿Su hijo/a se puede comunicar tan bien como quiere?: {self.salud_ultima_semana.comunicarse_2}")
+			info.append(f"¿A su hijo/a le molesta no poder hablar tan bien como los demás chicos/as?: {self.salud_ultima_semana.hablar_2}")
 			info.append("")
 
 		# Información de SaludUltimaSemana2
 		if self.salud_ultima_semana_2:
-			info.append("=== SALUD ÚLTIMA SEMANA 2 ===")
-			info.append(f"Físicamente: {self.salud_ultima_semana_2.fisicamente}")
-			info.append(f"Energía: {self.salud_ultima_semana_2.energia}")
-			info.append(f"Tristeza: {self.salud_ultima_semana_2.tristeza}")
-			info.append(f"Soledad: {self.salud_ultima_semana_2.soledad}")
-			info.append(f"Tiempo libre: {self.salud_ultima_semana_2.tiempo_libre}")
-			info.append(f"Cosas quería: {self.salud_ultima_semana_2.cosas_queria}")
-			info.append(f"Justicia: {self.salud_ultima_semana_2.justicia}")
-			info.append(f"Diversión: {self.salud_ultima_semana_2.diversion}")
-			info.append(f"Colegio: {self.salud_ultima_semana_2.colegio}")
-			info.append(f"Atención: {self.salud_ultima_semana_2.atencion}")
+			info.append("Sobre la salud del chico o chica")
+			info.append(f"¿El chico/a se sintió bien y físicamente en forma?: {self.salud_ultima_semana_2.fisicamente}")
+			info.append(f"¿El chico/a se sintió lleno/a de energía?: {self.salud_ultima_semana_2.energia}")
+			info.append(f"¿El chico/a se sintió triste? {self.salud_ultima_semana_2.tristeza}")
+			info.append(f"¿El chico/a se sintió solo/a?: {self.salud_ultima_semana_2.soledad}")
+			info.append(f"¿El chico/a tuvo suficiente tiempo para él/ella?: {self.salud_ultima_semana_2.tiempo_libre}")
+			info.append(f"¿El chico/a hizo las cosas que quería hacer en su tiempo libre?: {self.salud_ultima_semana_2.cosas_queria}")
+			info.append(f"¿Los padres del chico/a fueron justos con él/ella?: {self.salud_ultima_semana_2.justicia}")
+			info.append(f"¿El chico/a se divirtió con sus amigos/as? {self.salud_ultima_semana_2.diversion}")
+			info.append(f"¿Al chico/a le fue bien en la escuela o en el colegio? {self.salud_ultima_semana_2.colegio}")
+			info.append(f"¿El chico/a pudo prestar atención en clase? {self.salud_ultima_semana_2.atencion}")
 			info.append("")
 
 		# Información de Hogar
 		if self.hogar:
-			info.append("=== HOGAR ===")
+			info.append("Caracterísiticas del hogar")
 			info.append(f"Dormitorio propio: {self.hogar.dormitorio_propio}")
 			info.append(f"Autos: {self.hogar.autos}")
 			info.append(f"Computadoras: {self.hogar.computadoras}")
@@ -720,7 +725,7 @@ class Cpqol(models.Model):
 
 		# Información de Finalización (correo)
 		if self.correo:
-			info.append("=== FINALIZACIÓN ===")
+			info.append("Finalización")
 			info.append(f"Correo: {self.correo.correo}")
 			info.append("")
 

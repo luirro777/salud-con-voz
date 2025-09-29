@@ -11,16 +11,17 @@ from .help_texts import (
 from .models import *
 
 class TerminosYCondicionesForm(forms.Form):
-
     consentimiento = forms.BooleanField(label="He leído esta información sobre la investigación y acepto participar.")
 
     def __init__(self, user=None, *args, **kwargs):
         self.user = user    
         super().__init__(*args, **kwargs)
 
-    def save(self):
-        return        
-    
+    def save(self, cpqol=None, atributo=None, commit=True):
+        """
+        Método save compatible con la estructura requerida
+        """
+        return None
 
 class CodigoForm(forms.Form):
     mes_ano = forms.CharField(label="Ingrese Mes y Año de Nacimiento (del paciente) en formato MMAA", min_length=4, max_length=4, widget=forms.TextInput(attrs={'class': 'form-control',}))
@@ -62,10 +63,11 @@ class CodigoForm(forms.Form):
             pass
             
         return cleaned_data
-    
 
-
-    def save(self):
+    def save(self, cpqol=None, atributo=None, commit=True):
+        """
+        Método save compatible con la estructura requerida
+        """
         dni = self.cleaned_data.get('dni')
         mes_ano = self.cleaned_data.get('mes_ano')
         dni = self.cleaned_data.get('dni')
@@ -88,9 +90,9 @@ class CodigoForm(forms.Form):
 
     def help_text(self):
         return CODIGO_HELP_TEXT
-
+    
+    
 class BaseForm(forms.ModelForm):
-
     def __init__(self, user=None, *args, **kwargs):
         self.user = user        
         super().__init__(*args, **kwargs)
@@ -99,11 +101,31 @@ class BaseForm(forms.ModelForm):
         for field_name, field in self.fields.items():
             field.widget.attrs.update({'class': 'form-control h5'})
 
+    def save(self, cpqol=None, atributo=None, commit=True):
+        """
+        Método save modificado para aceptar cpqol y atributo
+        """
+        instance = super().save(commit=False)
+        
+        # Lógica específica del formulario si existe
+        if hasattr(self, '_custom_save_logic'):
+            instance = self._custom_save_logic(instance)
+        
+        if commit:
+            instance.save()
+            
+        # Asignar la instancia al CPQOL si se proporciona
+        if cpqol and atributo:
+            setattr(cpqol, atributo, instance)
+            cpqol.save()
+            
+        return instance
 
-    def save(self, cpqol, atributo):
-        instance = super().save(commit=True)
-        setattr(cpqol, atributo, instance)
-        cpqol.save()
+    def _custom_save_logic(self, instance):
+        """
+        Método para lógica personalizada de guardado
+        Puede ser sobrescrito por formularios hijos
+        """
         return instance
 ########################################################    
 # Para encuesta de profesionales
@@ -246,15 +268,12 @@ class PacienteForm(BaseForm):
                 self.add_error("cobertura_cual", "Este campo es obligatorio para la opción seleccionada.")
         return cleaned_data
 
-    def save(self, commit=True):
-        # Guardar el campo cobertura como JSON
-        instance = super().save(commit=False)
+    def _custom_save_logic(self, instance):
+        """Lógica personalizada para guardar Paciente"""
         if 'cobertura' in self.cleaned_data:
             instance.cobertura = self.cleaned_data['cobertura']
-        if commit:
-            instance.save()
         return instance
-
+    
 
 class MovimientoForm(BaseForm):
     class Meta:

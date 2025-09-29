@@ -383,7 +383,7 @@ def vista_formulario(request):
 
 def exportar_excel(request):
     """
-    Exporta los cuestionarios:
+    Exporta los cuestionarios (familiares y profesionales):
     - Cada .xlsx contiene hasta 10 cuestionarios.
     - Cada hoja = 1 cuestionario, nombre de hoja = codigo (sanitizado).
     - Si hay un solo archivo (<=10 cue.), se devuelve la descarga directa (.xlsx).
@@ -391,20 +391,29 @@ def exportar_excel(request):
       (data-URI base64) que permiten descargar cada .xlsx por separado (sin zip).
     """
     MAX_PER_FILE = 10
-    qs = list(Cpqol.objects.all().order_by('creacion'))
+    
+    # Obtener ambos tipos de cuestionarios
+    qs_familiares = list(Cpqol.objects.all().order_by('creacion'))
+    qs_profesionales = list(CpqolProfesional.objects.all().order_by('creacion'))
+    
+    # Combinar ambos querysets
+    all_questionnaires = qs_familiares + qs_profesionales
+    
+    # Ordenar por fecha de creación
+    all_questionnaires.sort(key=lambda x: x.creacion)
 
-    if not qs:
+    if not all_questionnaires:
         return HttpResponse("No hay cuestionarios para exportar.", status=204)
 
     # dividir en chunks de MAX_PER_FILE
-    chunks = [qs[i:i+MAX_PER_FILE] for i in range(0, len(qs), MAX_PER_FILE)]
+    chunks = [all_questionnaires[i:i+MAX_PER_FILE] for i in range(0, len(all_questionnaires), MAX_PER_FILE)]
 
     # Caso: 1 archivo -> devolver xlsx directamente
     if len(chunks) == 1:
         wb = workbook_for_cpqols(chunks[0])
         bio = workbook_to_bytesio(wb)
         response = HttpResponse(bio.getvalue(), content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-        response['Content-Disposition'] = 'attachment; filename="resultados.xlsx"'
+        response['Content-Disposition'] = 'attachment; filename="resultados_completos.xlsx"'
         return response
 
     # Caso: varios archivos -> generar varios xlsx en memoria y devolver HTML con enlaces (data URIs)
@@ -424,6 +433,7 @@ def exportar_excel(request):
     # Construir HTML simple con enlaces de descarga
     html_parts = ['<html><head><meta charset="utf-8"><title>Descargas - Resultados</title></head><body>']
     html_parts.append('<h2>Descargas generadas (cada archivo contiene hasta 10 cuestionarios)</h2>')
+    html_parts.append('<p>Incluye cuestionarios de familiares y profesionales.</p>')
     html_parts.append('<ul>')
     for l in links:
         html_parts.append(format_html(
@@ -435,3 +445,18 @@ def exportar_excel(request):
     html_parts.append('</body></html>')
 
     return HttpResponse(''.join(html_parts), content_type='text/html; charset=utf-8')
+
+def diagnosticar_cobertura(request):
+    """Función temporal para diagnosticar problemas con cobertura"""
+    pacientes = Paciente.objects.all()
+    resultados = []
+    
+    for paciente in pacientes:
+        resultados.append({
+            'id': paciente.id,
+            'cobertura_raw': paciente.cobertura,
+            'cobertura_type': type(paciente.cobertura),
+            'get_cobertura_display': paciente.get_cobertura_display() if hasattr(paciente, 'get_cobertura_display') else 'Método no existe'
+        })
+    
+    return HttpResponse(str(resultados))

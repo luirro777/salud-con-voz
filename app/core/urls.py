@@ -20,5 +20,6 @@ from .views import *
 urlpatterns = [
     path("", vista_formulario, name='cpqol'),
     path('exportar/', exportar_excel, name='exportar_excel'),
+    path('diagnosticar-cobertura/', diagnosticar_cobertura, name='diagnosticar_cobertura'),
 
 ]

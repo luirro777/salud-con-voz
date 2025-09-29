@@ -51,11 +51,11 @@ def _normalize_val(value):
     if value is None:
         return None
 
-    # already int
+    # Ya es entero
     if isinstance(value, int):
         return value
 
-    # if it's a Decimal
+    # Decimal
     try:
         from decimal import Decimal
         if isinstance(value, Decimal):
@@ -70,7 +70,7 @@ def _normalize_val(value):
     except Exception:
         pass
 
-    # numpy ints (si las tenés)
+    # numpy ints (si hay)
     try:
         import numbers
         if isinstance(value, numbers.Integral):
@@ -191,11 +191,4 @@ def calcular_promedio_dolor(sender, instance, **kwargs):
     instance.promedio = round(suma / count, 2) if count > 0 else 0.0
 
 
-@receiver(pre_save, sender=Movimiento)
-def calcular_promedio_movimiento(sender, instance, **kwargs):
-    # normalizar movimiento si viene como string/decimal
-    v = _normalize_val(getattr(instance, "movimiento", None))
-    if v is not None and v in MAPPER_MOVIMIENTO:
-        instance.promedio = MAPPER_MOVIMIENTO[v]
-    else:
-        instance.promedio = 0.0
+
