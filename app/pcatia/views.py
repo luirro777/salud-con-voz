@@ -162,7 +162,11 @@ class SolicitudConfirmView(TemplateView):
 class SolicitudListView(LoginRequiredMixin, ListView):
     model = Solicitud
     template_name = 'pcatia/solicitud_list.html'
-    context_object_name = 'pcatia'    
+    context_object_name = 'pcatia'  
+
+    def get_queryset(self):
+        # Esto debería retornar todas las solicitudes
+        return Solicitud.objects.all().order_by('-fecha_solicitud')  # Ordenadas por fecha más reciente primero  
 
 class SolicitudDeleteView(LoginRequiredMixin, DeleteView):
     model = Solicitud

@@ -2,31 +2,38 @@
 
 {% block contenido %}
   <h2>Listado de Solicitudes PCATIA</h2>
-  <table class="table table-striped">
-    <thead>
-      <tr>        
-        <th>Responsable Principal</th>
-        <th>Email Principal</th>
-        <th>Institución Principal</th>
-        <th>Acciones</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for solicitud in pcatia %}
-        <tr>         
-          <td>{{ solicitud.nombres_principal }} {{ solicitud.apellidos_principal }}</td>
-          <td>{{ solicitud.email_principal }}</td>
-          <td>{{ solicitud.institucion_principal }}</td>
-          <td>
-            <a href="{% url 'pcatia:solicitud_detail' solicitud.id %}">
-              <button>Ver</button>
-            </a>            
-            <a href="{% url 'pcatia:solicitud_delete' solicitud.id %}">
-              <button>Borrar</button>
-            </a>
-          </td>
+  
+  {% if pcatia %}
+    <table class="table table-striped">
+      <thead>
+        <tr>        
+          <th>Responsable Principal</th>
+          <th>Email Principal</th>
+          <th>Institución Principal</th>
+          <th>Acciones</th>
         </tr>
-      {% endfor %}
-    </tbody>
-  </table>
+      </thead>
+      <tbody>
+        {% for solicitud in pcatia %}
+          <tr>         
+            <td>{{ solicitud.nombres_principal }} {{ solicitud.apellidos_principal }}</td>
+            <td>{{ solicitud.email_principal }}</td>
+            <td>{{ solicitud.institucion_principal }}</td>
+            <td>
+              <a href="{% url 'pcatia:solicitud_detail' solicitud.id %}">
+                <button class="btn btn-info btn-sm">Ver</button>
+              </a>            
+              <a href="{% url 'pcatia:solicitud_delete' solicitud.id %}">
+                <button class="btn btn-danger btn-sm">Borrar</button>
+              </a>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <div class="alert alert-warning">
+      No hay solicitudes registradas.
+    </div>
+  {% endif %}
 {% endblock %}
