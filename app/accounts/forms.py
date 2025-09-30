@@ -7,7 +7,8 @@ from captcha.fields import CaptchaField  # Importa CaptchaField
 
 class CustomUserCreationForm(UserCreationForm):
     grupo = forms.ModelChoiceField(
-        queryset=Group.objects.all(),
+        #queryset=Group.objects.all(),
+        queryset=Group.objects.filter(name__in=['profesional', 'familiar']),
         required=True,
         label="Soy...",
         widget=forms.RadioSelect
