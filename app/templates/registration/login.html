@@ -2,19 +2,26 @@
 {% load static %} 
 
 {% block contenido %}
-<div class="d-flex align-items-center justify-content-center min-vh-100 text-center">
-    <div class="card w-75 mx-auto">
+<div class="d-flex align-items-center justify-content-center min-vh-100 text-center p-3">
+    <div class="card w-100 w-sm-75 w-md-50 mx-auto shadow-lg">
         <div class="card-body">
             <div class="row justify-content-center">
-                <div class="col-md-6 px-3">
-                    <div class="d-flex justify-content-center mb-4">
-                        <img src="{% static 'img/logo-ciecs.png' %}" height="80" alt="Logo de Salud con Voz" class="me-3">
-                        <img src="{% static 'img/logo-scv.png' %}" height="80" alt="Logo de Salud con Voz">
+                <div class="col-12 col-sm-10 col-md-8 col-lg-6 px-3"> 
+                    <!-- Logos con comportamiento responsivo -->
+                    <div class="d-flex flex-column flex-md-row justify-content-center align-items-center mb-4 gap-3">
+                        <a href="{% url 'principal' %}" class="d-block text-decoration-none">
+                            <div class="d-flex flex-column flex-md-row align-items-center gap-3">
+                                <img src="{% static 'img/logo-scv.png' %}" class="img-fluid logo-size" alt="Logo de Salud con Voz">
+                                <img src="{% static 'img/logo-ciecs.png'%}" class="img-fluid logo-size" alt="Logo de CIECS">
+                                <img src="{% static 'img/logo-fcm.png' %}" class="img-fluid logo-size" alt="Logo de FCM">
+                            </div>
+                        </a>
                     </div>
+
                     <form method="POST">{% csrf_token %}
                         <div class="form-group mt-3">
                             <label for="user" class="text-dark"><strong>Usuario</strong></label>
-                            <input type="text" class="form-control text-center" name="username" id="user" aria-describedby="emailHelp" placeholder="Usuario">
+                            <input type="text" class="form-control text-center" name="username" id="user" placeholder="Usuario">
                         </div>
                         <div class="form-group mt-3">
                             <label for="password" class="text-dark"><strong>Contraseña</strong></label>
@@ -23,7 +30,6 @@
                         <button type="submit" class="btn btn-primary w-100 mt-5">Entrar</button>
                     </form>
                     
-                    <!-- Bloque de registro agregado -->
                     <div class="mt-4 pt-3 border-top">
                         <p class="text-dark mb-2"><strong>¿No tiene cuenta?</strong></p>
                         <a href="{% url 'registro' %}" class="btn btn-outline-dark">Regístrese aquí</a>
@@ -33,4 +39,39 @@
         </div>
     </div>
 </div>
+
+<style>
+/* Estilos para las imágenes responsivas */
+.logo-size {
+    max-height: 50px;
+    width: auto;
+    transition: max-height 0.3s ease;
+    object-fit: contain;
+}
+
+/* Ajustes responsivos para los logos */
+@media (min-width: 576px) {
+    .logo-size {
+        max-height: 60px;
+    }
+}
+
+@media (min-width: 768px) {
+    .logo-size {
+        max-height: 70px;
+    }
+}
+
+@media (min-width: 992px) {
+    .logo-size {
+        max-height: 80px;
+    }
+}
+
+/* Efecto hover sutil */
+.logo-size:hover {
+    opacity: 0.9;
+    transform: scale(1.02);
+}
+</style>
 {% endblock %}

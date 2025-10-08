@@ -2,55 +2,76 @@
 {% load static %}
 
 {% block contenido %}
-
-
-      <div class="d-flex align-items-center justify-content-center py-5">
-          <div class="container">
-            <div class="text-center">
-              <div class="d-flex justify-content-between px-2">
-                  <img src="{% static 'img/logo-ciecs.png' %}" height="80" alt="Logo de Salud con Voz">
-                  <img src="{% static 'img/logo-scv.png' %}" height="80" alt="Logo de Salud con Voz">
-              </div>
+<div class="d-flex align-items-center justify-content-center py-5">
+    <div class="container">
+        <div class="text-left">
+            <!-- Logos responsivos que se apilan en móviles -->
+            <div class="d-flex flex-column flex-md-row justify-content-center align-items-center mb-4 gap-3">
+            	<a href="{% url 'principal' %}" class="d-block text-decoration-none">
+                    <img src="{% static 'img/logo-scv.png' %}" class="img-fluid logo-size" alt="Logo de Salud con Voz">
+                </a>
+                <a href="{% url 'principal' %}" class="d-block text-decoration-none">
+                    <img src="{% static 'img/logo-ciecs.png' %}" class="img-fluid logo-size" alt="Logo de CIECS">
+                </a>
+                <a href="{% url 'principal' %}" class="d-block text-decoration-none">
+                    <img src="{% static 'img/logo-fcm.png' %}" class="img-fluid logo-size" alt="Logo de Salud con Voz">
+                </a>
+                
             </div>
+            
             <blockquote class="blockquote text-black">
-              <p class="mt-5">Desde la Universidad Nacional de Córdoba y CONICET nuestro equipo trabaja investigando la calidad de vida relacionada a la salud (CVRS) con cuestionarios adaptados a la cultura, modos de vivir y forma de entender el mundo de la población argentina.</p>
-              <p class="">La CVRS nos ayuda a conocer cómo nos sentimos con nuestra salud y se refleja en distintas áreas de nuestra vida. Además del bienestar físico, tiene en cuenta factores como el bienestar psicológico, emocional y general, la relación con nuestras familias y amigos y la calidad del ambiente en el que vivimos, entre otros.</p>
-              <p class="">En el caso de las chicas y chicos con parálisis cerebral, la CVRS permite conocer su percepción sobre situaciones relacionadas a su salud y su vida cotidiana, por ejemplo, cómo se sienten con sus tratamientos, cómo se sienten ante alguna incomodidad física o el dolor; cómo se sienten en situaciones sociales en general o con sus pares, si se sienten discriminadas o discriminados de alguna forma o cómo se sienten emocionalmente, entre otras.</p>
-              <p class="">Conocer cómo se sienten los niños, niñas, adolescentes y jóvenes con parálisis cerebral ayuda a planificar medidas de salud que tengan en cuenta sus necesidades, basándose en la persona y su entorno particular.</p>
-              <p class="">¡Agradecemos tu colaboración porque es muy importante!</p>
-              <p class="">Hacé click debajo para responder.</p>
+                <p class="mt-5">Desde la Universidad Nacional de Córdoba y CONICET nuestro equipo trabaja investigando la calidad de vida relacionada a la salud (CVRS) con cuestionarios adaptados a la cultura, modos de vivir y forma de entender el mundo de la población argentina.</p>
+                <p class="">La CVRS nos ayuda a conocer cómo nos sentimos con nuestra salud y se refleja en distintas áreas de nuestra vida. Además del bienestar físico, tiene en cuenta factores como el bienestar psicológico, emocional y general, la relación con nuestras familias y amigos y la calidad del ambiente en el que vivimos, entre otros.</p>
+                <p class="">En el caso de las chicas y chicos con parálisis cerebral, la CVRS permite conocer su percepción sobre situaciones relacionadas a su salud y su vida cotidiana, por ejemplo, cómo se sienten con sus tratamientos, cómo se sienten ante alguna incomodidad física o el dolor; cómo se sienten en situaciones sociales en general o con sus pares, si se sienten discriminadas o discriminados de alguna forma o cómo se sienten emocionalmente, entre otras.</p>
+                <p class="">Conocer cómo se sienten los niños, niñas, adolescentes y jóvenes con parálisis cerebral ayuda a planificar medidas de salud que tengan en cuenta sus necesidades, basándose en la persona y su entorno particular.</p>
+                <p class="">¡Agradecemos tu colaboración porque es muy importante!</p>
+                <p class="">Hacé click debajo para responder.</p>
             </blockquote>
 
-
-                <div class="card bg-light">
-                  <div class="card-body">
-                    
-    
-    
-                  <form method="POST" class="text-black mt-5">{% csrf_token %}
-                    <div class="px-5">
-                      <div class="row">
-                        <div class="col-md-8 offset-md-2">                    
-
-                          {% include 'widgets/inputs.html' %}
-      
-                          <button type="submit" class="btn btn-primary w-100 my-5">Registrarse</button>
+            <div class="card bg-light">
+                <div class="card-body">
+                    <form method="POST" class="text-black mt-5">{% csrf_token %}
+                        <div class="px-5">
+                            <div class="row">
+                                <div class="col-md-8 offset-md-2">                    
+                                    {% include 'widgets/inputs.html' %}
+                                    <button type="submit" class="btn btn-primary w-100 my-5">Registrarse</button>
+                                </div>
+                            </div>                    
                         </div>
-                      </div>                    
-                    </div>
-                  </form>
-      
-    
+                    </form>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
 
+<style>
+/* Estilos para las imágenes responsivas */
+.logo-size {
+    max-height: 60px;
+    width: auto;
+    transition: max-height 0.3s ease;
+    object-fit: contain;
+}
 
+/* Ajustes responsivos para los logos */
+@media (min-width: 576px) {
+    .logo-size {
+        max-height: 70px;
+    }
+}
 
+@media (min-width: 768px) {
+    .logo-size {
+        max-height: 80px;
+    }
+}
 
-
-
-          </div>
-
-
-      </div>
-
+/* Efecto hover sutil */
+.logo-size:hover {
+    opacity: 0.9;
+    transform: scale(1.02);
+}
+</style>
 {% endblock %}
