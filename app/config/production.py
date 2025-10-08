@@ -3,7 +3,7 @@ import json
 import os
 from decouple import config
 
-DEBUG = True
+DEBUG = False
 
 
 ALLOWED_HOSTS = [config('DJANGO_DOMAIN'),'localhost']
@@ -25,6 +25,6 @@ SECRET_KEY = config('DJANGO_SECRET_KEY')
 
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles/')
+CSRF_TRUSTED_ORIGINS = ["https://saludconvoz.fcm.unc.edu.ar"]
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
-trusted_origins_str = os.environ.get('CSRF_TRUSTED_ORIGINS', '')
-CSRF_TRUSTED_ORIGINS = trusted_origins_str.split(',') if trusted_origins_str else []
